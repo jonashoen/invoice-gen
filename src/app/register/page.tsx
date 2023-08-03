@@ -88,25 +88,27 @@ const Register = () => {
             required
           />
 
-          <TextField
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="text-purple"
-            label="Passwort"
-            required
-            type="password"
-          />
+          <div className="flex justify-between gap-4">
+            <TextField
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="text-purple"
+              label="Passwort"
+              required
+              type="password"
+            />
 
-          <TextField
-            name="password-repeated"
-            value={passwordRepeated}
-            onChange={(e) => setPasswordRepeated(e.target.value)}
-            className="text-purple"
-            label="Passwort wiederholen"
-            required
-            type="password"
-          />
+            <TextField
+              name="password-repeated"
+              value={passwordRepeated}
+              onChange={(e) => setPasswordRepeated(e.target.value)}
+              className="text-purple"
+              label="Passwort wiederholen"
+              required
+              type="password"
+            />
+          </div>
 
           <div className="flex justify-between gap-4">
             <TextField
