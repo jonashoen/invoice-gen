@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+
+  firstName   String
+  lastName    String
+  zipcode     Int
+  city        String
+  street      String
+  houseNumber Int
+  bank        String
+  iban        String
+  bic         String
+  taxNumber   String
+  vatId       String
+  telephone   String
+  email       String
+  createdAt   DateTime   @default(now())
+  customers   Customer[]
+  session     Session?
+}
+
+model Session {
+  sessionId String   @unique
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires   DateTime @db.Timestamp()
+}
+
+model Customer {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  number      String    @unique
+  zipcode     Int
+  city        String
+  street      String
+  houseNumber Int
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projects    Project[]
+}
+
+model Project {
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  paymentDue     Int
+  paymentDueUnit PaymentDueUnit
+  customerId     Int
+  customer       Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  invoices       Invoice[]
+}
+
+model Invoice {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now()) @db.Date
+  number    String   @unique
+  filename  String
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentDueUnit {
+  days
+  week
+  weeks
+  month
+  months
+}

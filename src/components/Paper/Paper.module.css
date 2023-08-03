@@ -1,0 +1,9 @@
+.paper {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-color: #000;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 12px;
+}

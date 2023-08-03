@@ -1,0 +1,27 @@
+.button {
+  cursor: pointer;
+  user-select: none;
+  width: min-content;
+  padding: 8px;
+  font-weight: bolder;
+  border-color: #000;
+  border-style: solid;
+  border-radius: 12px;
+  border-width: 3px;
+  border-right-width: 6px;
+  border-bottom-width: 6px;
+  font-family: inherit;
+  font-size: inherit;
+  position: relative;
+}
+
+.button:not(:disabled):active {
+  top: 1px;
+  left: 1px;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.5;
+  filter: saturate(0.25);
+}
