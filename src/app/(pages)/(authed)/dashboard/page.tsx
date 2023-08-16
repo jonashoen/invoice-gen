@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const Dashboard = () => {
   return (
-    <main className="bg-yellow flex-grow px-4">
+    <main className="flex-grow px-4">
       <Form className="container mx-auto flex flex-col justify-center">
         <Container className="bg-green">
           <p className="font-bold py-4 text-6xl flex justify-between">

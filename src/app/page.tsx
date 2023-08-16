@@ -1,11 +1,12 @@
 import isAuthed from "@/lib/isAuthed";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 
-export default function Home() {
-  if (!isAuthed()) {
-    return redirect("/login");
+export default async function Home() {
+  const session = await isAuthed();
+
+  if (!session) {
+    redirect("/login");
   } else {
-    return redirect("/dashboard");
+    redirect("/dashboard");
   }
 }

@@ -5,6 +5,9 @@ const Api = {
   Login: "/login",
   Register: "/register",
   Logout: "/logout",
+  Invoices: "/invoices",
+  Projects: "/projects",
+  Customers: "/customers",
 };
 
 export default Api;

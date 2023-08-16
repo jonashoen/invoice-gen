@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 import isAuthed from "@/lib/isAuthed";
 import apiError from "@/lib/apiError";
+import customer from "@/services/customer";
 
 const GET = async () => {
   const session = await isAuthed();
@@ -12,7 +13,9 @@ const GET = async () => {
     return apiError(401);
   }
 
-  return new NextResponse();
+  const customers = await customer.getCustomers(session);
+
+  return NextResponse.json(customers);
 };
 
 export { GET };

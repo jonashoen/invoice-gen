@@ -8,32 +8,6 @@ import sessionConfig from "@/config/session";
 
 dayjs.extend(utc);
 
-const login = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
-  const user = await db.user.findUnique({
-    where: {
-      username,
-    },
-  });
-
-  if (!user) {
-    return null;
-  }
-
-  const passwordCorrect = bcrypt.compareSync(password, user.password);
-
-  if (!passwordCorrect) {
-    return null;
-  }
-
-  return await createSession(user.id);
-};
-
 const register = async ({
   username,
   password,
@@ -106,6 +80,32 @@ const register = async ({
   return await createSession(user.id);
 };
 
+const login = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  const user = await db.user.findUnique({
+    where: {
+      username,
+    },
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  const passwordCorrect = bcrypt.compareSync(password, user.password);
+
+  if (!passwordCorrect) {
+    return null;
+  }
+
+  return await createSession(user.id);
+};
+
 const createSession = async (userId: number) => {
   return await db.session.upsert({
     where: {
@@ -122,4 +122,22 @@ const createSession = async (userId: number) => {
   });
 };
 
-export default { login, register };
+const checkSession = async ({ sessionId }: { sessionId: string }) => {
+  const session = await db.session.findUnique({
+    where: {
+      sessionId,
+    },
+  });
+
+  if (!session) {
+    return null;
+  }
+
+  if (session.expires.valueOf() < dayjs.utc().valueOf()) {
+    return null;
+  }
+
+  return session.userId;
+};
+
+export default { register, login, checkSession };

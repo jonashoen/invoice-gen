@@ -6,7 +6,9 @@ import isAuthed from "@/lib/isAuthed";
 import destroySession from "@/lib/destroySession";
 
 const POST = async () => {
-  if (!isAuthed()) {
+  const session = await isAuthed();
+
+  if (!session) {
     return NextResponse.redirect("/login");
   }
 

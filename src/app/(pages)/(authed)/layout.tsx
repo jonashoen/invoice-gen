@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Navigation />
         <div className="flex flex-grow min-h-screen flex-col">
           <Header />
-          {layout({ children })}
+          <div className="p-6">{layout({ children })}</div>
         </div>
       </div>
     )

@@ -9,7 +9,9 @@ import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<RegisterRequest>) => {
-  if (isAuthed()) {
+  const oldSession = await isAuthed();
+
+  if (oldSession) {
     return NextResponse.redirect("/");
   }
 

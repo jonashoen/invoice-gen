@@ -1,8 +1,9 @@
 import { cookies } from "next/headers";
 
 import sessionConfig from "@/config/session";
+import user from "@/services/user";
 
-const isAuthed = () => {
+const isAuthed = async () => {
   const cookieStore = cookies();
   const sid = cookieStore.get(sessionConfig.cookieName);
 
@@ -10,7 +11,9 @@ const isAuthed = () => {
     return false;
   }
 
-  return true;
+  const session = await user.checkSession({ sessionId: sid.value });
+
+  return session ?? false;
 };
 
 export default isAuthed;

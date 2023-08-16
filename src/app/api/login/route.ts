@@ -11,7 +11,9 @@ import createSession from "@/lib/createSession";
 import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<LoginRequest>) => {
-  if (isAuthed()) {
+  const oldSession = await isAuthed();
+
+  if (oldSession) {
     return NextResponse.redirect("/");
   }
 
