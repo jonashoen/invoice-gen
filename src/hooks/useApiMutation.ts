@@ -9,7 +9,7 @@ interface Props<TResponse> {
   onError?: (error: ApiError) => void;
 }
 
-const useApiMutation = <TRequest, TResponse>({
+const useApiMutation = <TRequest = any, TResponse = any>({
   route,
   invalidates,
   onSuccess,

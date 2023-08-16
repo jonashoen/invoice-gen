@@ -1,7 +1,8 @@
 import parseDuration from "parse-duration";
 
 const sessionConfig = {
-  maxAge: parseDuration("2 weeks")!,
+  cookieName: "sid",
+  maxAge: parseDuration("2 weeks", "sec")!,
 };
 
 export default sessionConfig;

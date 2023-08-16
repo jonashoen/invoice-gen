@@ -1,12 +1,12 @@
 import { cookies } from "next/headers";
 
-const AUTH_COOKIE_NAME = "token";
+import sessionConfig from "@/config/session";
 
 const isAuthed = () => {
   const cookieStore = cookies();
-  const token = cookieStore.get(AUTH_COOKIE_NAME);
+  const sid = cookieStore.get(sessionConfig.cookieName);
 
-  if (!token) {
+  if (!sid) {
     return false;
   }
 

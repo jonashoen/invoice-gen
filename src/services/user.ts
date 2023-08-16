@@ -34,6 +34,78 @@ const login = async ({
   return await createSession(user.id);
 };
 
+const register = async ({
+  username,
+  password,
+  passwordRepeated,
+  firstName,
+  lastName,
+  zipCode,
+  city,
+  street,
+  houseNumber,
+  bank,
+  iban,
+  bic,
+  taxNumber,
+  vatId,
+  telephone,
+  email,
+}: {
+  username: string;
+  password: string;
+  passwordRepeated: string;
+  firstName: string;
+  lastName: string;
+  zipCode: number;
+  city: string;
+  street: string;
+  houseNumber: number;
+  bank: string;
+  iban: string;
+  bic: string;
+  taxNumber: string;
+  vatId: string;
+  telephone: string;
+  email: string;
+}) => {
+  const oldUser = await db.user.findUnique({ where: { username } });
+
+  if (oldUser) {
+    return null;
+  }
+
+  if (password !== passwordRepeated) {
+    return null;
+  }
+
+  if (!Number.isInteger(zipCode) || !Number.isInteger(houseNumber)) {
+    return null;
+  }
+
+  const user = await db.user.create({
+    data: {
+      username,
+      password: bcrypt.hashSync(password, 14),
+      firstName,
+      lastName,
+      zipCode,
+      city,
+      street,
+      houseNumber,
+      bank,
+      iban,
+      bic,
+      taxNumber,
+      vatId,
+      telephone,
+      email,
+    },
+  });
+
+  return await createSession(user.id);
+};
+
 const createSession = async (userId: number) => {
   return await db.session.upsert({
     where: {
@@ -50,4 +122,4 @@ const createSession = async (userId: number) => {
   });
 };
 
-export default { login };
+export default { login, register };

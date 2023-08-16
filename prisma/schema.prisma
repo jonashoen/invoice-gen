@@ -17,7 +17,7 @@ model User {
 
   firstName   String
   lastName    String
-  zipcode     Int
+  zipCode     Int
   city        String
   street      String
   houseNumber Int

@@ -17,11 +17,7 @@ const POST = async (request: BaseRequest<LoginRequest>) => {
 
   const body = await request.json();
 
-  console.log({ body });
-
   const session = await user.login(body);
-
-  console.log({ session });
 
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);

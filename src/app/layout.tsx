@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de">
-      <body>
+      <body className="bg-yellow">
         <QueryClientProvider client={client}>{children}</QueryClientProvider>
       </body>
     </html>

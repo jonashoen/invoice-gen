@@ -5,11 +5,7 @@ import Link from "next/link";
 export default function Home() {
   if (!isAuthed()) {
     return redirect("/login");
+  } else {
+    return redirect("/dashboard");
   }
-
-  return (
-    <main>
-      <Link href="/login">Login</Link>
-    </main>
-  );
 }

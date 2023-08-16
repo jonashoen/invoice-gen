@@ -3,6 +3,10 @@ import { NextResponse } from "next/server";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import RegisterRequest from "@/interfaces/requests/register";
 import isAuthed from "@/lib/isAuthed";
+import user from "@/services/user";
+import createSession from "@/lib/createSession";
+import apiError from "@/lib/apiError";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<RegisterRequest>) => {
   if (isAuthed()) {
@@ -11,9 +15,13 @@ const POST = async (request: BaseRequest<RegisterRequest>) => {
 
   const body = await request.json();
 
-  console.log({ body });
+  const session = await user.register(body);
 
-  return NextResponse.json({});
+  if (!session) {
+    return apiError(StatusCodes.BAD_REQUEST);
+  }
+
+  return createSession(session.sessionId);
 };
 
 export { POST };

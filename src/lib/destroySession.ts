@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 
 import sessionConfig from "@/config/session";
 
-const createSession = (sessionId: string) => {
+const destroySession = () => {
   const response = new NextResponse(null);
 
   response.cookies.set({
     name: sessionConfig.cookieName,
-    value: sessionId,
-    maxAge: sessionConfig.maxAge,
+    value: "",
+    maxAge: -1,
   });
 
   return response;
 };
 
-export default createSession;
+export default destroySession;
