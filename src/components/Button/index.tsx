@@ -9,7 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-const MyButton: React.FC<Props> = ({
+const Button: React.FC<Props> = ({
   children,
   disabled,
   loading,
@@ -25,4 +25,4 @@ const MyButton: React.FC<Props> = ({
   </button>
 );
 
-export default MyButton;
+export default Button;

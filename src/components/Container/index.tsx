@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Container: React.FC<Props> = ({ children, className }) => (
-  <div className={[className, styles.container].join(" ")}>{children}</div>
+  <div className={[styles.container, className].join(" ")}>{children}</div>
 );
 
 export default Container;

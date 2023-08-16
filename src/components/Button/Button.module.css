@@ -1,7 +1,7 @@
 .button {
   cursor: pointer;
   user-select: none;
-  width: min-content;
+  width: fit-content;
   padding: 8px;
   font-weight: bolder;
   border-color: #000;
