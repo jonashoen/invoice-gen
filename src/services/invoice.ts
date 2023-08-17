@@ -9,6 +9,21 @@ const getInvoices = async (userId: number) => {
         },
       },
     },
+    include: {
+      project: {
+        select: {
+          name: true,
+          paymentDue: true,
+          paymentDueUnit: true,
+          customer: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      positions: true,
+    },
   });
 };
 
