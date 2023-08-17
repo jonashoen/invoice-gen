@@ -1,6 +1,7 @@
 "use client";
 
 import Container from "@/components/Container";
+import Pages from "@/routes/Pages";
 import useUserStore from "@/store/userStore";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -12,7 +13,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isAuthed) {
-      router.push("/dashboard");
+      router.push(Pages.Dashboard);
     }
   }, [isAuthed]);
 

@@ -11,6 +11,7 @@ import RegisterRequest from "@/interfaces/requests/register";
 import Api from "@/routes/Api";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Pages from "@/routes/Pages";
 
 const Register = () => {
   const register = useApiMutation<RegisterRequest>({
@@ -66,7 +67,7 @@ const Register = () => {
           <p className="font-bold py-4 text-4xl">Regstrieren</p>
           <p>
             oder{" "}
-            <Link className="underline" href="/login">
+            <Link className="underline" href={Pages.Login}>
               Einloggen
             </Link>
           </p>

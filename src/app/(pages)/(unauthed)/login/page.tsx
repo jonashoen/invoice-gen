@@ -13,6 +13,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/userStore";
+import Pages from "@/routes/Pages";
 
 const Login = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const Login = () => {
     route: Api.Login,
     onSuccess: () => {
       loginLocal();
-      router.replace("/dashboard");
+      router.replace(Pages.Dashboard);
     },
   });
 
@@ -41,7 +42,7 @@ const Login = () => {
           <p className="font-bold py-4 text-4xl">Einloggen</p>
           <p>
             oder{" "}
-            <Link className="underline" href="/register">
+            <Link className="underline" href={Pages.Register}>
               Registrieren
             </Link>
           </p>

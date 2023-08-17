@@ -9,15 +9,16 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import Api from "@/routes/Api";
 import useApiMutation from "@/hooks/useApiMutation";
+import Pages from "@/routes/Pages";
 
 const { metadata, layout } = title("Dashboard - ig");
 
 const links = [
-  { text: "Dashboard", url: "/dashboard" },
-  { text: "Rechnungen", url: "/invoices" },
-  { text: "Projekte", url: "/projects" },
-  { text: "Kunden", url: "/customers" },
-  { text: "Profil", url: "/profile" },
+  { text: "Dashboard", url: Pages.Dashboard },
+  { text: "Rechnungen", url: Pages.Invoices },
+  { text: "Projekte", url: Pages.Projects },
+  { text: "Kunden", url: Pages.Customers },
+  { text: "Profil", url: Pages.Profile },
 ];
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -29,7 +30,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const logout = useApiMutation({
     route: Api.Logout,
     onSuccess: () => {
-      router.replace("/login");
+      router.replace(Pages.Login);
       logoutLocal();
     },
   });
@@ -38,14 +39,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isAuthed === false) {
-      router.push("/login");
+      router.push(Pages.Login);
     }
   }, [isAuthed]);
 
   return (
     isAuthed && (
       <div className="flex flex-grow items-center min-h-screen flex-col">
-        <header className="flex w-screen justify-center bg-purple py-4 border-b-8 border-black sticky">
+        <header className="flex w-screen justify-center bg-purple py-4 border-b-8 border-black sticky top-0">
           <div className="container flex justify-between items-center ">
             <Chip className="bg-orange -rotate-3">
               <h1 className="font-bold text-xl text-white">invoice-gen</h1>
