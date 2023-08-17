@@ -149,9 +149,16 @@ const deleteProject = async (userId: number, { id }: { id: number }) => {
         userId,
       },
     },
+    include: {
+      _count: {
+        select: {
+          invoices: true,
+        },
+      },
+    },
   });
 
-  if (!project) {
+  if (!project || project._count.invoices !== 0) {
     return null;
   }
 
