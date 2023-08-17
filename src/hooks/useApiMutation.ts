@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
-import { StatusCodes } from "http-status-codes";
-import { ApiError, routeBuilder, tryParseContent } from "./useApi";
+import { ApiError, tryParseContent } from "./useApi";
+import { prefix } from "@/routes/Api";
 
 interface Props<TResponse> {
   route: string;
@@ -20,7 +20,7 @@ const useApiMutation = <TRequest = any, TResponse = any>({
   return useMutation(
     [route],
     async (body: TRequest) => {
-      const request = await fetch(routeBuilder({ route }), {
+      const request = await fetch(prefix + route, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(body),

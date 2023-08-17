@@ -17,10 +17,10 @@ model User {
 
   firstName   String
   lastName    String
-  zipCode     Int
+  zipCode     String
   city        String
   street      String
-  houseNumber Int
+  houseNumber String
   bank        String
   iban        String
   bic         String
@@ -42,25 +42,30 @@ model Session {
 
 model Customer {
   id          Int       @id @default(autoincrement())
-  name        String    @unique
-  number      String    @unique
-  zipcode     Int
+  name        String
+  number      String
+  zipCode     String
   city        String
   street      String
-  houseNumber Int
+  houseNumber String
   userId      Int
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   projects    Project[]
+
+  @@unique([name, userId])
+  @@unique([number, userId])
 }
 
 model Project {
   id             Int            @id @default(autoincrement())
-  name           String         @unique
+  name           String
   paymentDue     Int
   paymentDueUnit PaymentDueUnit
   customerId     Int
   customer       Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
   invoices       Invoice[]
+
+  @@unique([name, customerId])
 }
 
 model Invoice {

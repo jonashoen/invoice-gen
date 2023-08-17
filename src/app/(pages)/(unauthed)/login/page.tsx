@@ -50,8 +50,7 @@ const Login = () => {
         <TextField
           name="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="text-purple"
+          setValue={setUsername}
           label="Nutzername"
           required
         />
@@ -59,8 +58,7 @@ const Login = () => {
         <TextField
           name="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="text-purple"
+          setValue={setPassword}
           label="Passwort"
           required
           type="password"

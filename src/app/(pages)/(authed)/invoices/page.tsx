@@ -11,7 +11,7 @@ const Pages = () => {
   return (
     <main>
       <Header title="Rechnungen">
-        <Button className="bg-pink text-white">+ Anlegen</Button>
+        <Button className="bg-pink text-white">Anlegen</Button>
       </Header>
       <p>{JSON.stringify(invoices)}</p>
     </main>

@@ -4,10 +4,10 @@ interface RegisterRequest {
   passwordRepeated: string;
   firstName: string;
   lastName: string;
-  zipCode: number;
+  zipCode: string;
   city: string;
   street: string;
-  houseNumber: number;
+  houseNumber: string;
   bank: string;
   iban: string;
   bic: string;

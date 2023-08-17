@@ -17,6 +17,7 @@ const links = [
   { text: "Rechnungen", url: "/invoices" },
   { text: "Projekte", url: "/projects" },
   { text: "Kunden", url: "/customers" },
+  { text: "Profil", url: "/profile" },
 ];
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -44,7 +45,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     isAuthed && (
       <div className="flex flex-grow items-center min-h-screen flex-col">
-        <header className="flex w-screen justify-center bg-purple py-4">
+        <header className="flex w-screen justify-center bg-purple py-4 border-b-8 border-black sticky">
           <div className="container flex justify-between items-center ">
             <Chip className="bg-orange -rotate-3">
               <h1 className="font-bold text-xl text-white">invoice-gen</h1>
@@ -55,6 +56,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
                 return (
                   <Link
+                    key={link.text}
                     href={link.url}
                     className={[
                       "box-content text-white text-xl transition-sizes duration-300 hover:font-black",

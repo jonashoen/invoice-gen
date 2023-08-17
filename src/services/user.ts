@@ -1,10 +1,9 @@
-import bcrypt from "bcrypt";
-
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 import db from "@/db";
 import sessionConfig from "@/config/session";
+import passwordHelper from "@/lib/password";
 
 dayjs.extend(utc);
 
@@ -31,10 +30,10 @@ const register = async ({
   passwordRepeated: string;
   firstName: string;
   lastName: string;
-  zipCode: number;
+  zipCode: string;
   city: string;
   street: string;
-  houseNumber: number;
+  houseNumber: string;
   bank: string;
   iban: string;
   bic: string;
@@ -43,24 +42,20 @@ const register = async ({
   telephone: string;
   email: string;
 }) => {
+  if (password !== passwordRepeated) {
+    return null;
+  }
+
   const oldUser = await db.user.findUnique({ where: { username } });
 
   if (oldUser) {
     return null;
   }
 
-  if (password !== passwordRepeated) {
-    return null;
-  }
-
-  if (!Number.isInteger(zipCode) || !Number.isInteger(houseNumber)) {
-    return null;
-  }
-
   const user = await db.user.create({
     data: {
       username,
-      password: bcrypt.hashSync(password, 14),
+      password: passwordHelper.hash(password),
       firstName,
       lastName,
       zipCode,
@@ -97,7 +92,7 @@ const login = async ({
     return null;
   }
 
-  const passwordCorrect = bcrypt.compareSync(password, user.password);
+  const passwordCorrect = passwordHelper.compare(password, user.password);
 
   if (!passwordCorrect) {
     return null;
@@ -140,4 +135,140 @@ const checkSession = async ({ sessionId }: { sessionId: string }) => {
   return session.userId;
 };
 
-export default { register, login, checkSession };
+const get = async (userId: number) => {
+  return await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      createdAt: true,
+      username: true,
+      firstName: true,
+      lastName: true,
+      zipCode: true,
+      city: true,
+      street: true,
+      houseNumber: true,
+      bank: true,
+      iban: true,
+      bic: true,
+      taxNumber: true,
+      vatId: true,
+      telephone: true,
+      email: true,
+    },
+  });
+};
+
+const edit = async (
+  id: number,
+  {
+    username,
+    firstName,
+    lastName,
+    zipCode,
+    city,
+    street,
+    houseNumber,
+    bank,
+    iban,
+    bic,
+    taxNumber,
+    vatId,
+    telephone,
+    email,
+  }: {
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    zipCode?: string;
+    city?: string;
+    street?: string;
+    houseNumber?: string;
+    bank?: string;
+    iban?: string;
+    bic?: string;
+    taxNumber?: string;
+    vatId?: string;
+    telephone?: string;
+    email?: string;
+  }
+) => {
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  if (username && user.username !== username) {
+    const userUsername = await db.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (userUsername) {
+      return null;
+    }
+  }
+
+  return await db.user.update({
+    where: {
+      id,
+    },
+    data: {
+      username,
+      firstName,
+      lastName,
+      zipCode,
+      city,
+      street,
+      houseNumber,
+      bank,
+      iban,
+      bic,
+      taxNumber,
+      vatId,
+      telephone,
+      email,
+    },
+  });
+};
+
+const changePassword = async (
+  id: number,
+  {
+    oldPassword,
+    newPassword,
+    newPasswordRepeated,
+  }: { oldPassword: string; newPassword: string; newPasswordRepeated: string }
+) => {
+  if (newPassword !== newPasswordRepeated) {
+    return null;
+  }
+
+  const user = await db.user.findUnique({ where: { id } });
+
+  if (!user) {
+    return null;
+  }
+
+  if (!passwordHelper.compare(oldPassword, user.password)) {
+    return null;
+  }
+
+  return await db.user.update({
+    where: {
+      id,
+    },
+    data: {
+      password: passwordHelper.hash(newPassword),
+    },
+  });
+};
+
+export default { register, login, checkSession, get, edit, changePassword };

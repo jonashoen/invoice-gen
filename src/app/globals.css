@@ -5,4 +5,9 @@
 html,
 body {
   font-family: "Lexend Mega";
+  overflow-x: clip;
+}
+
+main {
+  padding-bottom: 100px;
 }

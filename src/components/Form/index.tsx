@@ -1,7 +1,7 @@
-interface Props {
-  children: React.ReactNode;
+import { FormHTMLAttributes } from "react";
+
+interface Props extends FormHTMLAttributes<HTMLFormElement> {
   onSubmit?: () => void;
-  className?: string;
 }
 
 const Form: React.FC<Props> = ({ children, onSubmit, className }) => (

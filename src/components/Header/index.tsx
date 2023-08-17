@@ -10,7 +10,7 @@ const Header = ({
   children?: ReactNode;
 }) => {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center mb-8">
       <Container className="w-min bg-green">
         <h1 className="text-6xl font-bold">{title}</h1>
       </Container>

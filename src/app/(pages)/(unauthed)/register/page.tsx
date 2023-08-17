@@ -45,10 +45,10 @@ const Register = () => {
       passwordRepeated,
       firstName,
       lastName,
-      zipCode: parseInt(zipCode),
+      zipCode,
       city,
       street,
-      houseNumber: parseInt(houseNumber),
+      houseNumber,
       bank,
       iban,
       bic,
@@ -75,8 +75,7 @@ const Register = () => {
         <TextField
           name="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="text-purple"
+          setValue={setUsername}
           label="Nutzername"
           required
         />
@@ -85,8 +84,7 @@ const Register = () => {
           <TextField
             name="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="text-purple"
+            setValue={setPassword}
             label="Passwort"
             required
             type="password"
@@ -95,8 +93,7 @@ const Register = () => {
           <TextField
             name="password-repeated"
             value={passwordRepeated}
-            onChange={(e) => setPasswordRepeated(e.target.value)}
-            className="text-purple"
+            setValue={setPasswordRepeated}
             label="Passwort wiederholen"
             required
             type="password"
@@ -107,8 +104,7 @@ const Register = () => {
           <TextField
             name="firstname"
             value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="text-purple"
+            setValue={setFirstName}
             label="Vorname"
             required
           />
@@ -116,8 +112,7 @@ const Register = () => {
           <TextField
             name="lastname"
             value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="text-purple"
+            setValue={setLastName}
             label="Nachname"
             required
           />
@@ -127,18 +122,15 @@ const Register = () => {
           <TextField
             name="zipcode"
             value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
-            className="text-purple"
+            setValue={setZipCode}
             label="PLZ"
             required
-            type="number"
           />
 
           <TextField
             name="city"
             value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="text-purple"
+            setValue={setCity}
             label="Stadt"
             required
           />
@@ -146,8 +138,7 @@ const Register = () => {
           <TextField
             name="street"
             value={street}
-            onChange={(e) => setStreet(e.target.value)}
-            className="text-purple"
+            setValue={setStreet}
             label="Straße"
             required
           />
@@ -155,11 +146,9 @@ const Register = () => {
           <TextField
             name="housenumber"
             value={houseNumber}
-            onChange={(e) => setHouseNumber(e.target.value)}
-            className="text-purple"
+            setValue={setHouseNumber}
             label="Hausnummer"
             required
-            type="number"
           />
         </div>
 
@@ -167,8 +156,7 @@ const Register = () => {
           <TextField
             name="bank"
             value={bank}
-            onChange={(e) => setBank(e.target.value)}
-            className="text-purple"
+            setValue={setBank}
             label="Bank"
             required
           />
@@ -176,8 +164,7 @@ const Register = () => {
           <TextField
             name="iban"
             value={iban}
-            onChange={(e) => setIban(e.target.value)}
-            className="text-purple"
+            setValue={setIban}
             label="IBAN"
             required
           />
@@ -185,8 +172,7 @@ const Register = () => {
           <TextField
             name="bic"
             value={bic}
-            onChange={(e) => setBic(e.target.value)}
-            className="text-purple"
+            setValue={setBic}
             label="BIC"
             required
           />
@@ -196,8 +182,7 @@ const Register = () => {
           <TextField
             name="taxnumber"
             value={taxNumber}
-            onChange={(e) => setTaxNumber(e.target.value)}
-            className="text-purple"
+            setValue={setTaxNumber}
             label="Steuernummer"
             required={!vatId}
           />
@@ -205,8 +190,7 @@ const Register = () => {
           <TextField
             name="vatId"
             value={vatId}
-            onChange={(e) => setVatId(e.target.value)}
-            className="text-purple"
+            setValue={setVatId}
             label="Umsatzsteuer-Identifikationsnummer"
             required={!taxNumber}
           />
@@ -216,8 +200,7 @@ const Register = () => {
           <TextField
             name="telephone"
             value={telephone}
-            onChange={(e) => setTelephone(e.target.value)}
-            className="text-purple"
+            setValue={setTelephone}
             label="Telefonnummer"
             required
             type="tel"
@@ -226,8 +209,7 @@ const Register = () => {
           <TextField
             name="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="text-purple"
+            setValue={setEmail}
             label="E-Mail"
             required
             type="email"

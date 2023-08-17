@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Customer" ALTER COLUMN "zipCode" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "zipCode" SET DATA TYPE TEXT;

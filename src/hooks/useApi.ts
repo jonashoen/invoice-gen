@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import { StatusCodes } from "http-status-codes";
 import { prefix } from "@/routes/Api";
 
 class ApiError extends Error {
@@ -23,18 +22,15 @@ interface Props<TResponse> {
 
 const useApi = <TResponse>({
   route,
-  query: queryObject,
   onSuccess,
   onError,
   initialData,
   enabled,
 }: Props<TResponse>) => {
-  const processedRoute = routeBuilder({ route, query: queryObject });
-
-  const query = useQuery(
+  const query = useQuery<any, ApiError, TResponse>(
     [route],
     async () => {
-      const response = await fetch(processedRoute, {
+      const response = await fetch(prefix + route, {
         method: "GET",
         credentials: "include",
       });
@@ -53,33 +49,11 @@ const useApi = <TResponse>({
     }
   );
 
-  return { ...query, invalidator: [route] };
-};
-
-const routeBuilder = ({
-  route,
-  query: queryObject,
-}: {
-  route: string;
-  query?: { [key: string]: any };
-}) => {
-  const params: { [key: string]: any } = {};
-
-  if (queryObject) {
-    for (const key of Object.keys(queryObject)) {
-      if (queryObject[key] !== undefined) {
-        params[key] = queryObject[key];
-      }
-    }
-  }
-
-  const queryParams = new URLSearchParams(params);
-
-  return prefix + route + (queryObject ? `?${queryParams.toString()}` : "");
+  return { ...query, data: query.data as TResponse, invalidator: [route] };
 };
 
 export default useApi;
-export { ApiError, tryParseContent, routeBuilder };
+export { ApiError, tryParseContent };
 
 const tryParseContent = async (request: Response) => {
   const data = await request.text();

@@ -1,10 +1,11 @@
 "use client";
 
+import Modal from "@/components/Modal";
 import useApi from "@/hooks/useApi";
 import Api from "@/routes/Api";
 import useUserStore from "@/store/userStore";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
@@ -20,7 +21,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
     },
   });
 
-  return children;
+  return (
+    <>
+      {children}
+      <Modal />
+    </>
+  );
 };
 
 export default Layout;
