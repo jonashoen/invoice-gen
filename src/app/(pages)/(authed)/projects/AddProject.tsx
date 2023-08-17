@@ -151,7 +151,7 @@ const AddProject: React.FC<Props> = ({
         name="projectName"
       />
 
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         <TextField
           label="Zahlungsfrist"
           required
@@ -159,6 +159,7 @@ const AddProject: React.FC<Props> = ({
           setValue={setPaymentDue}
           name="paymentDue"
           type="number"
+          className="min-w-[250px]"
         />
 
         <Select
@@ -170,6 +171,7 @@ const AddProject: React.FC<Props> = ({
           options={Object.values(PaymentDueUnit).map((unit) => ({
             text: unit,
           }))}
+          className="min-w-[250px]"
         />
       </div>
 

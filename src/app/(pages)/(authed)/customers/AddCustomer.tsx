@@ -167,13 +167,14 @@ const AddCustomer: React.FC<Props> = ({
         />
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         <TextField
           label="PLZ"
           required
           value={zipCode}
           setValue={setZipCode}
           name="zipcode"
+          className="min-w-[100px]"
         />
         <TextField
           label="Stadt"
@@ -181,6 +182,7 @@ const AddCustomer: React.FC<Props> = ({
           value={city}
           setValue={setCity}
           name="city"
+          className="min-w-[300px]"
         />
         <TextField
           label="Straße"
@@ -188,6 +190,7 @@ const AddCustomer: React.FC<Props> = ({
           value={street}
           setValue={setStreet}
           name="street"
+          className="min-w-[200px]"
         />
         <TextField
           label="Hausnummer"
@@ -195,6 +198,7 @@ const AddCustomer: React.FC<Props> = ({
           value={houseNumber}
           setValue={setHouseNumber}
           name="housenumber"
+          className="min-w-[100px]"
         />
       </div>
       <div

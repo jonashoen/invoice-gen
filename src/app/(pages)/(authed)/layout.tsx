@@ -46,12 +46,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     isAuthed && (
       <div className="flex flex-grow items-center min-h-screen flex-col">
-        <header className="flex w-screen justify-center bg-purple py-4 border-b-8 border-black sticky top-0">
-          <div className="container flex justify-between items-center ">
+        <header className="flex  w-screen justify-center bg-purple py-4 border-b-8 border-black sticky top-0">
+          <div className="container flex flex-wrap justify-center 2xl:justify-between items-center gap-4">
             <Chip className="bg-orange -rotate-3">
               <h1 className="font-bold text-xl text-white">invoice-gen</h1>
             </Chip>
-            <nav className="flex flex-grow justify-around items-center px-32">
+            <nav className="flex flex-grow flex-wrap justify-around items-center px-32 gap-4">
               {links.map((link) => {
                 const isActiveRoute = pathname.includes(link.url);
 
