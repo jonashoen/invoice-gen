@@ -73,19 +73,20 @@ model Invoice {
   date      DateTime          @default(now()) @db.Date
   number    String            @unique
   filename  String
+  locked    Boolean           @default(false)
   projectId Int
   project   Project           @relation(fields: [projectId], references: [id])
   positions InvoicePosition[]
 }
 
 model InvoicePosition {
-  id          Int     @id @default(autoincrement())
+  id          Int                 @id @default(autoincrement())
   amount      Float
-  unit        String
+  unit        InvoicePositionUnit
   description String
   price       Float
   invoiceId   Int
-  invoice     Invoice @relation(fields: [invoiceId], references: [id])
+  invoice     Invoice             @relation(fields: [invoiceId], references: [id])
 }
 
 enum PaymentDueUnit {
@@ -94,4 +95,8 @@ enum PaymentDueUnit {
   weeks
   month
   months
+}
+
+enum InvoicePositionUnit {
+  hours
 }
