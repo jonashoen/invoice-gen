@@ -5,6 +5,7 @@ import numberToCurrencyString from "@/helper/numberToCurrencyString";
 import sumPositions from "@/helper/sumPositions";
 import taxes from "@/helper/taxes";
 import useApiMutation from "@/hooks/useApiMutation";
+import t from "@/i18n/t";
 import { PublishInvoiceRequest } from "@/interfaces/requests/invoice";
 import Api from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
@@ -76,7 +77,7 @@ const CreateInvoice: React.FC<Props> = ({ invoice }) => {
       <p className="mt-4">Positionen:</p>
       <table>
         <thead className="block border-black border-b pb-2">
-          <tr className="flex gap-2">
+          <tr className="flex">
             <td className="flex-[2]">Position</td>
             <td className="flex-[2]">Anzahl</td>
             <td className="flex-[2]">Einheit</td>
@@ -98,7 +99,7 @@ const CreateInvoice: React.FC<Props> = ({ invoice }) => {
             >
               <td className="flex-[2]">{i + 1}</td>
               <td className="flex-[2]">{position.amount}</td>
-              <td className="flex-[2]">{position.unit}</td>
+              <td className="flex-[2]">{t(position.unit)}</td>
               <td className="flex-[6] break-words">{position.description}</td>
               <td className="flex-[3] text-right">
                 {numberToCurrencyString(position.price)}
