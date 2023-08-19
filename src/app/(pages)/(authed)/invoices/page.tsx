@@ -44,6 +44,11 @@ const Pages = () => {
 
       {!isFetching ? (
         <div className="flex flex-col gap-4">
+          {invoices.length === 0 && (
+            <p className="text-center text-3xl mt-20">
+              Noch keine Rechnungen angelegt
+            </p>
+          )}
           {invoices.map((invoice) => (
             <Paper key={invoice.id} className="bg-white">
               <div className="flex justify-between items-center">

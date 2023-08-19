@@ -37,6 +37,11 @@ const Projects = () => {
 
       {!isFetching ? (
         <div className="flex flex-col gap-4">
+          {projects.length === 0 && (
+            <p className="text-center text-3xl mt-20">
+              Noch keine Projekte angelegt
+            </p>
+          )}
           {projects.map((project) => (
             <Paper key={project.id} className="bg-white">
               <div className="flex flex-row justify-between items-center">
