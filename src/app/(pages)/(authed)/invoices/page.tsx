@@ -5,13 +5,14 @@ import Header from "@/components/Header";
 import Loader from "@/components/Loader";
 import Paper from "@/components/Paper";
 import useApi from "@/hooks/useApi";
-import Api from "@/routes/Api";
+import Api, { Prefix as ApiPrefix } from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
 import { Customer, Invoice, InvoicePosition, Project } from "@prisma/client";
 import AddInvoice from "./AddInvoice";
 import dateToDateString from "@/helper/dateToDateString";
 import dayjs from "dayjs";
 import CreateInvoice from "./CreateInvoice";
+import ShowInvoice from "./ShowInvoice";
 
 const Pages = () => {
   const showModal = useModalStore((state) => state.show);
@@ -124,7 +125,12 @@ const Pages = () => {
                       onClick={() => {
                         showModal({
                           title: `Rechnung ${invoice.number}`,
-                          content: <CreateInvoice invoice={invoice} />,
+                          content: (
+                            <ShowInvoice
+                              filename={invoice.filename!}
+                              number={invoice.number!}
+                            />
+                          ),
                         });
                       }}
                     >

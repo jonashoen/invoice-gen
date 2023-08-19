@@ -4,6 +4,7 @@ import utc from "dayjs/plugin/utc";
 import db from "@/db";
 import { InvoicePositionUnit } from "@prisma/client";
 import pdf from "@/services/pdf";
+import { ReadStream } from "fs";
 
 dayjs.extend(utc);
 
@@ -240,6 +241,8 @@ const publish = async (userId: number, { id }: { id: number }) => {
     include: {
       project: {
         select: {
+          paymentDue: true,
+          paymentDueUnit: true,
           customer: {
             include: {
               user: true,
@@ -247,7 +250,11 @@ const publish = async (userId: number, { id }: { id: number }) => {
           },
         },
       },
-      positions: true,
+      positions: {
+        orderBy: {
+          id: "asc",
+        },
+      },
     },
   });
 
@@ -280,7 +287,7 @@ const publish = async (userId: number, { id }: { id: number }) => {
     invoice.project.customer.number
   }/${invoiceCountFormatted}`;
 
-  const filename = await pdf.createInvoice(invoice);
+  const filename = await pdf.createInvoice(invoice, number);
 
   if (!filename) {
     return null;
@@ -299,4 +306,45 @@ const publish = async (userId: number, { id }: { id: number }) => {
   });
 };
 
-export default { getInvoices, add, edit, deleteInvoice, publish };
+const get = async (userId: number, filename: string) => {
+  const invoice = await db.invoice.findFirst({
+    where: {
+      filename,
+      project: {
+        customer: {
+          userId,
+        },
+      },
+    },
+  });
+
+  if (!invoice) {
+    return null;
+  }
+
+  const fileStream = pdf.getFile(filename);
+
+  return iteratorToStream(nodeStreamToIterator(fileStream));
+};
+
+export default { getInvoices, add, edit, deleteInvoice, publish, get };
+
+async function* nodeStreamToIterator(stream: ReadStream) {
+  for await (const chunk of stream) {
+    yield chunk;
+  }
+}
+
+function iteratorToStream(iterator: AsyncGenerator<any>): ReadableStream {
+  return new ReadableStream({
+    async pull(controller) {
+      const { value, done } = await iterator.next();
+
+      if (done) {
+        controller.close();
+      } else {
+        controller.enqueue(new Uint8Array(value));
+      }
+    },
+  });
+}

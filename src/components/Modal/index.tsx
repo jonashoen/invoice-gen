@@ -51,7 +51,7 @@ const Modal = () => {
           showContent ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
       >
-        <div className="p-5">
+        <div className="p-5 flex flex-grow flex-col">
           <div className="flex justify-between items-center">
             <h4 className="text-3xl">{title}</h4>
             <Button

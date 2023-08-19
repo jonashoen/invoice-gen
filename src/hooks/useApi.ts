@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { prefix } from "@/routes/Api";
+import { Prefix } from "@/routes/Api";
 
 class ApiError extends Error {
   statusCode: number;
@@ -30,7 +30,7 @@ const useApi = <TResponse>({
   const query = useQuery<any, ApiError, TResponse>(
     [route],
     async () => {
-      const response = await fetch(prefix + route, {
+      const response = await fetch(Prefix + route, {
         method: "GET",
         credentials: "include",
       });

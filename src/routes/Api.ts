@@ -1,4 +1,4 @@
-const prefix = "/api";
+const Prefix = "/api";
 
 const Api = {
   Authed: "/user/is-authed",
@@ -22,8 +22,9 @@ const Api = {
   LockInvoice: "/invoices/lock",
   DeleteInvoice: "/invoices/delete",
   PublishInvoice: "/invoices/publish",
+  ShowInvoice: "/invoices/show",
 };
 
 export default Api;
 
-export { prefix };
+export { Prefix };
