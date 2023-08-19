@@ -187,7 +187,7 @@ Font.register({
 const Logo = () => (
   <View style={[styles.logo, styles.wrapper]} fixed>
     <View style={styles.filler} />
-    <Image style={{ display: "none" }} src="/monke.png" />
+    <Image style={{ display: "none" }} src="./src/pdf/monke.png" />
   </View>
 );
 
@@ -398,7 +398,11 @@ const Footer = ({
           <Text>
             {user.zipCode} {user.city}
           </Text>
-          <Text>St.-Nr.: 057/232/05095</Text>
+          {user.vatId ? (
+            <Text>USt-IdNr.: {user.vatId}</Text>
+          ) : (
+            <Text>St.-Nr.: {user.taxNumber}</Text>
+          )}
         </View>
         <View style={styles.flex2}>
           <Text>Tel.: {user.telephone}</Text>
