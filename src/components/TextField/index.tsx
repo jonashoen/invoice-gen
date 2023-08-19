@@ -1,7 +1,9 @@
-import React, { InputHTMLAttributes } from "react";
+import React, { ClassAttributes, InputHTMLAttributes } from "react";
 import styles from "./TextField.module.css";
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props
+  extends InputHTMLAttributes<HTMLInputElement>,
+    ClassAttributes<HTMLInputElement> {
   label?: string;
   setValue?: (value: string) => void;
 }

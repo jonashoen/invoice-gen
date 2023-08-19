@@ -21,4 +21,26 @@ interface ChangePasswordRequest {
   newPasswordRepeated: string;
 }
 
-export type { EditUserRequest, ChangePasswordRequest };
+interface RequestResetPasswordRequest {
+  email: string;
+}
+
+interface CheckResetPasswordCodeRequest {
+  email: string;
+  code: string;
+}
+
+interface ResetPasswordRequest {
+  email: string;
+  code: string;
+  newPassword: string;
+  newPasswordRepeated: string;
+}
+
+export type {
+  EditUserRequest,
+  ChangePasswordRequest,
+  RequestResetPasswordRequest,
+  CheckResetPasswordCodeRequest,
+  ResetPasswordRequest,
+};

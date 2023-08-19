@@ -14,10 +14,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/userStore";
 import Pages from "@/routes/Pages";
+import useModalStore from "@/store/modalStore";
+import ForgotPassword from "./ForgotPassword";
 
 const Login = () => {
   const router = useRouter();
 
+  const showModal = useModalStore((state) => state.show);
   const loginLocal = useUserStore((state) => state.login);
 
   const login = useApiMutation<LoginRequest>({
@@ -64,11 +67,17 @@ const Login = () => {
           required
           type="password"
         />
-        <p className="text-sm text-right">
-          Probleme beim Einloggen?{" "}
-          <Link href="#" className="text-purple underline">
-            Passwort vergessen
-          </Link>
+        <p
+          className="text-sm text-right cursor-pointer"
+          onClick={() =>
+            showModal({
+              title: "Passwort vergessen",
+              content: <ForgotPassword />,
+            })
+          }
+        >
+          <span>Probleme beim Einloggen?</span>{" "}
+          <span className="text-purple underline">Passwort vergessen</span>
         </p>
 
         <div className="flex justify-end mt-4 ">
