@@ -147,7 +147,7 @@ const AddCustomer: React.FC<Props> = ({
       onSubmit={id ? editCustomer : addCustomer}
     >
       {error && (
-        <Chip className="bg-red-600 text-white text-center">{error}</Chip>
+        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
       )}
 
       <div className="flex gap-4">

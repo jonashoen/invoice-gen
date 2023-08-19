@@ -16,8 +16,7 @@
 }
 
 .button:not(:disabled):active {
-  top: 1px;
-  left: 1px;
+  inset: 1px 1px 0;
 }
 
 .button:disabled {

@@ -5,6 +5,7 @@ import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import useApi from "@/hooks/useApi";
 import useApiMutation from "@/hooks/useApiMutation";
+import t from "@/i18n/t";
 import {
   AddProjectRequest,
   DeleteProjectRequest,
@@ -35,10 +36,12 @@ const AddProject: React.FC<Props> = ({
 }) => {
   const hideModal = useModalStore((state) => state.hide);
 
-  const { data: customers } = useApi<Customer[]>({
-    route: Api.Customers,
-    initialData: [],
-  });
+  const { data: customers, isFetching: customersFetching } = useApi<Customer[]>(
+    {
+      route: Api.Customers,
+      initialData: [],
+    }
+  );
 
   const [error, setError] = useState<string | null>(null);
 
@@ -140,7 +143,7 @@ const AddProject: React.FC<Props> = ({
       onSubmit={id ? editProject : addProject}
     >
       {error && (
-        <Chip className="bg-red-600 text-white text-center">{error}</Chip>
+        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
       )}
 
       <TextField
@@ -169,7 +172,8 @@ const AddProject: React.FC<Props> = ({
           onChange={(e) => setPaymentDueUnit(e.target.value as PaymentDueUnit)}
           name="paymentDueUnit"
           options={Object.values(PaymentDueUnit).map((unit) => ({
-            text: unit,
+            text: t(unit),
+            value: unit,
           }))}
           className="min-w-[250px]"
         />
@@ -181,6 +185,7 @@ const AddProject: React.FC<Props> = ({
         value={customerId}
         setValue={setCustomerId}
         name="customer"
+        loading={customersFetching}
         options={customers.map((customer) => ({
           value: customer.id,
           text: customer.name,

@@ -17,6 +17,11 @@ const Api = {
   AddProject: "/projects/add",
   EditProject: "/projects/edit",
   DeleteProject: "/projects/delete",
+  AddInvoice: "/invoices/add",
+  EditInvoice: "/invoices/edit",
+  LockInvoice: "/invoices/lock",
+  DeleteInvoice: "/invoices/delete",
+  PublishInvoice: "/invoices/publish",
 };
 
 export default Api;

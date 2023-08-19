@@ -12,8 +12,14 @@ module.exports = {
         yellow: "#ffff00",
         orange: "#ff4911",
       },
+      keyframes: {
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-0.5deg)" },
+          "50%": { transform: "rotate(0.5deg)" },
+        },
+      },
       animation: {
-        "spin-slow": "spin 10s linear infinite",
+        wiggle: "wiggle 0.33s ease-in-out infinite",
       },
     },
   },

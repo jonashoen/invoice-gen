@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Paper from "../Paper";
 import useModalStore from "@/store/modalStore";
+import Button from "../Button";
 
 const Modal = () => {
   const [title, open, hide, content] = useModalStore((state) => [
@@ -33,7 +34,7 @@ const Modal = () => {
   return (
     <div
       className={[
-        "absolute flex justify-center left-0 top-0 right-0 bottom-0",
+        "fixed flex justify-center left-0 top-0 right-0 bottom-0 z-50",
         !show && "hidden",
       ].join(" ")}
     >
@@ -46,16 +47,19 @@ const Modal = () => {
       />
       <Paper
         className={[
-          "lg:container bg-white transition-transform flex-grow fixed -bottom-3 min-h-[75%]",
+          "lg:container bg-white transition-transform flex-grow fixed -bottom-3 min-h-[75%] max-h-[90%] overflow-y-auto",
           showContent ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
       >
         <div className="p-5">
           <div className="flex justify-between items-center">
             <h4 className="text-3xl">{title}</h4>
-            <p className="text-2xl font-bold p-3 cursor-pointer" onClick={hide}>
+            <Button
+              className="p-3 cursor-pointer !w-[48px] h-[48px]"
+              onClick={hide}
+            >
               x
-            </p>
+            </Button>
           </div>
 
           {content}

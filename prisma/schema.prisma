@@ -70,9 +70,10 @@ model Project {
 
 model Invoice {
   id        Int               @id @default(autoincrement())
-  date      DateTime          @default(now()) @db.Date
-  number    String            @unique
-  filename  String
+  createdAt DateTime          @default(now()) @db.Date
+  date      DateTime?         @db.Date
+  number    String?           @unique
+  filename  String?
   locked    Boolean           @default(false)
   projectId Int
   project   Project           @relation(fields: [projectId], references: [id])
@@ -86,7 +87,7 @@ model InvoicePosition {
   description String
   price       Float
   invoiceId   Int
-  invoice     Invoice             @relation(fields: [invoiceId], references: [id])
+  invoice     Invoice             @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
 
 enum PaymentDueUnit {
