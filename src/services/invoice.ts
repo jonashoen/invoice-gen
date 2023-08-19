@@ -227,4 +227,76 @@ const deleteInvoice = async (userId: number, { id }: { id: number }) => {
   });
 };
 
-export default { getInvoices, add, edit, deleteInvoice };
+const publish = async (userId: number, { id }: { id: number }) => {
+  const invoice = await db.invoice.findUnique({
+    where: {
+      id,
+      project: {
+        customer: {
+          userId,
+        },
+      },
+    },
+    include: {
+      project: {
+        select: {
+          customer: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+      positions: true,
+    },
+  });
+
+  if (!invoice || invoice.locked) {
+    return null;
+  }
+
+  const date = dayjs.utc();
+
+  const invoiceCountForCustomerThisYear = await db.invoice.count({
+    where: {
+      date: {
+        gte: date.startOf("year").toDate(),
+        lte: date.endOf("year").toDate(),
+      },
+      project: {
+        customer: {
+          id: invoice.project.customer.id,
+        },
+      },
+      locked: true,
+    },
+  });
+
+  const invoiceCountFormatted = (invoiceCountForCustomerThisYear + 1)
+    .toString()
+    .padStart(3, "0");
+
+  const number = `${date.get("year")}/${
+    invoice.project.customer.number
+  }/${invoiceCountFormatted}`;
+
+  const filename = await pdf.createInvoice(invoice);
+
+  if (!filename) {
+    return null;
+  }
+
+  return await db.invoice.update({
+    where: {
+      id,
+    },
+    data: {
+      locked: true,
+      number,
+      filename,
+      date: date.toDate(),
+    },
+  });
+};
+
+export default { getInvoices, add, edit, deleteInvoice, publish };
