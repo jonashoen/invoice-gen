@@ -27,12 +27,10 @@ const Step1 = ({ handleNext }: { handleNext: (email: string) => void }) => {
   const sendRestoreCodeMutation = useApiMutation<RequestResetPasswordRequest>({
     route: Api.RequestResetPassword,
     onSuccess: () => handleNext(email),
-    onError: () => {
-      handleNext(email);
+    onError: () =>
       setError(
         "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
-      );
-    },
+      ),
   });
 
   const sendRestoreCode = () => {
