@@ -66,8 +66,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
                     key={link.text}
                     href={link.url}
                     className={[
-                      "box-content text-white text-xl transition-sizes duration-300 hover:font-black",
-                      isActiveRoute ? "font-black text-2xl" : "",
+                      "box-content text-white text-xl transition-sizes duration-300",
+                      isActiveRoute
+                        ? "underline cursor-default"
+                        : "hover:underline",
                     ].join(" ")}
                   >
                     <p>{link.text}</p>
