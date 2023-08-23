@@ -138,10 +138,7 @@ const AddProject: React.FC<Props> = ({
       oldCustomerId !== customerId);
 
   return (
-    <Form
-      className="flex flex-col gap-5"
-      onSubmit={id ? editProject : addProject}
-    >
+    <Form className="gap-5" onSubmit={id ? editProject : addProject}>
       {error && (
         <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
       )}

@@ -50,7 +50,7 @@ const Pages = () => {
             </p>
           )}
           {invoices.map((invoice) => (
-            <Paper key={invoice.id} className="bg-white">
+            <Paper key={invoice.id}>
               <div className="flex justify-between items-center">
                 <div className="flex flex-row justify-between items-center">
                   <div>

@@ -1,6 +1,5 @@
 import React, { HTMLAttributes, InputHTMLAttributes } from "react";
 import styles from "./Chip.module.css";
-import Container from "../Container";
 
 const Chip: React.FC<HTMLAttributes<HTMLElement>> = ({
   className,

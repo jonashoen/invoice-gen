@@ -170,7 +170,7 @@ const Profile = () => {
       {!isFetching ? (
         <>
           <Form onSubmit={editUser}>
-            <Paper className="bg-white gap-2 !py-8">
+            <Paper className="gap-2 !py-8">
               {userError && (
                 <Chip className="bg-red-600 text-white text-center mb-8">
                   {userError}
@@ -320,7 +320,7 @@ const Profile = () => {
           </Form>
 
           <Form onSubmit={changePassword} className="mt-10">
-            <Paper className="bg-white gap-2 !py-8">
+            <Paper className="gap-2 !py-8">
               {passwordError && (
                 <Chip className="bg-red-600 text-white text-center mb-8">
                   {passwordError}

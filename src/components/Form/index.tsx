@@ -6,7 +6,7 @@ interface Props extends FormHTMLAttributes<HTMLFormElement> {
 
 const Form: React.FC<Props> = ({ children, onSubmit, className }) => (
   <form
-    className={className}
+    className={["flex flex-col", className].join(" ")}
     onSubmit={(e) => {
       e.preventDefault();
 

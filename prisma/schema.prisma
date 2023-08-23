@@ -15,22 +15,26 @@ model User {
   username String @unique
   password String
 
-  firstName   String
-  lastName    String
-  zipCode     String
-  city        String
-  street      String
-  houseNumber String
-  bank        String
-  iban        String
-  bic         String
-  taxNumber   String
-  vatId       String
-  telephone   String
-  email       String
-  createdAt   DateTime   @default(now())
-  customers   Customer[]
-  session     Session?
+  firstName     String
+  lastName      String
+  zipCode       String
+  city          String
+  street        String
+  houseNumber   String
+  bank          String
+  iban          String
+  bic           String
+  taxNumber     String
+  vatId         String
+  telephone     String
+  email         String
+  createdAt     DateTime           @default(now())
+  verified      Boolean            @default(false)
+  verifiedAt    DateTime?
+  customers     Customer[]
+  session       Session?
+  verify        UserVerify?
+  passwordReset UserPasswordReset?
 }
 
 model Session {
@@ -38,6 +42,19 @@ model Session {
   userId    Int      @unique
   user      User     @relation(fields: [userId], references: [id])
   expires   DateTime @db.Timestamp()
+}
+
+model UserVerify {
+  userId Int    @id
+  user   User   @relation(fields: [userId], references: [id])
+  token  String
+}
+
+model UserPasswordReset {
+  userId  Int      @id
+  user    User     @relation(fields: [userId], references: [id])
+  token   String
+  expires DateTime
 }
 
 model Customer {

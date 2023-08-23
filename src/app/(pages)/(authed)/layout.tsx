@@ -10,7 +10,6 @@ import Button from "@/components/Button";
 import Api from "@/routes/Api";
 import useApiMutation from "@/hooks/useApiMutation";
 import Pages from "@/routes/Pages";
-import useModalStore from "@/store/modalStore";
 
 const { metadata, layout } = title("Dashboard - ig");
 
@@ -53,9 +52,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
       >
         <header className="flex  w-screen justify-center bg-purple py-4 border-b-8 border-black sticky top-0 z-40">
           <div className="container flex flex-wrap justify-center 2xl:justify-between items-center gap-4">
-            <Chip className="bg-orange -rotate-3">
-              <h1 className="font-bold text-xl text-white">invoice-gen</h1>
-            </Chip>
+            <Link href={Pages.Dashboard}>
+              <Chip className="bg-orange -rotate-3">
+                <h1 className="font-bold text-xl text-white">invoice-gen</h1>
+              </Chip>
+            </Link>
             <nav className="flex flex-grow flex-wrap justify-around items-center px-32 gap-4">
               {links.map((link) => {
                 const isActiveRoute = pathname.includes(link.url);

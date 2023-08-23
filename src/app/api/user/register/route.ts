@@ -4,15 +4,15 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import RegisterRequest from "@/interfaces/requests/register";
 import isAuthed from "@/lib/isAuthed";
 import user from "@/services/user";
-import createSession from "@/lib/createSession";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
+import Pages from "@/routes/Pages";
 
 const POST = async (request: BaseRequest<RegisterRequest>) => {
   const oldSession = await isAuthed();
 
   if (oldSession) {
-    return NextResponse.redirect("/");
+    return NextResponse.redirect(Pages.Dashboard);
   }
 
   const body = await request.json();
@@ -23,7 +23,7 @@ const POST = async (request: BaseRequest<RegisterRequest>) => {
     return apiError(StatusCodes.BAD_REQUEST);
   }
 
-  return createSession(session.sessionId);
+  return new NextResponse();
 };
 
 export { POST };

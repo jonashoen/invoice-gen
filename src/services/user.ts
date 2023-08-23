@@ -1,9 +1,12 @@
+import crypto from "crypto";
+
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 import db from "@/db";
 import sessionConfig from "@/config/session";
 import passwordHelper from "@/lib/password";
+import mailer from "@/lib/mailer";
 
 dayjs.extend(utc);
 
@@ -52,6 +55,8 @@ const register = async ({
     return null;
   }
 
+  const verifyToken = generateToken();
+
   const user = await db.user.create({
     data: {
       username,
@@ -69,7 +74,17 @@ const register = async ({
       vatId,
       telephone,
       email,
+      verify: {
+        create: {
+          token: verifyToken,
+        },
+      },
     },
+  });
+
+  await mailer.sendVerificationMail({
+    to: email,
+    token: verifyToken,
   });
 
   return await createSession(user.id);
@@ -272,3 +287,13 @@ const changePassword = async (
 };
 
 export default { register, login, checkSession, get, edit, changePassword };
+
+const generateToken = (codeLength: number = 6) => {
+  let code = "";
+
+  for (let i = 0; i < codeLength; i++) {
+    code += crypto.randomInt(36).toString(36);
+  }
+
+  return code.toUpperCase();
+};

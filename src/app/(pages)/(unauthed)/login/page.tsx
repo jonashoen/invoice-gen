@@ -40,7 +40,7 @@ const Login = () => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Paper className="gap-2 bg-white mt-10">
+      <Paper className="gap-2 mt-10">
         <div className="flex justify-between items-center">
           <p className="font-bold py-4 text-4xl">Einloggen</p>
           <p>

@@ -142,10 +142,7 @@ const AddCustomer: React.FC<Props> = ({
       oldHouseNumber !== houseNumber);
 
   return (
-    <Form
-      className="flex flex-col gap-5"
-      onSubmit={id ? editCustomer : addCustomer}
-    >
+    <Form className="gap-5" onSubmit={id ? editCustomer : addCustomer}>
       {error && (
         <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
       )}

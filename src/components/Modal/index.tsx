@@ -47,7 +47,7 @@ const Modal = () => {
       />
       <Paper
         className={[
-          "lg:container bg-white transition-transform flex-grow fixed -bottom-3 min-h-[75%] max-h-[90%] overflow-y-auto",
+          "lg:container transition-transform flex-grow fixed -bottom-3 min-h-[75%] max-h-[90%] overflow-y-auto",
           showContent ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
       >

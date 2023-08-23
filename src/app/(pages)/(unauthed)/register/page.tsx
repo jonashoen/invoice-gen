@@ -9,15 +9,24 @@ import Button from "@/components/Button";
 import useApiMutation from "@/hooks/useApiMutation";
 import RegisterRequest from "@/interfaces/requests/register";
 import Api from "@/routes/Api";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Pages from "@/routes/Pages";
+import useModalStore from "@/store/modalStore";
+import VerifyAccount from "./VerifyAccount";
 
 const Register = () => {
+  const router = useRouter();
+
+  const showModal = useModalStore((state) => state.show);
+
   const register = useApiMutation<RegisterRequest>({
     route: Api.Register,
     onSuccess: () => {
-      redirect("/");
+      showModal({
+        title: "Account verifizieren",
+        content: <VerifyAccount />,
+      });
     },
   });
 
@@ -62,7 +71,7 @@ const Register = () => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Paper className="gap-2 bg-white mt-10">
+      <Paper className="gap-2 mt-10">
         <div className="flex justify-between items-center">
           <p className="font-bold py-4 text-4xl">Regstrieren</p>
           <p>

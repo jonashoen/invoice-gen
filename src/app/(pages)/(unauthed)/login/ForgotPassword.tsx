@@ -40,10 +40,10 @@ const Step1 = ({ handleNext }: { handleNext: (email: string) => void }) => {
   };
 
   return (
-    <Form onSubmit={sendRestoreCode} className="flex flex-col gap-4 mt-10">
+    <Form onSubmit={sendRestoreCode} className="gap-4 mt-10">
       <p>
-        Bitte gib deine E-Mail-Adresse ein. Du erhälst dann eine Mail mit einem
-        Wiederherstellungscode.
+        Bitte gib die E-Mail-Adresse mit der du dich registriert hast. Du
+        erhälst dann eine Mail mit einem Wiederherstellungscode.
       </p>
 
       {error && (
@@ -118,7 +118,7 @@ const Step2 = ({
   }, [code]);
 
   return (
-    <Form onSubmit={checkRestoreCode} className="flex flex-col gap-4 mt-10">
+    <Form onSubmit={checkRestoreCode} className="gap-4 mt-10">
       <p>
         Bitte gib jetzt den Code ein, den du per E-Mail an{" "}
         <span className="text-purple">{email}</span> bekommen hast.
@@ -225,7 +225,7 @@ const Step3 = ({
   };
 
   return (
-    <Form onSubmit={resetPassword} className="flex flex-col gap-4 mt-10">
+    <Form onSubmit={resetPassword} className="gap-4 mt-10">
       <p>Gib jetzt dein neues Passwort ein.</p>
 
       {error && (
@@ -264,7 +264,7 @@ const Step3 = ({
 
 const Step4 = ({ handleNext }: { handleNext: () => void }) => {
   return (
-    <Form onSubmit={handleNext} className="flex flex-col gap-4 mt-10">
+    <Form onSubmit={handleNext} className="gap-4 mt-10">
       <Chip className="bg-green text-center">
         Dein Passwort wurde erfolgreich geändert, du kannst dich jetzt anmelden.
       </Chip>
@@ -283,7 +283,7 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
 
-  const [step, setStep] = useState<Steps>(Steps.Email);
+  const [step, setStep] = useState<Steps>(Steps.Code);
 
   switch (step) {
     case Steps.Email:

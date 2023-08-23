@@ -43,7 +43,7 @@ const Projects = () => {
             </p>
           )}
           {projects.map((project) => (
-            <Paper key={project.id} className="bg-white">
+            <Paper key={project.id}>
               <div className="flex flex-row justify-between items-center">
                 <div>
                   <p className="text-xl">{project.name}</p>

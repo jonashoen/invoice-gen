@@ -41,7 +41,7 @@ const Customers = () => {
             </p>
           )}
           {customers.map((customer) => (
-            <Paper key={customer.id} className="bg-white">
+            <Paper key={customer.id}>
               <div className="flex flex-row justify-between items-center">
                 <div>
                   <p>

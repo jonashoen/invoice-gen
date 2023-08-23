@@ -11,9 +11,7 @@ const isAuthed = async () => {
     return false;
   }
 
-  const session = await user.checkSession({ sessionId: sid.value });
-
-  return session ?? false;
+  return await user.checkSession({ sessionId: sid.value });
 };
 
 export default isAuthed;
