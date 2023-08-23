@@ -9,26 +9,37 @@ import Button from "@/components/Button";
 import useApiMutation from "@/hooks/useApiMutation";
 import RegisterRequest from "@/interfaces/requests/register";
 import Api from "@/routes/Api";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Pages from "@/routes/Pages";
 import useModalStore from "@/store/modalStore";
 import VerifyAccount from "./VerifyAccount";
+import { User } from "@prisma/client";
+import { StatusCodes } from "http-status-codes";
+import Chip from "@/components/Chip";
 
 const Register = () => {
-  const router = useRouter();
-
   const showModal = useModalStore((state) => state.show);
 
-  const register = useApiMutation<RegisterRequest>({
+  const register = useApiMutation<RegisterRequest, User>({
     route: Api.Register,
-    onSuccess: () => {
+    onSuccess: (user) => {
       showModal({
         title: "Account verifizieren",
-        content: <VerifyAccount />,
+        content: <VerifyAccount username={username} />,
       });
     },
+    onError: (apiError) => {
+      if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
+        setError("Der Nutzername oder die E-Mail ist schon vergeben.");
+      } else {
+        setError(
+          "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
+        );
+      }
+    },
   });
+
+  const [error, setError] = useState("");
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -81,6 +92,12 @@ const Register = () => {
             </Link>
           </p>
         </div>
+
+        {error && (
+          <Chip className="bg-red-600 text-white text-center mt-4">
+            {error}
+          </Chip>
+        )}
 
         <TextField
           name="username"

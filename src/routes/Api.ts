@@ -4,6 +4,7 @@ const Api = {
   Authed: "/user/is-authed",
   Login: "/user/login",
   Register: "/user/register",
+  VerifyAccount: "/user/verify",
   Logout: "/user/logout",
   GetUser: "/user/get",
   EditUser: "/user/edit",

@@ -90,7 +90,7 @@ const register = async ({
     code: verifyCode,
   });
 
-  return await createSession(user.id);
+  return user;
 };
 
 const login = async ({
@@ -383,22 +383,64 @@ const resetPassword = async ({
     where: { email },
   });
 
-  const updatedUser = await db.user.update({
+  return await db.user.update({
     where: {
       id: user!.id,
     },
     data: {
       password: passwordHelper.hash(newPassword),
+      passwordReset: {
+        delete: true,
+      },
     },
   });
+};
 
-  await db.userPasswordReset.delete({
+const verify = async ({
+  username,
+  code,
+}: {
+  username: string;
+  code: string;
+}) => {
+  const user = await db.user.findUnique({
     where: {
-      userId: user!.id,
+      username,
     },
   });
 
-  return updatedUser;
+  if (!user) {
+    return null;
+  }
+
+  const userVerify = await db.userVerify.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!userVerify) {
+    return null;
+  }
+
+  if (!passwordHelper.compare(code, userVerify.code)) {
+    return null;
+  }
+
+  await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      verified: true,
+      verifiedAt: dayjs.utc().toDate(),
+      verify: {
+        delete: true,
+      },
+    },
+  });
+
+  return createSession(user.id);
 };
 
 export default {
@@ -411,6 +453,7 @@ export default {
   requestResetPassword,
   checkResetPasswordCode,
   resetPassword,
+  verify,
 };
 
 const generateCode = (codeLength: number = 6) => {

@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import Chip from "@/components/Chip";
+import CodeInput, { CODE_LENGHT } from "@/components/CodeInput";
 import Form from "@/components/Form";
 import TextField from "@/components/TextField";
 import useApiMutation from "@/hooks/useApiMutation";
@@ -81,10 +82,7 @@ const Step2 = ({
   handleBack: () => void;
   handleNext: (code: string) => void;
 }) => {
-  const CODE_LENGHT = 6;
-
   const [code, setCode] = useState("");
-  const [codeFocused, setCodeFocused] = useState(false);
   const [error, setError] = useState("");
 
   const checkRestoreCodeMutation =
@@ -128,40 +126,7 @@ const Step2 = ({
         <Chip className="bg-red-600 text-white text-center">{error}</Chip>
       )}
 
-      <div className="flex justify-center">
-        <div className="relative w-min">
-          <div className="flex gap-4">
-            {[...Array(6).fill(0)].map((_, i) => (
-              <div className="w-[70px]">
-                <TextField
-                  value={code[i] ?? "•"}
-                  readOnly
-                  maxLength={1}
-                  className={[
-                    "text-center aspect-square uppercase text-3xl",
-                    code.length === i &&
-                      codeFocused &&
-                      "!border-purple text-purple",
-                  ].join(" ")}
-                />
-              </div>
-            ))}
-          </div>
-
-          <TextField
-            value={code}
-            setValue={(c) => c.trim() !== code && setCode(c)}
-            className="absolute bottom-0 w-full opacity-0 text-3xl h-[70px]"
-            required
-            minLength={CODE_LENGHT}
-            maxLength={CODE_LENGHT}
-            name="code"
-            autoFocus
-            onFocus={() => setCodeFocused(true)}
-            onBlur={() => setCodeFocused(false)}
-          />
-        </div>
-      </div>
+      <CodeInput code={code} setCode={setCode} />
 
       <div className="flex justify-between mt-10">
         <Button

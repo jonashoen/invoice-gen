@@ -7,8 +7,10 @@ import user from "@/services/user";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 import Pages from "@/routes/Pages";
+import { VerifyAccountRequest } from "@/interfaces/requests/user";
+import createSession from "@/lib/createSession";
 
-const POST = async (request: BaseRequest<RegisterRequest>) => {
+const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
   const oldSession = await isAuthed();
 
   if (oldSession) {
@@ -17,13 +19,13 @@ const POST = async (request: BaseRequest<RegisterRequest>) => {
 
   const body = await request.json();
 
-  const registeredUser = await user.register(body);
+  const session = await user.verify(body);
 
-  if (!registeredUser) {
+  if (!session) {
     return apiError(StatusCodes.BAD_REQUEST);
   }
 
-  return new NextResponse();
+  return createSession(session.sessionId);
 };
 
 export { POST };

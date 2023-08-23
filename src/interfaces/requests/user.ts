@@ -37,10 +37,16 @@ interface ResetPasswordRequest {
   newPasswordRepeated: string;
 }
 
+interface VerifyAccountRequest {
+  username: string;
+  code: string;
+}
+
 export type {
   EditUserRequest,
   ChangePasswordRequest,
   RequestResetPasswordRequest,
   CheckResetPasswordCodeRequest,
   ResetPasswordRequest,
+  VerifyAccountRequest,
 };
