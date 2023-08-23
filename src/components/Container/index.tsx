@@ -1,14 +1,10 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
 import styles from "./Container.module.css";
 
-interface Props {
-  children: React.ReactNode;
-  className?: string;
-}
-
-const Container: React.FC<Props> = ({ children, className }) => (
-  <div className={[styles.container, className].join(" ")}>{children}</div>
-);
+const Container: React.FC<HTMLAttributes<HTMLElement>> = ({
+  children,
+  className,
+}) => <div className={[styles.container, className].join(" ")}>{children}</div>;
 
 export default Container;

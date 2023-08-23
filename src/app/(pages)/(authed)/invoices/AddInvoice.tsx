@@ -385,6 +385,7 @@ const AddInvoice: React.FC<Props> = ({
           value={unit}
           onChange={(e) => setUnit(e.target.value as InvoicePositionUnit)}
           options={Object.values(InvoicePositionUnit).map((unit) => ({
+            value: unit,
             text: t(unit),
           }))}
           label="Einheit"
