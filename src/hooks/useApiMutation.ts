@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "react-query";
 import { ApiError, tryParseContent } from "./useApi";
 import { Prefix } from "@/routes/Api";
+import { StatusCodes } from "http-status-codes";
+import useUserStore from "@/store/userStore";
 
 interface Props<TResponse> {
   route: string;
@@ -17,10 +19,15 @@ const useApiMutation = <TRequest = any, TResponse = any>({
 }: Props<TResponse>) => {
   const queryClient = useQueryClient();
 
+  const [isAuthed, logout] = useUserStore((state) => [
+    state.isAuthed,
+    state.logout,
+  ]);
+
   return useMutation(
     [route],
     async (body: TRequest) => {
-      const request = await fetch(Prefix + route, {
+      const response = await fetch(Prefix + route, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(body),
@@ -29,11 +36,15 @@ const useApiMutation = <TRequest = any, TResponse = any>({
         },
       });
 
-      if (!request.ok) {
-        throw new ApiError("Error while fetching the API", request.status);
+      if (!response.ok) {
+        if (response.status === StatusCodes.UNAUTHORIZED && isAuthed) {
+          logout();
+        }
+
+        throw new ApiError("Error while fetching the API", response.status);
       }
 
-      return await tryParseContent(request);
+      return await tryParseContent(response);
     },
     {
       onSuccess: async (data) => {
