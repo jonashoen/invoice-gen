@@ -116,7 +116,21 @@ const login = async ({
     return null;
   }
 
+  if (!user.verified) {
+    await resendVerifyCode({ username: user.username });
+
+    return { userId: user.id, sessionId: null, expires: null };
+  }
+
   return await createSession(user.id);
+};
+
+const logout = async (userId: number) => {
+  return await db.session.delete({
+    where: {
+      userId,
+    },
+  });
 };
 
 const createSession = async (userId: number) => {
@@ -443,9 +457,40 @@ const verify = async ({
   return createSession(user.id);
 };
 
+const resendVerifyCode = async ({ username }: { username: string }) => {
+  const user = await db.user.findUnique({
+    where: {
+      username,
+    },
+  });
+
+  if (!user || user.verified) {
+    return null;
+  }
+
+  const verifyCode = generateCode();
+
+  const userVerify = await db.userVerify.update({
+    where: {
+      userId: user.id,
+    },
+    data: {
+      code: passwordHelper.hash(verifyCode),
+    },
+  });
+
+  await mailer.sendVerificationMail({
+    to: user.email,
+    code: verifyCode,
+  });
+
+  return userVerify;
+};
+
 export default {
   register,
   login,
+  logout,
   checkSession,
   get,
   edit,
@@ -454,6 +499,7 @@ export default {
   checkResetPasswordCode,
   resetPassword,
   verify,
+  resendVerifyCode,
 };
 
 const generateCode = (codeLength: number = 6) => {

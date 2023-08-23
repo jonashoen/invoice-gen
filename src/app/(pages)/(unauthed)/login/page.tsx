@@ -16,6 +16,9 @@ import useUserStore from "@/store/userStore";
 import Pages from "@/routes/Pages";
 import useModalStore from "@/store/modalStore";
 import ForgotPassword from "./ForgotPassword";
+import Chip from "@/components/Chip";
+import { StatusCodes } from "http-status-codes";
+import VerifyAccount from "../register/VerifyAccount";
 
 const Login = () => {
   const router = useRouter();
@@ -29,8 +32,24 @@ const Login = () => {
       loginLocal();
       router.replace(Pages.Dashboard);
     },
+    onError: (apiError) => {
+      if (apiError.statusCode === StatusCodes.UNAUTHORIZED) {
+        setError("Der Nutzername oder Passwort ist falsch.");
+      } else if (apiError.statusCode === StatusCodes.FORBIDDEN) {
+        showModal({
+          title: "Account verifizieren",
+          content: <VerifyAccount username={username} />,
+          cancelable: false,
+        });
+      } else {
+        setError(
+          "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
+        );
+      }
+    },
   });
 
+  const [error, setError] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -50,6 +69,12 @@ const Login = () => {
             </Link>
           </p>
         </div>
+
+        {error && (
+          <Chip className="bg-red-600 text-white text-center mt-4">
+            {error}
+          </Chip>
+        )}
 
         <TextField
           name="username"

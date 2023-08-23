@@ -42,6 +42,10 @@ interface VerifyAccountRequest {
   code: string;
 }
 
+interface ResendVerifyCodeRequest {
+  username: string;
+}
+
 export type {
   EditUserRequest,
   ChangePasswordRequest,
@@ -49,4 +53,5 @@ export type {
   CheckResetPasswordCodeRequest,
   ResetPasswordRequest,
   VerifyAccountRequest,
+  ResendVerifyCodeRequest,
 };

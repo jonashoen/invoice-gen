@@ -25,6 +25,10 @@ const POST = async (request: BaseRequest<LoginRequest>) => {
     return apiError(StatusCodes.UNAUTHORIZED);
   }
 
+  if (!session.sessionId) {
+    return apiError(StatusCodes.FORBIDDEN);
+  }
+
   return createSession(session.sessionId);
 };
 

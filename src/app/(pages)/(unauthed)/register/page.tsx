@@ -26,6 +26,7 @@ const Register = () => {
       showModal({
         title: "Account verifizieren",
         content: <VerifyAccount username={username} />,
+        cancelable: false,
       });
     },
     onError: (apiError) => {

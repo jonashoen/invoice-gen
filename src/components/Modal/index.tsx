@@ -4,11 +4,12 @@ import useModalStore from "@/store/modalStore";
 import Button from "../Button";
 
 const Modal = () => {
-  const [title, open, hide, content] = useModalStore((state) => [
+  const [title, open, hide, content, cancelable] = useModalStore((state) => [
     state.title,
     state.open,
     state.hide,
     state.content,
+    state.cancelable,
   ]);
 
   const [show, setShow] = useState(false);
@@ -43,7 +44,7 @@ const Modal = () => {
           "w-full h-full bg-black transition-opacity",
           showBg ? "opacity-30" : "opacity-0",
         ].join(" ")}
-        onClick={hide}
+        onClick={cancelable ? hide : undefined}
       />
       <Paper
         className={[
@@ -54,12 +55,14 @@ const Modal = () => {
         <div className="p-5 flex flex-grow flex-col">
           <div className="flex justify-between items-center">
             <h4 className="text-3xl">{title}</h4>
-            <Button
-              className="p-3 cursor-pointer !w-[48px] h-[48px]"
-              onClick={hide}
-            >
-              x
-            </Button>
+            {cancelable && (
+              <Button
+                className="p-3 cursor-pointer !w-[48px] h-[48px]"
+                onClick={hide}
+              >
+                x
+              </Button>
+            )}
           </div>
 
           {content}

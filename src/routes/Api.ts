@@ -5,6 +5,7 @@ const Api = {
   Login: "/user/login",
   Register: "/user/register",
   VerifyAccount: "/user/verify",
+  ResendVerifyCode: "/user/resend-verify-code",
   Logout: "/user/logout",
   GetUser: "/user/get",
   EditUser: "/user/edit",
