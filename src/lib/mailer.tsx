@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import mailerConfig from "@/config/mailer";
 import { render } from "@react-email/render";
 import VerifyAccountEmail from "@/emails/verify-account";
+import ResetPasswordEmail from "@/emails/reset-password";
 
 const transporter = nodemailer.createTransport({
   host: mailerConfig.host,
@@ -15,14 +16,14 @@ const transporter = nodemailer.createTransport({
 
 const sendVerificationMail = async ({
   to,
-  token,
+  code,
 }: {
   to: string;
-  token: string;
+  code: string;
 }) => {
   try {
-    const html = render(<VerifyAccountEmail token={token} />);
-    const text = render(<VerifyAccountEmail token={token} />, {
+    const html = render(<VerifyAccountEmail code={code} />);
+    const text = render(<VerifyAccountEmail code={code} />, {
       plainText: true,
     });
 
@@ -43,4 +44,34 @@ const sendVerificationMail = async ({
   }
 };
 
-export default { sendVerificationMail };
+const sendResetPasswordMail = async ({
+  to,
+  code,
+}: {
+  to: string;
+  code: string;
+}) => {
+  try {
+    const html = render(<ResetPasswordEmail code={code} />);
+    const text = render(<ResetPasswordEmail code={code} />, {
+      plainText: true,
+    });
+
+    return await transporter.sendMail({
+      from: {
+        name: mailerConfig.from.name,
+        address: mailerConfig.from.email,
+      },
+      to,
+      subject: "invoice-gen - Passwort zurücksetzen",
+      html,
+      text,
+    });
+  } catch (err) {
+    console.error(err);
+
+    return null;
+  }
+};
+
+export default { sendVerificationMail, sendResetPasswordMail };

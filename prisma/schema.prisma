@@ -47,13 +47,13 @@ model Session {
 model UserVerify {
   userId Int    @id
   user   User   @relation(fields: [userId], references: [id])
-  token  String
+  code   String
 }
 
 model UserPasswordReset {
   userId  Int      @id
   user    User     @relation(fields: [userId], references: [id])
-  token   String
+  code    String
   expires DateTime
 }
 

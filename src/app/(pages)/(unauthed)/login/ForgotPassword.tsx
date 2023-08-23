@@ -283,7 +283,7 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
 
-  const [step, setStep] = useState<Steps>(Steps.Code);
+  const [step, setStep] = useState<Steps>(Steps.Email);
 
   switch (step) {
     case Steps.Email:

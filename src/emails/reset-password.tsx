@@ -14,7 +14,7 @@ interface Props {
   code: string;
 }
 
-const VerifyAccountEmail: React.FC<Props> = ({ code }) => {
+const ResetPasswordEmail: React.FC<Props> = ({ code }) => {
   return (
     <Tailwind config={tailwindConfig as any}>
       <Html lang="de" className="bg-white p-4 pt-8">
@@ -38,7 +38,7 @@ const VerifyAccountEmail: React.FC<Props> = ({ code }) => {
           />
         </Head>
 
-        <Preview>Aktiviere deinen invoice-gen Account</Preview>
+        <Preview>Passwort für deinen invoice-gen Account zurücksetzen</Preview>
 
         <Container>
           <table className="w-full">
@@ -52,10 +52,10 @@ const VerifyAccountEmail: React.FC<Props> = ({ code }) => {
           </table>
 
           <Heading as="h1" className="text-center">
-            Account verifizieren
+            Passwort zurücksetzen
           </Heading>
           <Text className="text-center">
-            Bitte nutze den folgenden Code um deinen Account zu verifizieren:
+            Bitte nutze den folgenden Code um dein Passwort zurückzusetzen:
           </Text>
           <Section className="bg-black rounded-lg w-fit px-2">
             <Text className="text-center text-white text-lg font-bold">
@@ -68,4 +68,4 @@ const VerifyAccountEmail: React.FC<Props> = ({ code }) => {
   );
 };
 
-export default VerifyAccountEmail;
+export default ResetPasswordEmail;

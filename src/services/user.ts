@@ -7,6 +7,7 @@ import db from "@/db";
 import sessionConfig from "@/config/session";
 import passwordHelper from "@/lib/password";
 import mailer from "@/lib/mailer";
+import passwordConfig from "@/config/password";
 
 dayjs.extend(utc);
 
@@ -49,13 +50,15 @@ const register = async ({
     return null;
   }
 
-  const oldUser = await db.user.findUnique({ where: { username } });
+  const oldUser = await db.user.findFirst({
+    where: { OR: [{ username }, { email, verified: true }] },
+  });
 
   if (oldUser) {
     return null;
   }
 
-  const verifyToken = generateToken();
+  const verifyCode = generateCode();
 
   const user = await db.user.create({
     data: {
@@ -76,7 +79,7 @@ const register = async ({
       email,
       verify: {
         create: {
-          token: verifyToken,
+          code: passwordHelper.hash(verifyCode),
         },
       },
     },
@@ -84,7 +87,7 @@ const register = async ({
 
   await mailer.sendVerificationMail({
     to: email,
-    token: verifyToken,
+    code: verifyCode,
   });
 
   return await createSession(user.id);
@@ -286,9 +289,131 @@ const changePassword = async (
   });
 };
 
-export default { register, login, checkSession, get, edit, changePassword };
+const requestResetPassword = async ({ email }: { email: string }) => {
+  const user = await db.user.findFirst({
+    where: {
+      email,
+    },
+  });
 
-const generateToken = (codeLength: number = 6) => {
+  if (!user) {
+    return null;
+  }
+
+  const code = generateCode();
+
+  await db.userPasswordReset.upsert({
+    where: {
+      userId: user.id,
+    },
+    create: {
+      userId: user.id,
+      code: passwordHelper.hash(code),
+      expires: dayjs.utc().add(passwordConfig.maxAge, "seconds").toDate(),
+    },
+    update: {
+      userId: user.id,
+      code: passwordHelper.hash(code),
+      expires: dayjs.utc().add(passwordConfig.maxAge, "seconds").toDate(),
+    },
+  });
+
+  await mailer.sendResetPasswordMail({ to: email, code });
+};
+
+const checkResetPasswordCode = async ({
+  email,
+  code,
+}: {
+  email: string;
+  code: string;
+}) => {
+  const user = await db.user.findFirst({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  const passwordReset = await db.userPasswordReset.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!passwordReset) {
+    return null;
+  }
+
+  if (
+    !passwordHelper.compare(code, passwordReset.code) &&
+    dayjs.utc().isBefore(passwordReset.expires)
+  ) {
+    return null;
+  }
+
+  return true;
+};
+
+const resetPassword = async ({
+  email,
+  code,
+  newPassword,
+  newPasswordRepeated,
+}: {
+  email: string;
+  code: string;
+  newPassword: string;
+  newPasswordRepeated: string;
+}) => {
+  if (newPassword !== newPasswordRepeated) {
+    return null;
+  }
+
+  const codeValid = await checkResetPasswordCode({ email, code });
+
+  if (!codeValid) {
+    return null;
+  }
+
+  const user = await db.user.findFirst({
+    where: { email },
+  });
+
+  const updatedUser = await db.user.update({
+    where: {
+      id: user!.id,
+    },
+    data: {
+      password: passwordHelper.hash(newPassword),
+    },
+  });
+
+  await db.userPasswordReset.delete({
+    where: {
+      userId: user!.id,
+    },
+  });
+
+  return updatedUser;
+};
+
+export default {
+  register,
+  login,
+  checkSession,
+  get,
+  edit,
+  changePassword,
+  requestResetPassword,
+  checkResetPasswordCode,
+  resetPassword,
+};
+
+const generateCode = (codeLength: number = 6) => {
   let code = "";
 
   for (let i = 0; i < codeLength; i++) {
