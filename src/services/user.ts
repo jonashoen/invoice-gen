@@ -134,6 +134,8 @@ const logout = async (userId: number) => {
 };
 
 const createSession = async (userId: number) => {
+  const expires = dayjs.utc().add(sessionConfig.maxAge, "seconds").toDate();
+
   return await db.session.upsert({
     where: {
       userId,
@@ -141,10 +143,11 @@ const createSession = async (userId: number) => {
     create: {
       userId,
       sessionId: crypto.randomUUID(),
-      expires: dayjs.utc().add(sessionConfig.maxAge, "milliseconds").toDate(),
+      expires,
     },
     update: {
       sessionId: crypto.randomUUID(),
+      expires,
     },
   });
 };
