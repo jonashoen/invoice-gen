@@ -117,4 +117,5 @@ enum PaymentDueUnit {
 
 enum InvoicePositionUnit {
   hours
+  pieces
 }

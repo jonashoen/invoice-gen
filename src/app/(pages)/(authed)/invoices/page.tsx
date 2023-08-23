@@ -97,7 +97,9 @@ const Pages = () => {
                       <Button
                         onClick={() => {
                           showModal({
-                            title: `Rechnung bearbeiten (${invoice.number})`,
+                            title: `Rechnung bearbeiten (vom ${dateToDateString(
+                              invoice.createdAt
+                            )})`,
                             content: (
                               <AddInvoice
                                 id={invoice.id}

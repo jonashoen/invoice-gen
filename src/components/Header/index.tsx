@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import Paper from "../Paper";
 import Container from "../Container";
 
 const Header = ({
