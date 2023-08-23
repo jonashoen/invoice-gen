@@ -13,7 +13,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isAuthed) {
-      router.push(Pages.Dashboard);
+      router.push(Pages.Invoices);
     }
   }, [isAuthed]);
 

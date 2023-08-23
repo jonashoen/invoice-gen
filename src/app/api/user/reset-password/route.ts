@@ -12,7 +12,7 @@ const POST = async (request: BaseRequest<ResetPasswordRequest>) => {
   const oldSession = await isAuthed();
 
   if (oldSession) {
-    return NextResponse.redirect(Pages.Dashboard);
+    return NextResponse.redirect(Pages.Invoices);
   }
 
   const body = await request.json();

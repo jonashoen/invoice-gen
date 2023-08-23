@@ -30,7 +30,7 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
     onSuccess: () => {
       login();
       hideModal();
-      router.push(Pages.Dashboard);
+      router.push(Pages.Invoices);
     },
     onError: (apiError) => {
       if (apiError.statusCode === StatusCodes.BAD_REQUEST) {

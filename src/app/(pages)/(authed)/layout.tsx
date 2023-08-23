@@ -14,7 +14,6 @@ import Pages from "@/routes/Pages";
 const { metadata, layout } = title("Dashboard - ig");
 
 const links = [
-  { text: "Dashboard", url: Pages.Dashboard },
   { text: "Rechnungen", url: Pages.Invoices },
   { text: "Projekte", url: Pages.Projects },
   { text: "Kunden", url: Pages.Customers },
@@ -52,7 +51,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       >
         <header className="flex  w-screen justify-center bg-purple py-4 border-b-8 border-black sticky top-0 z-40">
           <div className="container flex flex-wrap justify-center 2xl:justify-between items-center gap-4">
-            <Link href={Pages.Dashboard}>
+            <Link href={Pages.Invoices}>
               <Chip className="bg-orange -rotate-3">
                 <h1 className="font-bold text-xl text-white">invoice-gen</h1>
               </Chip>

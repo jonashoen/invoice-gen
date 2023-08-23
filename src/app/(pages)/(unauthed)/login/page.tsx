@@ -30,7 +30,7 @@ const Login = () => {
     route: Api.Login,
     onSuccess: () => {
       loginLocal();
-      router.replace(Pages.Dashboard);
+      router.replace(Pages.Invoices);
     },
     onError: (apiError) => {
       if (apiError.statusCode === StatusCodes.UNAUTHORIZED) {

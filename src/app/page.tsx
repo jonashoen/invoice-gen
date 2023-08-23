@@ -8,6 +8,6 @@ export default async function Home() {
   if (!session) {
     redirect(Pages.Login);
   } else {
-    redirect(Pages.Dashboard);
+    redirect(Pages.Invoices);
   }
 }
