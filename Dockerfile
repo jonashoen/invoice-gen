@@ -39,6 +39,8 @@ RUN npm install prisma
 
 USER nextjs
 
+RUN mkdir pdfs
+
 EXPOSE 5000
 
 ENV PORT 5000
