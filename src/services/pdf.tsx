@@ -26,7 +26,7 @@ const createInvoice = async (
   number: string
 ) => {
   const filename = generateFileName();
-  const filePath = path.join(pdfDirPath, `${filename}.pdf`);
+  const filePath = path.join(pdfDirPath, filename);
 
   const ReactDOMServer = (await import("react-dom/server")).default;
 
@@ -43,7 +43,7 @@ const createInvoice = async (
 };
 
 const getFile = (filename: string) => {
-  return fs.createReadStream(path.join(pdfDirPath, `${filename}.pdf`));
+  return fs.createReadStream(path.join(pdfDirPath, filename));
 };
 
 export default {
