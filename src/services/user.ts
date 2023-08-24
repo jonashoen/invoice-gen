@@ -309,7 +309,10 @@ const changePassword = async (
 const requestResetPassword = async ({ email }: { email: string }) => {
   const user = await db.user.findFirst({
     where: {
-      email,
+      email: {
+        equals: email,
+        mode: "insensitive",
+      },
     },
   });
 
@@ -347,7 +350,10 @@ const checkResetPasswordCode = async ({
 }) => {
   const user = await db.user.findFirst({
     where: {
-      email,
+      email: {
+        equals: email,
+        mode: "insensitive",
+      },
     },
   });
 
@@ -397,7 +403,12 @@ const resetPassword = async ({
   }
 
   const user = await db.user.findFirst({
-    where: { email },
+    where: {
+      email: {
+        equals: email,
+        mode: "insensitive",
+      },
+    },
   });
 
   return await db.user.update({
