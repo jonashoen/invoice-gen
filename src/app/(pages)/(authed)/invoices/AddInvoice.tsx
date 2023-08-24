@@ -53,7 +53,7 @@ const AddInvoice: React.FC<Props> = ({
     onSuccess: hideModal,
     onError: () => {
       setError(
-        "Beim Erstellen der Rechnung ist ein Fehler aufgetreten, bitte nochmal versuchen."
+        "Beim Anlegen der Rechnung ist ein Fehler aufgetreten, bitte nochmal versuchen."
       );
     },
   });
@@ -444,7 +444,7 @@ const AddInvoice: React.FC<Props> = ({
             deleteInvoiceMutation.isLoading
           }
         >
-          {id ? "Speichern" : "Erstellen"}
+          {id ? "Speichern" : "Anlegen"}
         </Button>
       </div>
     </Form>
