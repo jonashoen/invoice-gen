@@ -1,13 +1,6 @@
 kind: pipeline
 name: frontend
 
-environment:
-  MAIL_HOST: cicd
-  MAIL_PORT: 0cicd
-  MAIL_USER: cicd
-  MAIL_PASSWORD: cicd
-  MAIL_FROM: cicd
-
 steps:
   - name: build
     image: node
@@ -21,14 +14,8 @@ steps:
       - npm ci
       - npm run test
 
-  - name: docker
+  - name: dockerize
     image: plugins/docker
-    environment:
-      MAIL_HOST: cicd
-      MAIL_PORT: 0cicd
-      MAIL_USER: cicd
-      MAIL_PASSWORD: cicd
-      MAIL_FROM: cicd
     settings:
       registry: git.codemonke.de
       repo: git.codemonke.de/invoice/invoice-gen
