@@ -60,21 +60,21 @@ const Pages = () => {
           {openInvoices && openInvoices.length !== 0 && (
             <details open>
               <summary
-                className="cursor-pointer w-fit list-none select-none"
+                className="cursor-pointer flex items-center gap-2 w-fit list-none select-none"
                 onClick={() => setOpenInvoicesOpen((o) => !o)}
               >
-                <Container className="w-fit flex items-center bg-purple gap-2">
+                <Container className="w-fit bg-purple gap-2">
                   <h3 className="text-xl text-white">
                     Offene ({openInvoices.length})
                   </h3>
-                  <Container
-                    className={[
-                      "transition-colors !w-[48px] !h-[48px] text-center",
-                      openInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
-                    ].join(" ")}
-                  >
-                    {openInvoicesOpen ? "-" : "+"}
-                  </Container>
+                </Container>
+                <Container
+                  className={[
+                    "transition-colors !w-[48px] !h-[48px] text-center",
+                    openInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
+                  ].join(" ")}
+                >
+                  {openInvoicesOpen ? "-" : "+"}
                 </Container>
               </summary>
               <div className="flex flex-col gap-4 mt-4">
@@ -133,23 +133,21 @@ const Pages = () => {
           {createdInvoices && createdInvoices.length !== 0 && (
             <details open>
               <summary
-                className="cursor-pointer w-fit list-none select-none"
+                className="cursor-pointer flex items-center gap-2 w-fit list-none select-none"
                 onClick={() => setCreatedInvoicesOpen((o) => !o)}
               >
-                <Container className="w-fit flex items-center bg-purple gap-2">
+                <Container className="w-fit bg-purple gap-2">
                   <h3 className="text-xl text-white">
                     Erstellte ({createdInvoices.length})
                   </h3>
-                  <Container
-                    className={[
-                      "transition-colors !w-[48px] !h-[48px] text-center",
-                      createdInvoicesOpen
-                        ? "bg-red-600 text-white"
-                        : "bg-green",
-                    ].join(" ")}
-                  >
-                    {createdInvoicesOpen ? "-" : "+"}
-                  </Container>
+                </Container>
+                <Container
+                  className={[
+                    "transition-colors !w-[48px] !h-[48px] text-center",
+                    createdInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
+                  ].join(" ")}
+                >
+                  {createdInvoicesOpen ? "-" : "+"}
                 </Container>
               </summary>
               <div className="flex flex-col gap-4 mt-4">
