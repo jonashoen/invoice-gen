@@ -7,6 +7,12 @@ steps:
     commands:
       - npm ci
       - npm run build
+    environment:
+      MAIL_HOST: cicd
+      MAIL_PORT: 0cicd
+      MAIL_USER: cicd
+      MAIL_PASSWORD: cicd
+      MAIL_FROM: cicd
 
   - name: test
     image: node

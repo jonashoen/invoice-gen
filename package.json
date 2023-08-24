@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "emails": "email dev"
+    "emails": "email dev",
+    "test": "jest --coverage --passWithNoTests"
   },
   "dependencies": {
     "@fontsource/lexend-mega": "^5.0.3",
