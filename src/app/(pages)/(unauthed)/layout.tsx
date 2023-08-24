@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     if (isAuthed) {
       router.push(Pages.Invoices);
     }
-  }, [isAuthed]);
+  }, [isAuthed, router]);
 
   return (
     isAuthed === false && (

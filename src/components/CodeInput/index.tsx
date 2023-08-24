@@ -16,7 +16,7 @@ const CodeInput: React.FC<Props> = ({ code, setCode }) => {
       <div className="relative w-min">
         <div className="flex gap-4">
           {[...Array(6).fill(0)].map((_, i) => (
-            <div className="w-[70px]">
+            <div className="w-[70px]" key={i}>
               <TextField
                 value={code[i] ?? "•"}
                 readOnly

@@ -11,8 +11,6 @@ import Api from "@/routes/Api";
 import useApiMutation from "@/hooks/useApiMutation";
 import Pages from "@/routes/Pages";
 
-const { metadata, layout } = title("Dashboard - ig");
-
 const links = [
   { text: "Rechnungen", url: Pages.Invoices },
   { text: "Projekte", url: Pages.Projects },
@@ -40,7 +38,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     if (isAuthed === false) {
       router.push(Pages.Login);
     }
-  }, [isAuthed]);
+  }, [isAuthed, router]);
 
   return (
     isAuthed && (
@@ -84,11 +82,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
             </Button>
           </div>
         </header>
-        <div className="container py-8">{layout({ children })}</div>
+        <div className="container py-8">{children}</div>
       </div>
     )
   );
 };
 
 export default Layout;
-export { metadata };

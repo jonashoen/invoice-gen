@@ -21,10 +21,6 @@ const client = new QueryClient({
   },
 });
 
-export const metadata = {
-  title: "invoice-gen",
-};
-
 export default function RootLayout({
   children,
 }: {

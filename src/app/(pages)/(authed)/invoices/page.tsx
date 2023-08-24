@@ -79,7 +79,7 @@ const Pages = () => {
               </summary>
               <div className="flex flex-col gap-4 mt-4">
                 {openInvoices.map((invoice) => (
-                  <Paper className="!flex-row justify-between">
+                  <Paper className="!flex-row justify-between" key={invoice.id}>
                     <div className="flex flex-col justify-center">
                       <p className="text-xl">
                         {invoice.number ??

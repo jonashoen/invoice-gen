@@ -12,7 +12,7 @@ import {
 import Api from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
 import { StatusCodes } from "http-status-codes";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 enum Steps {
   Email = 1,
@@ -100,12 +100,12 @@ const Step2 = ({
       },
     });
 
-  const checkRestoreCode = () => {
+  const checkRestoreCode = useCallback(() => {
     checkRestoreCodeMutation.mutate({
       email,
       code,
     });
-  };
+  }, [checkRestoreCodeMutation, email, code]);
 
   useEffect(() => {
     setError("");
@@ -113,7 +113,7 @@ const Step2 = ({
     if (code.length === CODE_LENGHT) {
       checkRestoreCode();
     }
-  }, [code]);
+  }, [code, checkRestoreCode]);
 
   return (
     <Form onSubmit={checkRestoreCode} className="gap-4 mt-10">

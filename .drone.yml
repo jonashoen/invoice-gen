@@ -1,0 +1,29 @@
+kind: pipeline
+name: frontend
+
+steps:
+  - name: build
+    image: node
+    commands:
+      - npm ci
+      - npm run lint
+      - npm run build
+
+  - name: test
+    image: node
+    commands:
+      - npm ci
+      - npm run test
+
+  - name: dockerize
+    image: thegeeklab/drone-docker-buildx:23
+    privileged: true
+    settings:
+      registry: git.codemonke.de
+      repo: git.codemonke.de/invoice/invoice-gen
+      username:
+        from_secret: DOCKER_USERNAME
+      password:
+        from_secret: DOCKER_PASSWORD
+      platforms: linux/amd64
+      tags: latest

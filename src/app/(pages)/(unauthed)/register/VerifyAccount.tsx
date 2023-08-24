@@ -13,7 +13,7 @@ import useModalStore from "@/store/modalStore";
 import useUserStore from "@/store/userStore";
 import { StatusCodes } from "http-status-codes";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Props {
   username: string;
@@ -59,10 +59,10 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
   const [error, setError] = useState("");
   const [code, setCode] = useState("");
 
-  const verifyAccount = () => {
+  const verifyAccount = useCallback(() => {
     setSuccess("");
     verifyAccountMutation.mutate({ username, code });
-  };
+  }, [verifyAccountMutation, username, code]);
 
   const resendVerifyCode = () => {
     setError("");
@@ -77,7 +77,7 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
     if (code.length === CODE_LENGHT) {
       verifyAccount();
     }
-  }, [code]);
+  }, [code, verifyAccount]);
 
   return (
     <Form onSubmit={verifyAccount} className="gap-4">
