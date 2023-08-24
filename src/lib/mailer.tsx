@@ -4,16 +4,6 @@ import { render } from "@react-email/render";
 import VerifyAccountEmail from "@/emails/verify-account";
 import ResetPasswordEmail from "@/emails/reset-password";
 
-const transporter = nodemailer.createTransport({
-  host: mailerConfig.host,
-  port: mailerConfig.port,
-  secure: true,
-  auth: {
-    user: mailerConfig.user,
-    pass: mailerConfig.password,
-  },
-});
-
 const sendVerificationMail = async ({
   to,
   code,
@@ -27,7 +17,7 @@ const sendVerificationMail = async ({
       plainText: true,
     });
 
-    return await transporter.sendMail({
+    return await createTransport().sendMail({
       from: {
         name: mailerConfig.from.name,
         address: mailerConfig.from.email,
@@ -57,7 +47,7 @@ const sendResetPasswordMail = async ({
       plainText: true,
     });
 
-    return await transporter.sendMail({
+    return await createTransport().sendMail({
       from: {
         name: mailerConfig.from.name,
         address: mailerConfig.from.email,
@@ -75,3 +65,15 @@ const sendResetPasswordMail = async ({
 };
 
 export default { sendVerificationMail, sendResetPasswordMail };
+
+const createTransport = () => {
+  return nodemailer.createTransport({
+    host: mailerConfig.host,
+    port: mailerConfig.port,
+    secure: true,
+    auth: {
+      user: mailerConfig.user,
+      pass: mailerConfig.password,
+    },
+  });
+};
