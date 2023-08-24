@@ -62,7 +62,7 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
   const verifyAccount = useCallback(() => {
     setSuccess("");
     verifyAccountMutation.mutate({ username, code });
-  }, [verifyAccountMutation, username, code]);
+  }, [verifyAccountMutation.mutate, username, code]);
 
   const resendVerifyCode = () => {
     setError("");

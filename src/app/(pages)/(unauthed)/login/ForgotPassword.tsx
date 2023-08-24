@@ -105,7 +105,7 @@ const Step2 = ({
       email,
       code,
     });
-  }, [checkRestoreCodeMutation, email, code]);
+  }, [checkRestoreCodeMutation.mutate, email, code]);
 
   useEffect(() => {
     setError("");
