@@ -37,9 +37,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 RUN npm install prisma
 
-USER nextjs
-
 RUN mkdir pdfs
+RUN chown nextjs ./pdfs
+
+USER nextjs
 
 EXPOSE 5000
 
