@@ -2,7 +2,15 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 import db from "@/db";
-import { InvoicePositionUnit } from "@prisma/client";
+import {
+  Customer,
+  Invoice,
+  InvoicePosition,
+  InvoicePositionUnit,
+  PaymentDueUnit,
+  Profile,
+  User,
+} from "@prisma/client";
 import pdf from "@/services/pdf";
 import { ReadStream } from "fs";
 
@@ -229,7 +237,7 @@ const deleteInvoice = async (userId: number, { id }: { id: number }) => {
 };
 
 const publish = async (userId: number, { id }: { id: number }) => {
-  const invoice = await db.invoice.findUnique({
+  const invoice = (await db.invoice.findUnique({
     where: {
       id,
       project: {
@@ -245,7 +253,11 @@ const publish = async (userId: number, { id }: { id: number }) => {
           paymentDueUnit: true,
           customer: {
             include: {
-              user: true,
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
             },
           },
         },
@@ -256,7 +268,14 @@ const publish = async (userId: number, { id }: { id: number }) => {
         },
       },
     },
-  });
+  })) as Invoice & {
+    project: {
+      paymentDue: number;
+      paymentDueUnit: PaymentDueUnit;
+      customer: Customer & { user: User & { profile: Profile } };
+    };
+    positions: InvoicePosition[];
+  };
 
   if (!invoice || invoice.locked) {
     return null;

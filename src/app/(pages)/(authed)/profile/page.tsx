@@ -14,28 +14,28 @@ import {
   EditUserRequest,
 } from "@/interfaces/requests/user";
 import Api from "@/routes/Api";
-import { User } from "@prisma/client";
+import { Profile, User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import { useState } from "react";
 
 const Profile = () => {
-  const { data: user, isFetching } = useApi<User>({
+  const { data: user, isFetching } = useApi<User & { profile: Profile }>({
     route: Api.GetUser,
     onSuccess: (data) => {
       setUsername(data.username);
-      setFirstName(data.firstName);
-      setLastName(data.lastName);
-      setZipCode(data.zipCode);
-      setCity(data.city);
-      setStreet(data.street);
-      setHouseNumber(data.houseNumber);
-      setBank(data.bank);
-      setIban(data.iban);
-      setBic(data.bic);
-      setTaxNumber(data.taxNumber);
-      setVatId(data.vatId);
-      setTelephone(data.telephone);
-      setEmail(data.email);
+      setFirstName(data.profile.firstName);
+      setLastName(data.profile.lastName);
+      setZipCode(data.profile.zipCode);
+      setCity(data.profile.city);
+      setStreet(data.profile.street);
+      setHouseNumber(data.profile.houseNumber);
+      setBank(data.profile.bank);
+      setIban(data.profile.iban);
+      setBic(data.profile.bic);
+      setTaxNumber(data.profile.taxNumber);
+      setVatId(data.profile.vatId);
+      setTelephone(data.profile.telephone);
+      setEmail(data.profile.email);
     },
   });
 
@@ -143,19 +143,19 @@ const Profile = () => {
     telephone &&
     email &&
     (user.username !== username ||
-      user.firstName !== firstName ||
-      user.lastName !== lastName ||
-      user.zipCode !== zipCode ||
-      user.city !== city ||
-      user.street !== street ||
-      user.houseNumber !== houseNumber ||
-      user.bank !== bank ||
-      user.iban !== iban ||
-      user.bic !== bic ||
-      user.taxNumber !== taxNumber ||
-      user.vatId !== vatId ||
-      user.telephone !== telephone ||
-      user.email !== email);
+      user.profile.firstName !== firstName ||
+      user.profile.lastName !== lastName ||
+      user.profile.zipCode !== zipCode ||
+      user.profile.city !== city ||
+      user.profile.street !== street ||
+      user.profile.houseNumber !== houseNumber ||
+      user.profile.bank !== bank ||
+      user.profile.iban !== iban ||
+      user.profile.bic !== bic ||
+      user.profile.taxNumber !== taxNumber ||
+      user.profile.vatId !== vatId ||
+      user.profile.telephone !== telephone ||
+      user.profile.email !== email);
 
   const changePasswordButtonDisabled =
     !oldPassword ||
@@ -334,8 +334,6 @@ const Profile = () => {
               )}
 
               <p className="text-xl">Passwort ändern:</p>
-
-              <TextField name="username" value={user.username} type="hidden" />
 
               <TextField
                 name="oldPassword"

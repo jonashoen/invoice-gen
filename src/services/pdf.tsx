@@ -7,6 +7,7 @@ import {
   Invoice,
   InvoicePosition,
   PaymentDueUnit,
+  Profile,
   User,
 } from "@prisma/client";
 import ReactPDF from "@joshuajaco/react-pdf-renderer-bundled";
@@ -19,12 +20,16 @@ const createInvoice = async (
     project: {
       paymentDue: number;
       paymentDueUnit: PaymentDueUnit;
-      customer: Customer & { user: User };
+      customer: Customer & { user: User & { profile: Profile } };
     };
     positions: InvoicePosition[];
   },
   number: string
 ) => {
+  if (!invoice.project.customer.user.profile) {
+    return null;
+  }
+
   const filename = generateFileName();
   const filePath = path.join(pdfDirPath, filename);
 

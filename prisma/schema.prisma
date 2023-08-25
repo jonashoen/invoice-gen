@@ -11,30 +11,35 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
-
-  firstName     String
-  lastName      String
-  zipCode       String
-  city          String
-  street        String
-  houseNumber   String
-  bank          String
-  iban          String
-  bic           String
-  taxNumber     String
-  vatId         String
-  telephone     String
-  email         String
+  id            Int                @id @default(autoincrement())
+  username      String             @unique
+  password      String
   createdAt     DateTime           @default(now())
   verified      Boolean            @default(false)
   verifiedAt    DateTime?
+  profile       Profile?
   customers     Customer[]
   session       Session?
   verify        UserVerify?
   passwordReset UserPasswordReset?
+}
+
+model Profile {
+  userId      Int    @id
+  user        User   @relation(fields: [userId], references: [id])
+  firstName   String
+  lastName    String
+  zipCode     String
+  city        String
+  street      String
+  houseNumber String
+  bank        String
+  iban        String
+  bic         String
+  taxNumber   String
+  vatId       String
+  telephone   String
+  email       String
 }
 
 model Session {

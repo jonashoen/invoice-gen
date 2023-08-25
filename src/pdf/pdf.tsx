@@ -7,6 +7,7 @@ import {
   Invoice,
   InvoicePosition,
   PaymentDueUnit,
+  Profile,
   User,
 } from "@prisma/client";
 import {
@@ -198,7 +199,7 @@ const Head = ({
   invoiceNumber,
 }: {
   customer: Customer;
-  user: User;
+  user: User & { profile: Profile };
   project: { paymentDue: number; paymentDueUnit: PaymentDueUnit };
   invoiceNumber: string;
 }) => (
@@ -222,13 +223,13 @@ const Head = ({
         <Text style={[styles.toFrom, styles.right, styles.uppercase]}>Von</Text>
         <View style={[styles.right]}>
           <Text style={[styles.addressName, styles.bold, styles.accent]}>
-            {user.firstName} {user.lastName}
+            {user.profile.firstName} {user.profile.lastName}
           </Text>
           <Text>
-            {user.street} {user.houseNumber}
+            {user.profile.street} {user.profile.houseNumber}
           </Text>
           <Text>
-            {user.zipCode} {user.city}
+            {user.profile.zipCode} {user.profile.city}
           </Text>
         </View>
       </View>
@@ -276,7 +277,7 @@ const Main = ({
 }: {
   positions: InvoicePosition[];
   project: { paymentDue: number; paymentDueUnit: PaymentDueUnit };
-  user: User;
+  user: User & { profile: Profile };
 }) => {
   const invoiceSum = sumPositions(positions);
 
@@ -365,7 +366,7 @@ const Main = ({
         <View style={styles.billingNote}>
           <Text>Liebe Grüße</Text>
           <Text>
-            {user.firstName} {user.lastName}
+            {user.profile.firstName} {user.profile.lastName}
           </Text>
         </View>
       </View>
@@ -379,7 +380,7 @@ const Footer = ({
   sumIncludingTaxes,
   renderToStaticMarkup,
 }: {
-  user: User;
+  user: User & { profile: Profile };
   invoiceNumber: string;
   sumIncludingTaxes: number;
   renderToStaticMarkup: (element: ReactElement) => string;
@@ -390,36 +391,36 @@ const Footer = ({
       <View style={styles.footerColumns}>
         <View style={styles.flex1_5}>
           <Text>
-            {user.firstName} {user.lastName}
+            {user.profile.firstName} {user.profile.lastName}
           </Text>
           <Text>
-            {user.street} {user.houseNumber}
+            {user.profile.street} {user.profile.houseNumber}
           </Text>
           <Text>
-            {user.zipCode} {user.city}
+            {user.profile.zipCode} {user.profile.city}
           </Text>
-          {user.vatId ? (
-            <Text>USt-IdNr.: {user.vatId}</Text>
+          {user.profile.vatId ? (
+            <Text>USt-IdNr.: {user.profile.vatId}</Text>
           ) : (
-            <Text>St.-Nr.: {user.taxNumber}</Text>
+            <Text>St.-Nr.: {user.profile.taxNumber}</Text>
           )}
         </View>
         <View style={styles.flex2}>
-          <Text>Tel.: {user.telephone}</Text>
-          <Text>E-Mail: {user.email}</Text>
+          <Text>Tel.: {user.profile.telephone}</Text>
+          <Text>E-Mail: {user.profile.email}</Text>
         </View>
         <View style={styles.flex2}>
-          <Text>Kreditinstitut: {user.bank}</Text>
-          <Text>IBAN: {user.iban}</Text>
-          <Text>BIC: {user.bic}</Text>
+          <Text>Kreditinstitut: {user.profile.bank}</Text>
+          <Text>IBAN: {user.profile.iban}</Text>
+          <Text>BIC: {user.profile.bic}</Text>
           <Text>
-            Kontoinhaber: {user.firstName} {user.lastName}
+            Kontoinhaber: {user.profile.firstName} {user.profile.lastName}
           </Text>
         </View>
         <PdfSvg renderToStaticMarkup={renderToStaticMarkup} width={44}>
           <Girocode
-            iban={user.iban}
-            recipient={`${user.firstName} ${user.lastName}`}
+            iban={user.profile.iban}
+            recipient={`${user.profile.firstName} ${user.profile.lastName}`}
             text={invoiceNumber}
             amount={sumIncludingTaxes}
           />
@@ -434,7 +435,7 @@ interface Props {
     project: {
       paymentDue: number;
       paymentDueUnit: PaymentDueUnit;
-      customer: Customer & { user: User };
+      customer: Customer & { user: User & { profile: Profile } };
     };
     positions: InvoicePosition[];
   };
@@ -442,7 +443,7 @@ interface Props {
   renderToStaticMarkup: (element: ReactElement) => string;
 }
 
-const Invoice: React.FC<Props> = ({
+const InvoicePdf: React.FC<Props> = ({
   invoice,
   number,
   renderToStaticMarkup,
@@ -475,4 +476,4 @@ const Invoice: React.FC<Props> = ({
   );
 };
 
-export default Invoice;
+export default InvoicePdf;

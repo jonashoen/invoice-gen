@@ -51,7 +51,7 @@ const register = async ({
   }
 
   const oldUser = await db.user.findFirst({
-    where: { OR: [{ username }, { email, verified: true }] },
+    where: { OR: [{ username }, { profile: { email }, verified: true }] },
   });
 
   if (oldUser) {
@@ -64,19 +64,23 @@ const register = async ({
     data: {
       username,
       password: passwordHelper.hash(password),
-      firstName,
-      lastName,
-      zipCode,
-      city,
-      street,
-      houseNumber,
-      bank,
-      iban,
-      bic,
-      taxNumber,
-      vatId,
-      telephone,
-      email,
+      profile: {
+        create: {
+          firstName,
+          lastName,
+          zipCode,
+          city,
+          street,
+          houseNumber,
+          bank,
+          iban,
+          bic,
+          taxNumber,
+          vatId,
+          telephone,
+          email,
+        },
+      },
       verify: {
         create: {
           code: passwordHelper.hash(verifyCode),
@@ -178,19 +182,23 @@ const get = async (userId: number) => {
     select: {
       createdAt: true,
       username: true,
-      firstName: true,
-      lastName: true,
-      zipCode: true,
-      city: true,
-      street: true,
-      houseNumber: true,
-      bank: true,
-      iban: true,
-      bic: true,
-      taxNumber: true,
-      vatId: true,
-      telephone: true,
-      email: true,
+      profile: {
+        select: {
+          firstName: true,
+          lastName: true,
+          zipCode: true,
+          city: true,
+          street: true,
+          houseNumber: true,
+          bank: true,
+          iban: true,
+          bic: true,
+          taxNumber: true,
+          vatId: true,
+          telephone: true,
+          email: true,
+        },
+      },
     },
   });
 };
@@ -233,6 +241,9 @@ const edit = async (
     where: {
       id,
     },
+    include: {
+      profile: true,
+    },
   });
 
   if (!user) {
@@ -251,25 +262,45 @@ const edit = async (
     }
   }
 
+  if (email && user.profile!.email !== email) {
+    const userEmail = await db.profile.findFirst({
+      where: {
+        email: {
+          equals: email,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    if (userEmail) {
+      return null;
+    }
+  }
+
   return await db.user.update({
     where: {
       id,
     },
     data: {
       username,
-      firstName,
-      lastName,
-      zipCode,
-      city,
-      street,
-      houseNumber,
-      bank,
-      iban,
-      bic,
-      taxNumber,
-      vatId,
-      telephone,
-      email,
+      verify: {},
+      profile: {
+        update: {
+          firstName,
+          lastName,
+          zipCode,
+          city,
+          street,
+          houseNumber,
+          bank,
+          iban,
+          bic,
+          taxNumber,
+          vatId,
+          telephone,
+          email,
+        },
+      },
     },
   });
 };
@@ -307,7 +338,7 @@ const changePassword = async (
 };
 
 const requestResetPassword = async ({ email }: { email: string }) => {
-  const user = await db.user.findFirst({
+  const profile = await db.profile.findFirst({
     where: {
       email: {
         equals: email,
@@ -316,7 +347,7 @@ const requestResetPassword = async ({ email }: { email: string }) => {
     },
   });
 
-  if (!user) {
+  if (!profile) {
     return null;
   }
 
@@ -324,15 +355,15 @@ const requestResetPassword = async ({ email }: { email: string }) => {
 
   await db.userPasswordReset.upsert({
     where: {
-      userId: user.id,
+      userId: profile.userId,
     },
     create: {
-      userId: user.id,
+      userId: profile.userId,
       code: passwordHelper.hash(code),
       expires: dayjs.utc().add(passwordConfig.maxAge, "seconds").toDate(),
     },
     update: {
-      userId: user.id,
+      userId: profile.userId,
       code: passwordHelper.hash(code),
       expires: dayjs.utc().add(passwordConfig.maxAge, "seconds").toDate(),
     },
@@ -348,7 +379,7 @@ const checkResetPasswordCode = async ({
   email: string;
   code: string;
 }) => {
-  const user = await db.user.findFirst({
+  const profile = await db.profile.findFirst({
     where: {
       email: {
         equals: email,
@@ -357,13 +388,13 @@ const checkResetPasswordCode = async ({
     },
   });
 
-  if (!user) {
+  if (!profile) {
     return null;
   }
 
   const passwordReset = await db.userPasswordReset.findUnique({
     where: {
-      userId: user.id,
+      userId: profile.userId,
     },
   });
 
@@ -402,7 +433,7 @@ const resetPassword = async ({
     return null;
   }
 
-  const user = await db.user.findFirst({
+  const profile = await db.profile.findFirst({
     where: {
       email: {
         equals: email,
@@ -413,7 +444,7 @@ const resetPassword = async ({
 
   return await db.user.update({
     where: {
-      id: user!.id,
+      id: profile!.userId,
     },
     data: {
       password: passwordHelper.hash(newPassword),
@@ -476,6 +507,13 @@ const resendVerifyCode = async ({ username }: { username: string }) => {
     where: {
       username,
     },
+    include: {
+      profile: {
+        select: {
+          email: true,
+        },
+      },
+    },
   });
 
   if (!user || user.verified) {
@@ -494,7 +532,7 @@ const resendVerifyCode = async ({ username }: { username: string }) => {
   });
 
   await mailer.sendVerificationMail({
-    to: user.email,
+    to: user.profile!.email,
     code: verifyCode,
   });
 
