@@ -34,7 +34,7 @@ const Login = () => {
     },
     onError: (apiError) => {
       if (apiError.statusCode === StatusCodes.UNAUTHORIZED) {
-        setError("Der Nutzername oder Passwort ist falsch.");
+        setError("Der Nutzername oder das Passwort ist falsch.");
       } else if (apiError.statusCode === StatusCodes.FORBIDDEN) {
         showModal({
           title: "Account verifizieren",
