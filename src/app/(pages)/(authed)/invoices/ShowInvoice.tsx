@@ -29,7 +29,7 @@ const ShowInvoice: React.FC<Props> = ({ filename, number }) => {
           type="application/pdf"
           className="flex flex-col w-full flex-grow z-20"
         >
-          <p className="flex-grow text-2xl text-center text-red-500 font-bold">
+          <p className="flex-grow text-2xl bg-white text-center text-red-500 font-bold">
             PDF konnte nicht geladen werden.
           </p>
         </object>
