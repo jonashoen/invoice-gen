@@ -58,24 +58,25 @@ const Pages = () => {
             </p>
           )}
           {openInvoices && openInvoices.length !== 0 && (
-            <details open>
+            <details open={openInvoicesOpen}>
               <summary
-                className="cursor-pointer flex items-center gap-2 w-fit list-none select-none"
-                onClick={() => setOpenInvoicesOpen((o) => !o)}
+                className="flex items-center gap-2 w-fit list-none select-none"
+                onClick={(e) => e.preventDefault()}
               >
                 <Container className="w-fit bg-purple gap-2">
                   <h3 className="text-xl text-white">
                     Offene ({openInvoices.length})
                   </h3>
                 </Container>
-                <Container
+                <Button
                   className={[
                     "transition-colors !w-[48px] !h-[48px] text-center",
                     openInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
                   ].join(" ")}
+                  onClick={() => setOpenInvoicesOpen((o) => !o)}
                 >
                   {openInvoicesOpen ? "-" : "+"}
-                </Container>
+                </Button>
               </summary>
               <div className="flex flex-col gap-4 mt-4">
                 {openInvoices.map((invoice) => (
@@ -131,24 +132,25 @@ const Pages = () => {
           )}
 
           {createdInvoices && createdInvoices.length !== 0 && (
-            <details open>
+            <details open={createdInvoicesOpen}>
               <summary
-                className="cursor-pointer flex items-center gap-2 w-fit list-none select-none"
-                onClick={() => setCreatedInvoicesOpen((o) => !o)}
+                className="flex items-center gap-2 w-fit list-none select-none"
+                onClick={(e) => e.preventDefault()}
               >
                 <Container className="w-fit bg-purple gap-2">
                   <h3 className="text-xl text-white">
                     Erstellte ({createdInvoices.length})
                   </h3>
                 </Container>
-                <Container
+                <Button
                   className={[
                     "transition-colors !w-[48px] !h-[48px] text-center",
                     createdInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
                   ].join(" ")}
+                  onClick={() => setCreatedInvoicesOpen((o) => !o)}
                 >
                   {createdInvoicesOpen ? "-" : "+"}
-                </Container>
+                </Button>
               </summary>
               <div className="flex flex-col gap-4 mt-4">
                 {createdInvoices.map((invoice) => (
