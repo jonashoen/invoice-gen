@@ -143,6 +143,19 @@ const AddProject: React.FC<Props> = ({
         <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
       )}
 
+      <Select
+        label="Kunde"
+        required
+        value={customerId}
+        setValue={setCustomerId}
+        name="customer"
+        loading={customersFetching}
+        options={customers.map((customer) => ({
+          value: customer.id,
+          text: customer.name,
+        }))}
+      />
+
       <TextField
         label="Name"
         value={name}
@@ -175,19 +188,6 @@ const AddProject: React.FC<Props> = ({
           className="min-w-[250px]"
         />
       </div>
-
-      <Select
-        label="Kunde"
-        required
-        value={customerId}
-        setValue={setCustomerId}
-        name="customer"
-        loading={customersFetching}
-        options={customers.map((customer) => ({
-          value: customer.id,
-          text: customer.name,
-        }))}
-      />
 
       <div
         className={[
