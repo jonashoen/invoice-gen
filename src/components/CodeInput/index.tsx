@@ -23,7 +23,8 @@ const CodeInput: React.FC<Props> = ({ code, setCode }) => {
                 maxLength={1}
                 className={[
                   "text-center aspect-square uppercase text-3xl",
-                  code.length === i &&
+                  (code.length === i ||
+                    (code.length === CODE_LENGHT && i === CODE_LENGHT - 1)) &&
                     codeFocused &&
                     "!border-purple text-purple",
                 ].join(" ")}
@@ -34,11 +35,21 @@ const CodeInput: React.FC<Props> = ({ code, setCode }) => {
 
         <TextField
           value={code}
-          setValue={(c) => c.trim() !== code && setCode(c)}
+          setValue={(c) => {
+            if (c.trim() === code) {
+              return;
+            }
+
+            if (c.length > CODE_LENGHT) {
+              setCode(c.substring(0, CODE_LENGHT - 1) + c.at(-1));
+            } else {
+              setCode(c);
+            }
+          }}
           className="absolute bottom-0 w-full opacity-0 text-3xl h-[70px]"
           required
           minLength={CODE_LENGHT}
-          maxLength={CODE_LENGHT}
+          maxLength={CODE_LENGHT + 1}
           name="code"
           autoFocus
           onFocus={() => setCodeFocused(true)}
