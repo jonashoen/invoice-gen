@@ -1,13 +1,14 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import styles from "./Paper.module.css";
 
-interface Props {
-  children: React.ReactNode;
-  className?: string;
-}
-
-const Paper: React.FC<Props> = ({ children, className }) => (
-  <div className={[className, styles.paper].join(" ")}>{children}</div>
+const Paper: React.FC<HTMLAttributes<HTMLElement>> = ({
+  children,
+  className,
+  ...props
+}) => (
+  <div className={[className, styles.paper].join(" ")} {...props}>
+    {children}
+  </div>
 );
 
 export default Paper;

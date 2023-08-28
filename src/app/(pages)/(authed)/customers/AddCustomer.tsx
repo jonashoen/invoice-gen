@@ -1,7 +1,6 @@
 import Button from "@/components/Button";
-import Chip from "@/components/Chip";
 import Form from "@/components/Form";
-import Paper from "@/components/Paper";
+import Info from "@/components/Info";
 import TextField from "@/components/TextField";
 import useApiMutation from "@/hooks/useApiMutation";
 import {
@@ -12,7 +11,6 @@ import {
 import Api from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
 import StatusCodes from "http-status-codes";
-import { calculateSizeAdjustValues } from "next/dist/server/font-utils";
 import { useState } from "react";
 
 interface Props {
@@ -144,7 +142,9 @@ const AddCustomer: React.FC<Props> = ({
   return (
     <Form className="gap-5" onSubmit={id ? editCustomer : addCustomer}>
       {error && (
-        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
+        <Info severity="error" className="mt-4">
+          {error}
+        </Info>
       )}
 
       <div className="flex gap-4">

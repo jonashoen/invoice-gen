@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import Form from "@/components/Form";
-import Paper from "@/components/Paper";
 import Select from "@/components/Select";
 import TextArea from "@/components/TextArea";
 import TextField from "@/components/TextField";
@@ -23,7 +22,7 @@ import {
   EditInvoiceRequest,
 } from "@/interfaces/requests/invoice";
 import useModalStore from "@/store/modalStore";
-import Chip from "@/components/Chip";
+import Info from "@/components/Info";
 
 interface Props {
   id?: number;
@@ -219,7 +218,9 @@ const AddInvoice: React.FC<Props> = ({
       onSubmit={id ? editInvoice : addInvoice}
     >
       {error && (
-        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
+        <Info severity="error" className="mt-4">
+          {error}
+        </Info>
       )}
 
       <Select

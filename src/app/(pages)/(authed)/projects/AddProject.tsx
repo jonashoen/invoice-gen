@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import Chip from "@/components/Chip";
 import Form from "@/components/Form";
+import Info from "@/components/Info";
 import Select from "@/components/Select";
 import TextField from "@/components/TextField";
 import useApi from "@/hooks/useApi";
@@ -140,7 +140,9 @@ const AddProject: React.FC<Props> = ({
   return (
     <Form className="gap-5" onSubmit={id ? editProject : addProject}>
       {error && (
-        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
+        <Info severity="error" className="mt-4">
+          {error}
+        </Info>
       )}
 
       <Select

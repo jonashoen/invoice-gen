@@ -1,6 +1,5 @@
 "use client";
 
-import title from "@/lib/title";
 import { ReactNode, useEffect } from "react";
 import useUserStore from "@/store/userStore";
 import { usePathname, useRouter } from "next/navigation";

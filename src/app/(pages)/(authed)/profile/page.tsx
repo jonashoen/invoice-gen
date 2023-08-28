@@ -1,9 +1,9 @@
 "use client";
 
 import Button from "@/components/Button";
-import Chip from "@/components/Chip";
 import Form from "@/components/Form";
 import Header from "@/components/Header";
+import Info from "@/components/Info";
 import Loader from "@/components/Loader";
 import Paper from "@/components/Paper";
 import TextField from "@/components/TextField";
@@ -172,15 +172,15 @@ const Profile = () => {
           <Form onSubmit={editUser}>
             <Paper className="gap-2 !py-8">
               {userError && (
-                <Chip className="bg-red-600 text-white text-center mb-8">
+                <Info severity="error" className="text-white mb-8">
                   {userError}
-                </Chip>
+                </Info>
               )}
 
               {userSuccess && (
-                <Chip className="bg-green text-center mb-8">
+                <Info severity="success" className="mb-8">
                   Die Daten wurden erfolgreich aktualisiert.
-                </Chip>
+                </Info>
               )}
 
               <p className="text-xl">
@@ -322,15 +322,15 @@ const Profile = () => {
           <Form onSubmit={changePassword} className="mt-10">
             <Paper className="gap-2 !py-8">
               {passwordError && (
-                <Chip className="bg-red-600 text-white text-center mb-8">
+                <Info severity="error" className="mb-8">
                   {passwordError}
-                </Chip>
+                </Info>
               )}
 
               {passwordSuccess && (
-                <Chip className="bg-green text-center mb-8">
+                <Info severity="success" className="mb-8">
                   Das Password wurde erfolgreich aktualisiert.
-                </Chip>
+                </Info>
               )}
 
               <p className="text-xl">Passwort ändern:</p>

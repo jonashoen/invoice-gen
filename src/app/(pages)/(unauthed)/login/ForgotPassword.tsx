@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-import Chip from "@/components/Chip";
 import CodeInput, { CODE_LENGHT } from "@/components/CodeInput";
 import Form from "@/components/Form";
+import Info from "@/components/Info";
 import TextField from "@/components/TextField";
 import useApiMutation from "@/hooks/useApiMutation";
 import {
@@ -47,9 +47,7 @@ const Step1 = ({ handleNext }: { handleNext: (email: string) => void }) => {
         erhälst dann eine Mail mit einem Wiederherstellungscode.
       </p>
 
-      {error && (
-        <Chip className="bg-red-600 text-white text-center">{error}</Chip>
-      )}
+      {error && <Info severity="error">{error}</Info>}
 
       <TextField
         value={email}
@@ -122,9 +120,7 @@ const Step2 = ({
         <span className="text-purple">{email}</span> bekommen hast.
       </p>
 
-      {error && (
-        <Chip className="bg-red-600 text-white text-center">{error}</Chip>
-      )}
+      {error && <Info severity="error">{error}</Info>}
 
       <CodeInput code={code} setCode={setCode} />
 
@@ -193,9 +189,7 @@ const Step3 = ({
     <Form onSubmit={resetPassword} className="gap-4 mt-10">
       <p>Gib jetzt dein neues Passwort ein.</p>
 
-      {error && (
-        <Chip className="bg-red-600 text-white text-center">{error}</Chip>
-      )}
+      {error && <Info severity="error">{error}</Info>}
 
       <TextField
         value={newPassword}
@@ -230,9 +224,9 @@ const Step3 = ({
 const Step4 = ({ handleNext }: { handleNext: () => void }) => {
   return (
     <Form onSubmit={handleNext} className="gap-4 mt-10">
-      <Chip className="bg-green text-center">
+      <Info severity="success">
         Dein Passwort wurde erfolgreich geändert, du kannst dich jetzt anmelden.
-      </Chip>
+      </Info>
       <div className="flex justify-end mt-10">
         <Button className="bg-ice" type="submit">
           Ok

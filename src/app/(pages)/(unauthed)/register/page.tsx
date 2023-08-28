@@ -15,7 +15,7 @@ import useModalStore from "@/store/modalStore";
 import VerifyAccount from "./VerifyAccount";
 import { User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import Chip from "@/components/Chip";
+import Info from "@/components/Info";
 
 const Register = () => {
   const showModal = useModalStore((state) => state.show);
@@ -95,9 +95,9 @@ const Register = () => {
         </div>
 
         {error && (
-          <Chip className="bg-red-600 text-white text-center mt-4">
+          <Info severity="error" className="mt-4">
             {error}
-          </Chip>
+          </Info>
         )}
 
         <TextField

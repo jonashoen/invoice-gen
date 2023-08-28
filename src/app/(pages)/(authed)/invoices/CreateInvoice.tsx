@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import Chip from "@/components/Chip";
+import Info from "@/components/Info";
 import dateToDateString from "@/helper/dateToDateString";
 import numberToCurrencyString from "@/helper/numberToCurrencyString";
 import sumPositions from "@/helper/sumPositions";
@@ -24,7 +24,7 @@ const CreateInvoice: React.FC<Props> = ({ invoice }) => {
   const hideModal = useModalStore((state) => state.hide);
 
   const publishInvoiceMutation = useApiMutation<PublishInvoiceRequest>({
-    route: Api.PublishInvoice,
+    route: Api.PublishInvoice + "a",
     invalidates: [Api.Invoices],
     onSuccess: hideModal,
     onError: () => {
@@ -49,7 +49,9 @@ const CreateInvoice: React.FC<Props> = ({ invoice }) => {
   return (
     <div className="flex flex-col gap-4">
       {error && (
-        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
+        <Info severity="error" className="mt-4">
+          {error}
+        </Info>
       )}
 
       <p>
@@ -124,10 +126,10 @@ const CreateInvoice: React.FC<Props> = ({ invoice }) => {
         </tbody>
       </table>
       <div className="flex flex-col mt-10 items-end gap-4">
-        <Chip className="text-white text-right bg-orange">
+        <Info severity="warning">
           Achtung, nach dem Erstellen kann die Rechnung nicht mehr bearbeitet
           werden!
-        </Chip>
+        </Info>
 
         <Button
           className="bg-ice"

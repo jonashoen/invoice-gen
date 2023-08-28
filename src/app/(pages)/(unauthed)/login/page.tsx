@@ -16,9 +16,9 @@ import useUserStore from "@/store/userStore";
 import Pages from "@/routes/Pages";
 import useModalStore from "@/store/modalStore";
 import ForgotPassword from "./ForgotPassword";
-import Chip from "@/components/Chip";
 import { StatusCodes } from "http-status-codes";
 import VerifyAccount from "../register/VerifyAccount";
+import Info from "@/components/Info";
 
 const Login = () => {
   const router = useRouter();
@@ -71,9 +71,9 @@ const Login = () => {
         </div>
 
         {error && (
-          <Chip className="bg-red-600 text-white text-center mt-4">
+          <Info severity="error" className="mt-4">
             {error}
-          </Chip>
+          </Info>
         )}
 
         <TextField

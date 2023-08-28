@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-import Chip from "@/components/Chip";
 import CodeInput, { CODE_LENGHT } from "@/components/CodeInput";
 import Form from "@/components/Form";
+import Info from "@/components/Info";
 import useApiMutation from "@/hooks/useApiMutation";
 import {
   ResendVerifyCodeRequest,
@@ -82,10 +82,16 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
   return (
     <Form onSubmit={verifyAccount} className="gap-4">
       {error && (
-        <Chip className="bg-red-600 text-white text-center mt-4">{error}</Chip>
+        <Info severity="error" className="mt-4">
+          {error}
+        </Info>
       )}
 
-      {success && <Chip className="bg-green text-center mt-4">{success}</Chip>}
+      {success && (
+        <Info severity="success" className="mt-4">
+          {success}
+        </Info>
+      )}
 
       <p>
         Du hast gerade eine E-Mail mit einem Verifizierungs-Code erhalten. Bitte
