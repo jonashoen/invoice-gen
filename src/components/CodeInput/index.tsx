@@ -1,14 +1,14 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, InputHTMLAttributes, SetStateAction, useState } from "react";
 import TextField from "../TextField";
 
 const CODE_LENGHT = 6;
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   code: string;
   setCode: Dispatch<SetStateAction<string>>;
 }
 
-const CodeInput: React.FC<Props> = ({ code, setCode }) => {
+const CodeInput: React.FC<Props> = ({ code, setCode, disabled }) => {
   const [codeFocused, setCodeFocused] = useState(false);
 
   return (
@@ -21,6 +21,7 @@ const CodeInput: React.FC<Props> = ({ code, setCode }) => {
                 value={code[i] ?? "•"}
                 readOnly
                 maxLength={1}
+                disabled={disabled}
                 className={[
                   "text-center aspect-square uppercase text-3xl",
                   (code.length === i ||
@@ -36,7 +37,7 @@ const CodeInput: React.FC<Props> = ({ code, setCode }) => {
         <TextField
           value={code}
           setValue={(c) => {
-            if (c.trim() === code) {
+            if (c.trim() === code || disabled) {
               return;
             }
 

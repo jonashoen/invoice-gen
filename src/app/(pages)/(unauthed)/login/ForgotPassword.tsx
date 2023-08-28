@@ -122,7 +122,11 @@ const Step2 = ({
 
       {error && <Info severity="error">{error}</Info>}
 
-      <CodeInput code={code} setCode={setCode} />
+      <CodeInput
+        code={code}
+        setCode={setCode}
+        disabled={checkRestoreCodeMutation.isLoading}
+      />
 
       <div className="flex justify-between mt-10">
         <Button
