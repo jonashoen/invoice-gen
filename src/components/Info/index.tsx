@@ -6,9 +6,9 @@ interface Props extends HTMLAttributes<HTMLElement> {
 }
 
 const SeverityToBackgroundColor = {
-  success: "bg-green",
-  warning: "bg-orange",
-  error: "bg-red-600",
+  success: "!bg-green",
+  warning: "!bg-orange",
+  error: "!bg-red-600",
 };
 
 const SeverityToTextColor = {
@@ -21,7 +21,7 @@ const Info: React.FC<Props> = ({ children, className, severity, ...props }) => (
   <Paper
     className={[
       className,
-      `!border-4 text-center !${SeverityToBackgroundColor[severity]} ${SeverityToTextColor[severity]}`,
+      `!border-4 text-center ${SeverityToBackgroundColor[severity]} ${SeverityToTextColor[severity]}`,
     ].join(" ")}
     {...props}
   >
