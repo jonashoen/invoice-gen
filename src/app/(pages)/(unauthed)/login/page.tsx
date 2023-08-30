@@ -1,6 +1,5 @@
 "use client";
 
-import Container from "@/components/Container";
 import Paper from "@/components/Paper";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
@@ -8,7 +7,7 @@ import Button from "@/components/Button";
 import Form from "@/components/Form";
 import useApiMutation from "@/hooks/useApiMutation";
 import Api from "@/routes/Api";
-import LoginRequest from "@/interfaces/requests/login";
+import { LoginRequest } from "@/interfaces/requests/user";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

@@ -7,7 +7,7 @@ import Paper from "@/components/Paper";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
 import useApiMutation from "@/hooks/useApiMutation";
-import RegisterRequest from "@/interfaces/requests/register";
+import { RegisterRequest } from "@/interfaces/requests/user";
 import Api from "@/routes/Api";
 import Link from "next/link";
 import Pages from "@/routes/Pages";
