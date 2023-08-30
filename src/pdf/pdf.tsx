@@ -22,13 +22,16 @@ import {
 import Girocode from "react-girocode";
 
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/de";
 
 import PdfSvg from "@/pdf/PdfSvg";
 import { ReactElement } from "react";
 import t from "@/i18n/t";
+import paymentDueToString from "@/helper/paymentDueToString";
 
+dayjs.extend(duration);
 dayjs.extend(relativeTime);
 dayjs.locale("de");
 
@@ -352,12 +355,8 @@ const Main = ({
         <View style={styles.billingNote}>
           <Text>
             Bitte überweisen Sie den Rechnungsbetrag unter Angabe der
-            Rechnungsnummer innerhalb{" "}
-            {dayjs()
-              .add(project.paymentDue, project.paymentDueUnit)
-              .fromNow()
-              .replace("in", "von")}{" "}
-            auf das unten genannte Konto.
+            Rechnungsnummer innerhalb von {paymentDueToString(project)} auf das
+            unten genannte Konto.
           </Text>
           <Text>
             Für weitere Rückfragen stehe ich Ihnen gerne zur Verfügung.
