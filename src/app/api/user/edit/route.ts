@@ -7,22 +7,23 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import apiError from "@/lib/apiError";
 import { EditUserRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<EditUserRequest>) => {
   const session = await request.session();
   if (!session) {
-    return apiError(401);
+    return apiError(StatusCodes.UNAUTHORIZED);
   }
 
   const body = await request.parse(userSchemas.editUser);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const editedUser = await user.edit(session, body);
 
   if (!editedUser) {
-    return apiError(400);
+    return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return new NextResponse();

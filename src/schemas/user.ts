@@ -1,5 +1,5 @@
 import Joi from "joi";
-import ibantools from "ibantools";
+import * as ibantools from "ibantools";
 
 export const login = Joi.object({
   username: Joi.string().required(),

@@ -7,22 +7,23 @@ import project from "@/services/project";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { DeleteProjectRequest } from "@/interfaces/requests/project";
 import projectSchemas from "@/schemas/project";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<DeleteProjectRequest>) => {
   const session = await request.session();
   if (!session) {
-    return apiError(401);
+    return apiError(StatusCodes.UNAUTHORIZED);
   }
 
   const body = await request.parse(projectSchemas.deleteProject);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const deletedProject = await project.deleteProject(session, body);
 
   if (!deletedProject) {
-    return apiError(400);
+    return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return new NextResponse();

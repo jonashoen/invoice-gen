@@ -7,21 +7,22 @@ import customer from "@/services/customer";
 import { AddCustomerRequest } from "@/interfaces/requests/customer";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import customerRequests from "@/schemas/customer";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<AddCustomerRequest>) => {
   const session = await request.session();
   if (!session) {
-    return apiError(401);
+    return apiError(StatusCodes.UNAUTHORIZED);
   }
 
   const body = await request.parse(customerRequests.addCustomer);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const createdCustomer = await customer.addCustomer(session, body);
   if (!createdCustomer) {
-    return apiError(400);
+    return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return NextResponse.json(createdCustomer);

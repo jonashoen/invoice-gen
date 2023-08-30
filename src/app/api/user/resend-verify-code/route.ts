@@ -16,7 +16,7 @@ const POST = async (request: BaseRequest<ResendVerifyCodeRequest>) => {
 
   const body = await request.parse(userSchemas.resendVerifyCode);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const result = await user.resendVerifyCode(body);

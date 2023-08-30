@@ -191,7 +191,9 @@ Font.register({
 const Logo = () => (
   <View style={[styles.logo, styles.wrapper]} fixed>
     <View style={styles.filler} />
+    {/* eslint-disable jsx-a11y/alt-text */}
     <Image style={{ display: "none" }} src="./src/pdf/monke.png" />
+    {/* eslint-enable */}
   </View>
 );
 

@@ -16,7 +16,7 @@ const POST = async (request: BaseRequest<RegisterRequest>) => {
 
   const body = await request.parse(userSchemas.register);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const registeredUser = await user.register(body);

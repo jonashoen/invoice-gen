@@ -17,7 +17,7 @@ const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
 
   const body = await request.parse(userSchemas.verifyAccount);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const session = await user.verify(body);

@@ -7,21 +7,22 @@ import invoice from "@/services/invoice";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { EditInvoiceRequest } from "@/interfaces/requests/invoice";
 import invoiceSchemas from "@/schemas/invoice";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<EditInvoiceRequest>) => {
   const session = await request.session();
   if (!session) {
-    return apiError(401);
+    return apiError(StatusCodes.UNAUTHORIZED);
   }
 
   const body = await request.parse(invoiceSchemas.editInvoice);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const editedInvoice = await invoice.edit(session, body);
   if (!editedInvoice) {
-    return apiError(400);
+    return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return NextResponse.json(editedInvoice);

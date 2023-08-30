@@ -8,22 +8,23 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import apiError from "@/lib/apiError";
 import { ChangePasswordRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<ChangePasswordRequest>) => {
   const session = await request.session();
   if (!session) {
-    return apiError(401);
+    return apiError(StatusCodes.UNAUTHORIZED);
   }
 
   const body = await request.parse(userSchemas.changePassword);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const editedUser = await user.changePassword(session, body);
 
   if (!editedUser) {
-    return apiError(400);
+    return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return new NextResponse();

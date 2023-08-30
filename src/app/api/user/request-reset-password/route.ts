@@ -6,6 +6,7 @@ import Pages from "@/routes/Pages";
 import { RequestResetPasswordRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import apiError from "@/lib/apiError";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<RequestResetPasswordRequest>) => {
   const session = await request.session();
@@ -15,7 +16,7 @@ const POST = async (request: BaseRequest<RequestResetPasswordRequest>) => {
 
   const body = await request.parse(userSchemas.requestResetPassword);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   user.requestResetPassword(body);

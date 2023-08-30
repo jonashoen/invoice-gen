@@ -19,7 +19,7 @@ const POST = async (request: BaseRequest<LoginRequest>) => {
 
   const body = await request.parse(userSchemas.login);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const session = await user.login(body);

@@ -154,7 +154,7 @@ const AddInvoice: React.FC<Props> = ({
       projectId: parseInt(projectId),
       deletedPositions: positions
         .filter((position) => position.deleted && !position.added)
-        .map((position) => ({ id: position.id })),
+        .map((position) => position.id),
       positions: positions
         .filter((position) => !position.deleted)
         .map((position) => ({

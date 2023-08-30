@@ -7,21 +7,22 @@ import invoice from "@/services/invoice";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { DeleteInvoiceRequest } from "@/interfaces/requests/invoice";
 import invoiceSchemas from "@/schemas/invoice";
+import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<DeleteInvoiceRequest>) => {
   const session = await request.session();
   if (!session) {
-    return apiError(401);
+    return apiError(StatusCodes.UNAUTHORIZED);
   }
 
   const body = await request.parse(invoiceSchemas.deleteInvoice);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const deletedInvoice = await invoice.deleteInvoice(session, body);
   if (!deletedInvoice) {
-    return apiError(400);
+    return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return NextResponse.json(deletedInvoice);

@@ -16,7 +16,7 @@ const POST = async (request: BaseRequest<ResetPasswordRequest>) => {
 
   const body = await request.parse(userSchemas.resetPassword);
   if (!body) {
-    return apiError(422);
+    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   const result = await user.resetPassword(body);
