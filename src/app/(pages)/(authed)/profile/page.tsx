@@ -51,6 +51,8 @@ const Profile = () => {
     onError: (apiError) => {
       if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
         setUserError("Der Nutzername existiert bereits.");
+      } else if (apiError.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
+        setUserError("Die IBAN oder die BIC sind ungültig.");
       } else {
         setUserError(
           "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."

@@ -18,13 +18,21 @@ export const register = Joi.object({
   houseNumber: Joi.string().required(),
   bank: Joi.string().required(),
   iban: Joi.string()
-    .custom((value) => {
-      return ibantools.isValidIBAN(value);
+    .custom((value, helpers) => {
+      if (!ibantools.isValidIBAN(value)) {
+        return helpers.error("Invalid IBAN");
+      }
+
+      return value;
     })
     .required(),
   bic: Joi.string()
-    .custom((value) => {
-      return ibantools.isValidBIC(value);
+    .custom((value, helpers) => {
+      if (!ibantools.isValidBIC(value)) {
+        return helpers.error("Invalid ´BIC");
+      }
+
+      return value;
     })
     .required(),
   taxNumber: Joi.string().required(),
@@ -43,13 +51,21 @@ export const editUser = Joi.object({
   houseNumber: Joi.string().optional(),
   bank: Joi.string().optional(),
   iban: Joi.string()
-    .custom((value) => {
-      return ibantools.isValidIBAN(value);
+    .custom((value, helpers) => {
+      if (!ibantools.isValidIBAN(value)) {
+        return helpers.error("Invalid IBAN");
+      }
+
+      return value;
     })
     .optional(),
   bic: Joi.string()
-    .custom((value) => {
-      return ibantools.isValidBIC(value);
+    .custom((value, helpers) => {
+      if (!ibantools.isValidBIC(value)) {
+        return helpers.error("Invalid BIC");
+      }
+
+      return value;
     })
     .optional(),
   taxNumber: Joi.string().optional(),

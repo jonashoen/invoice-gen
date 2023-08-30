@@ -32,6 +32,8 @@ const Register = () => {
     onError: (apiError) => {
       if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
         setError("Der Nutzername oder die E-Mail ist schon vergeben.");
+      } else if (apiError.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
+        setError("Die IBAN oder die BIC sind ungültig.");
       } else {
         setError(
           "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
