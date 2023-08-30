@@ -71,14 +71,6 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
     resendVerifyCodeMutation.mutate({ username });
   };
 
-  useEffect(() => {
-    setError("");
-
-    if (code.length === CODE_LENGHT) {
-      verifyAccount();
-    }
-  }, [code, verifyAccount]);
-
   return (
     <Form onSubmit={verifyAccount} className="gap-4">
       {error && (
@@ -98,7 +90,13 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
         gib diesen jetzt hier ein:
       </p>
 
-      <CodeInput code={code} setCode={setCode} />
+      <CodeInput
+        code={code}
+        setCode={(c) => {
+          setError("");
+          setCode(c);
+        }}
+      />
 
       <div className="flex justify-end mt-10">
         <Button

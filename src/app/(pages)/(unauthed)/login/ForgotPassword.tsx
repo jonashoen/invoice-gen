@@ -105,10 +105,6 @@ const Step2 = ({
     });
   };
 
-  useEffect(() => {
-    setError("");
-  }, [code]);
-
   return (
     <Form onSubmit={checkRestoreCode} className="gap-4 mt-10">
       <p>
@@ -120,7 +116,10 @@ const Step2 = ({
 
       <CodeInput
         code={code}
-        setCode={setCode}
+        setCode={(c) => {
+          setError("");
+          setCode(c);
+        }}
         disabled={checkRestoreCodeMutation.isLoading}
       />
 
