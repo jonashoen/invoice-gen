@@ -5,10 +5,10 @@ import { NextResponse } from "next/server";
 import destroySession from "@/lib/destroySession";
 import Pages from "@/routes/Pages";
 import user from "@/services/user";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
+import isAuthed from "@/lib/isAuthed";
 
-const POST = async (request: BaseRequest) => {
-  const session = await request.session();
+const POST = async () => {
+  const session = await isAuthed();
 
   if (!session) {
     return NextResponse.redirect(Pages.Login);

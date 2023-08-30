@@ -8,9 +8,10 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { PublishInvoiceRequest } from "@/interfaces/requests/invoice";
 import invoiceSchemas from "@/schemas/invoice";
 import { StatusCodes } from "http-status-codes";
+import isAuthed from "@/lib/isAuthed";
 
 const POST = async (request: BaseRequest<PublishInvoiceRequest>) => {
-  const session = await request.session();
+  const session = await isAuthed();
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);
   }

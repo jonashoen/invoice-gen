@@ -7,9 +7,10 @@ import { StatusCodes } from "http-status-codes";
 import { CheckResetPasswordCodeRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import Pages from "@/routes/Pages";
+import isAuthed from "@/lib/isAuthed";
 
 const POST = async (request: BaseRequest<CheckResetPasswordCodeRequest>) => {
-  const session = await request.session();
+  const session = await isAuthed();
   if (session) {
     return NextResponse.redirect(Pages.Invoices);
   }

@@ -8,9 +8,10 @@ import Pages from "@/routes/Pages";
 import { VerifyAccountRequest } from "@/interfaces/requests/user";
 import createSession from "@/lib/createSession";
 import userSchemas from "@/schemas/user";
+import isAuthed from "@/lib/isAuthed";
 
 const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
-  const oldSession = await request.session();
+  const oldSession = await isAuthed();
   if (oldSession) {
     return NextResponse.redirect(Pages.Invoices);
   }

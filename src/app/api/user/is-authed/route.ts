@@ -7,7 +7,7 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { StatusCodes } from "http-status-codes";
 
 const GET = async (request: BaseRequest) => {
-  const session = await request.session();
+  const session = await isAuthed();
 
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);

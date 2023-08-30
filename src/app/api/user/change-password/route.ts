@@ -11,7 +11,7 @@ import userSchemas from "@/schemas/user";
 import { StatusCodes } from "http-status-codes";
 
 const POST = async (request: BaseRequest<ChangePasswordRequest>) => {
-  const session = await request.session();
+  const session = await isAuthed();
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);
   }

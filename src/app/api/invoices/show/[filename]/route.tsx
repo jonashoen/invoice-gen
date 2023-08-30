@@ -4,14 +4,14 @@ import { NextResponse } from "next/server";
 
 import apiError from "@/lib/apiError";
 import invoice from "@/services/invoice";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { StatusCodes } from "http-status-codes";
+import isAuthed from "@/lib/isAuthed";
 
 const GET = async (
-  request: BaseRequest,
+  _: Request,
   { params }: { params: { filename: string } }
 ) => {
-  const session = await request.session();
+  const session = await isAuthed();
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);
   }

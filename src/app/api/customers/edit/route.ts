@@ -8,9 +8,10 @@ import { EditCustomerRequest } from "@/interfaces/requests/customer";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import customerSchemas from "@/schemas/customer";
 import { StatusCodes } from "http-status-codes";
+import isAuthed from "@/lib/isAuthed";
 
 const POST = async (request: BaseRequest<EditCustomerRequest>) => {
-  const session = await request.session();
+  const session = await isAuthed();
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);
   }

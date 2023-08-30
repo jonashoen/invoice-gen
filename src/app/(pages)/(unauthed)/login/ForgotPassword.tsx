@@ -98,20 +98,16 @@ const Step2 = ({
       },
     });
 
-  const checkRestoreCode = useCallback(() => {
+  const checkRestoreCode = () => {
     checkRestoreCodeMutation.mutate({
       email,
       code,
     });
-  }, [checkRestoreCodeMutation.mutate, email, code]);
+  };
 
   useEffect(() => {
     setError("");
-
-    if (code.length === CODE_LENGHT) {
-      checkRestoreCode();
-    }
-  }, [code, checkRestoreCode]);
+  }, [code]);
 
   return (
     <Form onSubmit={checkRestoreCode} className="gap-4 mt-10">

@@ -10,9 +10,10 @@ import createSession from "@/lib/createSession";
 import { StatusCodes } from "http-status-codes";
 import Pages from "@/routes/Pages";
 import userSchemas from "@/schemas/user";
+import isAuthed from "@/lib/isAuthed";
 
 const POST = async (request: BaseRequest<LoginRequest>) => {
-  const oldSession = await request.session();
+  const oldSession = await isAuthed();
   if (oldSession) {
     return NextResponse.redirect(Pages.Invoices);
   }

@@ -1,16 +1,7 @@
 import { NextRequest } from "next/server";
 import { ObjectSchema } from "joi";
-import isAuthed from "@/lib/isAuthed";
 
 class BaseRequest<T = unknown> extends NextRequest {
-  constructor(input: URL | RequestInfo, init?: RequestInit | undefined) {
-    super(input, init);
-  }
-
-  session() {
-    return isAuthed();
-  }
-
   async parse(schema: ObjectSchema) {
     const body = await super.json();
 

@@ -8,9 +8,10 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { DeleteProjectRequest } from "@/interfaces/requests/project";
 import projectSchemas from "@/schemas/project";
 import { StatusCodes } from "http-status-codes";
+import isAuthed from "@/lib/isAuthed";
 
 const POST = async (request: BaseRequest<DeleteProjectRequest>) => {
-  const session = await request.session();
+  const session = await isAuthed();
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);
   }
