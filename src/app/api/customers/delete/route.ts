@@ -2,26 +2,25 @@
 
 import { NextResponse } from "next/server";
 
-import isAuthed from "@/lib/isAuthed";
 import apiError from "@/lib/apiError";
 import customer from "@/services/customer";
-import {
-  AddCustomerRequest,
-  DeleteCustomerRequest,
-} from "@/interfaces/requests/customer";
+import { DeleteCustomerRequest } from "@/interfaces/requests/customer";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
+import customerSchemas from "@/schemas/customer";
 
 const POST = async (request: BaseRequest<DeleteCustomerRequest>) => {
-  const session = await isAuthed();
+  const session = await request.session();
 
   if (!session) {
     return apiError(401);
   }
 
-  const body = await request.json();
+  const body = await request.parse(customerSchemas.deleteCustomerRequest);
+  if (!body) {
+    return apiError(422);
+  }
 
   const deletedCustomer = await customer.deleteCustomer(session, body);
-
   if (!deletedCustomer) {
     return apiError(400);
   }

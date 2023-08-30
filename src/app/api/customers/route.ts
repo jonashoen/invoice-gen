@@ -2,12 +2,12 @@
 
 import { NextResponse } from "next/server";
 
-import isAuthed from "@/lib/isAuthed";
 import apiError from "@/lib/apiError";
 import customer from "@/services/customer";
+import BaseRequest from "@/interfaces/requests/BaseRequest";
 
-const GET = async () => {
-  const session = await isAuthed();
+const GET = async (request: BaseRequest) => {
+  const session = await request.session();
 
   if (!session) {
     return apiError(401);

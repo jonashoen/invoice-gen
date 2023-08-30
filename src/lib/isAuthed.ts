@@ -9,13 +9,13 @@ const isAuthed = async () => {
   const sid = cookieStore.get(sessionConfig.cookieName);
 
   if (!sid) {
-    return false;
+    return null;
   }
 
   const sessionId = cookie.unsign(sid.value, sessionConfig.signKey);
 
   if (!sessionId) {
-    return false;
+    return null;
   }
 
   return await user.checkSession({ sessionId });
