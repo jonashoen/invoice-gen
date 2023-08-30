@@ -15,14 +15,13 @@ const ShowInvoice: React.FC<Props> = ({ filename, number }) => {
       </div>
 
       <div className="flex flex-col flex-grow bg-white mt-10 gap-2">
-        <Button>
-          <a
-            href={`${Prefix}${Api.ShowInvoice}/${filename}`}
-            download={`${number}.pdf`}
-          >
-            Download
-          </a>
-        </Button>
+        <a
+          href={`${Prefix}${Api.ShowInvoice}/${filename}`}
+          download={`${number}.pdf`}
+          className="w-fit"
+        >
+          <Button>Download</Button>
+        </a>
 
         <object
           data={`${Prefix}${Api.ShowInvoice}/${filename}#toolbar=0`}
