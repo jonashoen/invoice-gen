@@ -9,6 +9,7 @@ import { AddProjectRequest } from "@/interfaces/requests/project";
 import projectSchemas from "@/schemas/project";
 import { StatusCodes } from "http-status-codes";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<AddProjectRequest>) => {
   const session = await isAuthed();
@@ -16,7 +17,7 @@ const POST = async (request: BaseRequest<AddProjectRequest>) => {
     return apiError(StatusCodes.UNAUTHORIZED);
   }
 
-  const body = await request.parse(projectSchemas.addProject);
+  const body = await parse(projectSchemas.addProject, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

@@ -8,6 +8,7 @@ import { CheckResetPasswordCodeRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import Pages from "@/routes/Pages";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<CheckResetPasswordCodeRequest>) => {
   const session = await isAuthed();
@@ -15,7 +16,7 @@ const POST = async (request: BaseRequest<CheckResetPasswordCodeRequest>) => {
     return NextResponse.redirect(Pages.Invoices);
   }
 
-  const body = await request.parse(userSchemas.checkResetPasswordCode);
+  const body = await parse(userSchemas.checkResetPasswordCode, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

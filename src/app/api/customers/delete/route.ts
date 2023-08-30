@@ -9,6 +9,7 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import customerSchemas from "@/schemas/customer";
 import { StatusCodes } from "http-status-codes";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<DeleteCustomerRequest>) => {
   const session = await isAuthed();
@@ -17,7 +18,7 @@ const POST = async (request: BaseRequest<DeleteCustomerRequest>) => {
     return apiError(StatusCodes.UNAUTHORIZED);
   }
 
-  const body = await request.parse(customerSchemas.deleteCustomer);
+  const body = await parse(customerSchemas.deleteCustomer, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

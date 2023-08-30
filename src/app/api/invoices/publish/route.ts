@@ -9,6 +9,7 @@ import { PublishInvoiceRequest } from "@/interfaces/requests/invoice";
 import invoiceSchemas from "@/schemas/invoice";
 import { StatusCodes } from "http-status-codes";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<PublishInvoiceRequest>) => {
   const session = await isAuthed();
@@ -16,7 +17,7 @@ const POST = async (request: BaseRequest<PublishInvoiceRequest>) => {
     return apiError(StatusCodes.UNAUTHORIZED);
   }
 
-  const body = await request.parse(invoiceSchemas.publishInvoice);
+  const body = await parse(invoiceSchemas.publishInvoice, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

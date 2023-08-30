@@ -9,6 +9,7 @@ import { VerifyAccountRequest } from "@/interfaces/requests/user";
 import createSession from "@/lib/createSession";
 import userSchemas from "@/schemas/user";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
   const oldSession = await isAuthed();
@@ -16,7 +17,7 @@ const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
     return NextResponse.redirect(Pages.Invoices);
   }
 
-  const body = await request.parse(userSchemas.verifyAccount);
+  const body = await parse(userSchemas.verifyAccount, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

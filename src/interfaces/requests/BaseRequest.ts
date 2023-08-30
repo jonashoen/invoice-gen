@@ -1,18 +1,7 @@
 import { NextRequest } from "next/server";
-import { ObjectSchema } from "joi";
 
-class BaseRequest<T = unknown> extends NextRequest {
-  async parse(schema: ObjectSchema) {
-    const body = await super.json();
-
-    const validationResult = schema.validate(body);
-
-    if (validationResult.error) {
-      return null;
-    }
-
-    return validationResult.value as T;
-  }
+interface BaseRequest<T> extends NextRequest {
+  json: () => Promise<T>;
 }
 
 export default BaseRequest;

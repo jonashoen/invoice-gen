@@ -8,6 +8,7 @@ import Pages from "@/routes/Pages";
 import { ResendVerifyCodeRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<ResendVerifyCodeRequest>) => {
   const session = await isAuthed();
@@ -15,7 +16,7 @@ const POST = async (request: BaseRequest<ResendVerifyCodeRequest>) => {
     return NextResponse.redirect(Pages.Invoices);
   }
 
-  const body = await request.parse(userSchemas.resendVerifyCode);
+  const body = await parse(userSchemas.resendVerifyCode, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

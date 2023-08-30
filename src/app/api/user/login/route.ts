@@ -11,6 +11,7 @@ import { StatusCodes } from "http-status-codes";
 import Pages from "@/routes/Pages";
 import userSchemas from "@/schemas/user";
 import isAuthed from "@/lib/isAuthed";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<LoginRequest>) => {
   const oldSession = await isAuthed();
@@ -18,7 +19,7 @@ const POST = async (request: BaseRequest<LoginRequest>) => {
     return NextResponse.redirect(Pages.Invoices);
   }
 
-  const body = await request.parse(userSchemas.login);
+  const body = await parse(userSchemas.login, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }

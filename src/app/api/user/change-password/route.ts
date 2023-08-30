@@ -9,6 +9,7 @@ import apiError from "@/lib/apiError";
 import { ChangePasswordRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import { StatusCodes } from "http-status-codes";
+import parse from "@/lib/parse";
 
 const POST = async (request: BaseRequest<ChangePasswordRequest>) => {
   const session = await isAuthed();
@@ -16,7 +17,7 @@ const POST = async (request: BaseRequest<ChangePasswordRequest>) => {
     return apiError(StatusCodes.UNAUTHORIZED);
   }
 
-  const body = await request.parse(userSchemas.changePassword);
+  const body = await parse(userSchemas.changePassword, request);
   if (!body) {
     return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
   }
