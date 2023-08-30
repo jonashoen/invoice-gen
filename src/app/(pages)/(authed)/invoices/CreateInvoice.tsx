@@ -24,7 +24,7 @@ const CreateInvoice: React.FC<Props> = ({ invoice }) => {
   const hideModal = useModalStore((state) => state.hide);
 
   const publishInvoiceMutation = useApiMutation<PublishInvoiceRequest>({
-    route: Api.PublishInvoice + "a",
+    route: Api.PublishInvoice,
     invalidates: [Api.Invoices],
     onSuccess: hideModal,
     onError: () => {
