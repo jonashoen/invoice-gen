@@ -15,7 +15,7 @@ const POST = async (request: BaseRequest<DeleteCustomerRequest>) => {
     return apiError(401);
   }
 
-  const body = await request.parse(customerSchemas.deleteCustomerRequest);
+  const body = await request.parse(customerSchemas.deleteCustomer);
   if (!body) {
     return apiError(422);
   }

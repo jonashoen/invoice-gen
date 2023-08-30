@@ -2,7 +2,7 @@ import Joi from "joi";
 
 import { InvoicePositionUnit } from "@prisma/client";
 
-const addInvoiceRequest = Joi.object({
+export const addInvoice = Joi.object({
   projectId: Joi.number().integer().positive().required(),
   positions: Joi.array()
     .items(
@@ -18,7 +18,7 @@ const addInvoiceRequest = Joi.object({
     .required(),
 }).meta({ className: "AddInvoiceRequest" });
 
-const editInvoiceRequest = Joi.object({
+export const editInvoice = Joi.object({
   id: Joi.number().integer().positive().required(),
   projectId: Joi.number().integer().positive().optional(),
   deletedPositions: Joi.array()
@@ -40,17 +40,17 @@ const editInvoiceRequest = Joi.object({
     .optional(),
 }).meta({ className: "EditInvoiceRequest" });
 
-const deleteInvoiceRequest = Joi.object({
+export const deleteInvoice = Joi.object({
   id: Joi.number().integer().positive().required(),
 }).meta({ className: "DeleteInvoiceRequest" });
 
-const publishInvoiceRequest = Joi.object({
+export const publishInvoice = Joi.object({
   id: Joi.number().integer().positive().required(),
 }).meta({ className: "PublishInvoiceRequest" });
 
 export default {
-  addInvoiceRequest,
-  editInvoiceRequest,
-  deleteInvoiceRequest,
-  publishInvoiceRequest,
+  addInvoice,
+  editInvoice,
+  deleteInvoice,
+  publishInvoice,
 };

@@ -1,23 +1,24 @@
 import { NextResponse } from "next/server";
 
 import BaseRequest from "@/interfaces/requests/BaseRequest";
-import RegisterRequest from "@/interfaces/requests/register";
-import isAuthed from "@/lib/isAuthed";
 import user from "@/services/user";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 import Pages from "@/routes/Pages";
 import { VerifyAccountRequest } from "@/interfaces/requests/user";
 import createSession from "@/lib/createSession";
+import userSchemas from "@/schemas/user";
 
 const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
-  const oldSession = await isAuthed();
-
+  const oldSession = await request.session();
   if (oldSession) {
     return NextResponse.redirect(Pages.Invoices);
   }
 
-  const body = await request.json();
+  const body = await request.parse(userSchemas.verifyAccount);
+  if (!body) {
+    return apiError(422);
+  }
 
   const session = await user.verify(body);
 

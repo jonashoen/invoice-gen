@@ -7,7 +7,7 @@ export interface AddProjectRequest {
   customerId: number;
   name: string;
   paymentDue: number;
-  paymentDueUnit: "days" | "week" | "weeks" | "month" | "months";
+  paymentDueUnit: 'days' | 'week' | 'weeks' | 'month' | 'months';
 }
 
 export interface DeleteProjectRequest {
@@ -19,5 +19,5 @@ export interface EditProjectRequest {
   id: number;
   name?: string;
   paymentDue?: number;
-  paymentDueUnit?: "days" | "week" | "weeks" | "month" | "months";
+  paymentDueUnit?: 'days' | 'week' | 'weeks' | 'month' | 'months';
 }

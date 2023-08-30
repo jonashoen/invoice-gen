@@ -1,19 +1,22 @@
 import { NextResponse } from "next/server";
 
 import BaseRequest from "@/interfaces/requests/BaseRequest";
-import isAuthed from "@/lib/isAuthed";
 import user from "@/services/user";
 import Pages from "@/routes/Pages";
 import { RequestResetPasswordRequest } from "@/interfaces/requests/user";
+import userSchemas from "@/schemas/user";
+import apiError from "@/lib/apiError";
 
 const POST = async (request: BaseRequest<RequestResetPasswordRequest>) => {
-  const oldSession = await isAuthed();
-
-  if (oldSession) {
+  const session = await request.session();
+  if (session) {
     return NextResponse.redirect(Pages.Invoices);
   }
 
-  const body = await request.json();
+  const body = await request.parse(userSchemas.requestResetPassword);
+  if (!body) {
+    return apiError(422);
+  }
 
   user.requestResetPassword(body);
 

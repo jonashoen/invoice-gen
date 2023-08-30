@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const addCustomerRequest = Joi.object({
+export const addCustomer = Joi.object({
   name: Joi.string().required(),
   number: Joi.string().required(),
   zipCode: Joi.string().required(),
@@ -9,7 +9,7 @@ export const addCustomerRequest = Joi.object({
   houseNumber: Joi.string().required(),
 }).meta({ className: "AddCustomerRequest" });
 
-export const editCustomerRequest = Joi.object({
+export const editCustomer = Joi.object({
   id: Joi.number().integer().positive().required(),
   name: Joi.string().optional(),
   number: Joi.string().optional(),
@@ -19,12 +19,12 @@ export const editCustomerRequest = Joi.object({
   houseNumber: Joi.string().optional(),
 }).meta({ className: "EditCustomerRequest" });
 
-export const deleteCustomerRequest = Joi.object({
+export const deleteCustomer = Joi.object({
   id: Joi.number().integer().positive().required(),
 }).meta({ className: "DeleteCustomerRequest" });
 
 export default {
-  addCustomerRequest,
-  editCustomerRequest,
-  deleteCustomerRequest,
+  addCustomer,
+  editCustomer,
+  deleteCustomer,
 };

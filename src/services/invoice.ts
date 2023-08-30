@@ -106,9 +106,7 @@ const edit = async (
   }: {
     id: number;
     projectId?: number;
-    deletedPositions?: {
-      id: number;
-    }[];
+    deletedPositions?: number[];
     positions?: {
       id: number;
       amount?: number;
@@ -159,7 +157,7 @@ const edit = async (
     const oldPositionsToDeleteCount = await db.invoicePosition.count({
       where: {
         id: {
-          in: [...deletedPositions.map((position) => position.id)],
+          in: deletedPositions,
         },
       },
     });
@@ -189,7 +187,7 @@ const edit = async (
     data: {
       projectId,
       positions: {
-        deleteMany: deletedPositions,
+        deleteMany: deletedPositions?.map((position) => ({ id: position })),
         createMany: addedPositions && {
           data: addedPositions.map((position) => ({
             amount: position.amount!,

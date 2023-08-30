@@ -2,20 +2,22 @@
 
 import { NextResponse } from "next/server";
 
-import isAuthed from "@/lib/isAuthed";
 import apiError from "@/lib/apiError";
 import invoice from "@/services/invoice";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { PublishInvoiceRequest } from "@/interfaces/requests/invoice";
+import invoiceSchemas from "@/schemas/invoice";
 
 const POST = async (request: BaseRequest<PublishInvoiceRequest>) => {
-  const session = await isAuthed();
-
+  const session = await request.session();
   if (!session) {
     return apiError(401);
   }
 
-  const body = await request.json();
+  const body = await request.parse(invoiceSchemas.publishInvoice);
+  if (!body) {
+    return apiError(422);
+  }
 
   const publishedInvoice = await invoice.publish(session, body);
 

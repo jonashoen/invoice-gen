@@ -2,20 +2,22 @@
 
 import { NextResponse } from "next/server";
 
-import isAuthed from "@/lib/isAuthed";
 import apiError from "@/lib/apiError";
 import project from "@/services/project";
 import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { DeleteProjectRequest } from "@/interfaces/requests/project";
+import projectSchemas from "@/schemas/project";
 
 const POST = async (request: BaseRequest<DeleteProjectRequest>) => {
-  const session = await isAuthed();
-
+  const session = await request.session();
   if (!session) {
     return apiError(401);
   }
 
-  const body = await request.json();
+  const body = await request.parse(projectSchemas.deleteProject);
+  if (!body) {
+    return apiError(422);
+  }
 
   const deletedProject = await project.deleteProject(session, body);
 

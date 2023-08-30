@@ -31,7 +31,7 @@ const register = async ({
 }: {
   username: string;
   password: string;
-  passwordRepeated: string;
+  passwordRepeated?: string;
   firstName: string;
   lastName: string;
   zipCode: string;
@@ -311,7 +311,7 @@ const changePassword = async (
     oldPassword,
     newPassword,
     newPasswordRepeated,
-  }: { oldPassword: string; newPassword: string; newPasswordRepeated: string }
+  }: { oldPassword: string; newPassword: string; newPasswordRepeated?: string }
 ) => {
   if (newPassword !== newPasswordRepeated) {
     return null;
@@ -421,7 +421,7 @@ const resetPassword = async ({
   email: string;
   code: string;
   newPassword: string;
-  newPasswordRepeated: string;
+  newPasswordRepeated?: string;
 }) => {
   if (newPassword !== newPasswordRepeated) {
     return null;

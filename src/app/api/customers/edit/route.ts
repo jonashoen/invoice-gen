@@ -14,7 +14,7 @@ const POST = async (request: BaseRequest<EditCustomerRequest>) => {
     return apiError(401);
   }
 
-  const body = await request.parse(customerSchemas.editCustomerRequest);
+  const body = await request.parse(customerSchemas.editCustomer);
   if (!body) {
     return apiError(422);
   }

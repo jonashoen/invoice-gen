@@ -2,13 +2,13 @@
 
 import { NextResponse } from "next/server";
 
-import isAuthed from "@/lib/isAuthed";
 import destroySession from "@/lib/destroySession";
 import Pages from "@/routes/Pages";
 import user from "@/services/user";
+import BaseRequest from "@/interfaces/requests/BaseRequest";
 
-const POST = async () => {
-  const session = await isAuthed();
+const POST = async (request: BaseRequest) => {
+  const session = await request.session();
 
   if (!session) {
     return NextResponse.redirect(Pages.Login);
