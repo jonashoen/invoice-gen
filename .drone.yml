@@ -24,3 +24,13 @@ steps:
       password:
         from_secret: DOCKER_PASSWORD
       tags: latest
+
+  - name: notify
+    image: appleboy/drone-discord
+    settings:
+      username: Ciboy
+      avatar_url: https://cdn-icons-png.flaticon.com/256/4829/4829581.png
+      webhook_id:
+        from_secret: DISCORD_WEBHOOK_ID
+      webhook_token:
+        from_secret: DISCORD_WEBHOOK_TOKEN
