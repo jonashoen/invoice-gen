@@ -135,15 +135,11 @@ const edit = async (
   const updatedPositions = positions?.filter((position) => !position.added);
   const addedPositions = positions?.filter((position) => position.added);
 
-  if (updatedPositions) {
+  if (updatedPositions && updatedPositions.length !== 0) {
     const oldPositionsToEditCount = await db.invoicePosition.count({
       where: {
         id: {
-          in: [
-            ...updatedPositions
-              .filter((position) => !position.added)
-              .map((position) => position.id),
-          ],
+          in: [...updatedPositions.map((position) => position.id)],
         },
       },
     });
@@ -153,7 +149,7 @@ const edit = async (
     }
   }
 
-  if (deletedPositions) {
+  if (deletedPositions && deletedPositions.length !== 0) {
     const oldPositionsToDeleteCount = await db.invoicePosition.count({
       where: {
         id: {
