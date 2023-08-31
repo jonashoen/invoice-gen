@@ -26,29 +26,33 @@ const createInvoice = async (
   },
   number: string
 ) => {
-  if (!invoice.project.customer.user.profile) {
-    return null;
-  }
-
   const filename = generateFileName();
   const filePath = path.join(pdfDirPath, filename);
 
   const ReactDOMServer = (await import("react-dom/server")).default;
 
-  await ReactPDF.renderToFile(
-    <InvoicePdf
-      invoice={invoice}
-      number={number}
-      renderToStaticMarkup={ReactDOMServer.renderToStaticMarkup}
-    />,
-    filePath
-  );
+  try {
+    await ReactPDF.renderToFile(
+      <InvoicePdf
+        invoice={invoice}
+        number={number}
+        renderToStaticMarkup={ReactDOMServer.renderToStaticMarkup}
+      />,
+      filePath
+    );
 
-  return filename;
+    return filename;
+  } catch {
+    return null;
+  }
 };
 
 const getFile = (filename: string) => {
-  return fs.createReadStream(path.join(pdfDirPath, filename));
+  try {
+    return fs.createReadStream(path.join(pdfDirPath, filename));
+  } catch {
+    return null;
+  }
 };
 
 export default {

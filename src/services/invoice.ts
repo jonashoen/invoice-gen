@@ -337,6 +337,10 @@ const get = async (userId: number, filename: string) => {
 
   const fileStream = pdf.getFile(filename);
 
+  if (!fileStream) {
+    return null;
+  }
+
   return iteratorToStream(nodeStreamToIterator(fileStream));
 };
 

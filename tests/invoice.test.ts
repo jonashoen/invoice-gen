@@ -4,11 +4,12 @@ import { Invoice, InvoicePosition, Project } from "@prisma/client";
 import fs from "fs";
 
 const pdfMockCreate = jest.fn();
+const pdfMockGet = jest.fn();
 jest.mock(
   "../src/services/pdf",
   jest.fn().mockImplementation(() => ({
     createInvoice: () => pdfMockCreate(),
-    getFile: () => fs.createReadStream(Buffer.from("")),
+    getFile: () => pdfMockGet(),
   }))
 );
 
@@ -298,8 +299,20 @@ describe("Invoice service tests", () => {
       expect(invoice).toBeNull();
     });
 
-    test("Invoice doesn't exist", async () => {
+    test("File doesn't exist", async () => {
       prismaMock.invoice.findFirst.mockResolvedValueOnce(testInvoice);
+
+      pdfMockGet.mockReturnValueOnce(null);
+
+      const invoice = await invoiceService.get(userId, testInvoice.filename!);
+
+      expect(invoice).toBeNull();
+    });
+
+    test("Valid filename", async () => {
+      prismaMock.invoice.findFirst.mockResolvedValueOnce(testInvoice);
+
+      pdfMockGet.mockReturnValueOnce(fs.createReadStream(Buffer.from("")));
 
       const invoice = await invoiceService.get(userId, testInvoice.filename!);
 
