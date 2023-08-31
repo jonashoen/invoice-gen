@@ -42,7 +42,9 @@ const createInvoice = async (
     );
 
     return filename;
-  } catch {
+  } catch (err) {
+    console.error(err);
+
     return null;
   }
 };
@@ -50,7 +52,9 @@ const createInvoice = async (
 const getFile = (filename: string) => {
   try {
     return fs.createReadStream(path.join(pdfDirPath, filename));
-  } catch {
+  } catch (err) {
+    console.error(err);
+
     return null;
   }
 };

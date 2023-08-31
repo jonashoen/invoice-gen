@@ -9,6 +9,8 @@ const destroySession = () => {
     name: sessionConfig.cookieName,
     value: "",
     maxAge: -1,
+    secure: true,
+    httpOnly: true,
   });
 
   return response;

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { convertFromDirectory } from "joi-to-typescript";
 
 convertFromDirectory({

@@ -1,9 +1,11 @@
-import fs, { ReadStream } from "fs";
+import fs from "fs";
 import ReactPDF from "@joshuajaco/react-pdf-renderer-bundled";
 import pdfService from "@/services/pdf";
 
 jest.mock("@joshuajaco/react-pdf-renderer-bundled");
 jest.mock("fs");
+
+const consoleMock = jest.spyOn(console, "error").mockImplementation();
 
 describe("PDF Service tests", () => {
   describe("Create pdf", () => {
@@ -15,6 +17,7 @@ describe("PDF Service tests", () => {
         "0000/TC99/xxx"
       );
 
+      expect(consoleMock).toHaveBeenCalledTimes(1);
       expect(filename).toBeNull();
     });
 
@@ -38,6 +41,7 @@ describe("PDF Service tests", () => {
 
       const file = pdfService.getFile("Some filename");
 
+      expect(consoleMock).toHaveBeenCalledTimes(1);
       expect(file).toBeNull();
     });
 
