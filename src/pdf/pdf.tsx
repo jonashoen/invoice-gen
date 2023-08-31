@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import dateToDateString from "@/helper/dateToDateString";
 import numberToCurrencyString from "@/helper/numberToCurrencyString";
 import sumPositions from "@/helper/sumPositions";

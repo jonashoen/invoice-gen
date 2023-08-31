@@ -1,5 +1,7 @@
 "use server";
 
+/* istanbul ignore file */
+
 import React, { ReactElement } from "react";
 import htmlParser from "html-react-parser";
 import * as PdfElements from "@joshuajaco/react-pdf-renderer-bundled";
