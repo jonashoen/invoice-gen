@@ -1,12 +1,12 @@
 import invoiceService from "@/services/invoice";
-import { prismaMock } from "./helper/mockDb";
+import { prismaMock } from "../__helper/mockDb";
 import { Invoice, InvoicePosition, Project } from "@prisma/client";
 import fs from "fs";
 
 const pdfMockCreate = jest.fn();
 const pdfMockGet = jest.fn();
 jest.mock(
-  "../src/services/pdf",
+  "@/services/pdf",
   jest.fn().mockImplementation(() => ({
     createInvoice: () => pdfMockCreate(),
     getFile: () => pdfMockGet(),

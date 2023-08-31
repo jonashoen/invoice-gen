@@ -1,5 +1,5 @@
 import projectService from "@/services/project";
-import { prismaMock } from "./helper/mockDb";
+import { prismaMock } from "../__helper/mockDb";
 import { Customer, Project } from "@prisma/client";
 
 const userId = -1;

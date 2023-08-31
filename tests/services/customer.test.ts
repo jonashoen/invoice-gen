@@ -1,5 +1,5 @@
 import customerService from "@/services/customer";
-import { prismaMock } from "./helper/mockDb";
+import { prismaMock } from "../__helper/mockDb";
 import { Customer } from "@prisma/client";
 
 const testCustomer: Customer = {
