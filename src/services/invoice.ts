@@ -342,12 +342,14 @@ const get = async (userId: number, filename: string) => {
 
 export default { getInvoices, add, edit, deleteInvoice, publish, get };
 
+/* istanbul ignore next */
 async function* nodeStreamToIterator(stream: ReadStream) {
   for await (const chunk of stream) {
     yield chunk;
   }
 }
 
+/* istanbul ignore next */
 function iteratorToStream(iterator: AsyncGenerator<any>): ReadableStream {
   return new ReadableStream({
     async pull(controller) {

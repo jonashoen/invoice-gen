@@ -17,7 +17,9 @@ describe("Customer service tests", () => {
   test("Get customers", async () => {
     prismaMock.customer.findMany.mockResolvedValueOnce([testCustomer]);
 
-    const receivedCustomers = await customerService.getCustomers(-1);
+    const receivedCustomers = await customerService.getCustomers(
+      testCustomer.userId
+    );
 
     expect(receivedCustomers).toHaveLength(1);
     expect(receivedCustomers[0]).toEqual(testCustomer);
