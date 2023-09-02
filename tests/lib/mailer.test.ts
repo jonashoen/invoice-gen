@@ -1,5 +1,4 @@
 import mailer from "@/lib/mailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const consoleMock = jest.spyOn(console, "error").mockImplementation();
 
