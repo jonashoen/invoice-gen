@@ -34,3 +34,6 @@ steps:
         from_secret: DISCORD_WEBHOOK_ID
       webhook_token:
         from_secret: DISCORD_WEBHOOK_TOKEN
+      message: '{{build.author}} pushed to {{build.branch}} ({{repo.name}})'
+    when:
+      status: [ success, failure ]
