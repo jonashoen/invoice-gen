@@ -1,12 +1,12 @@
-const oldEnv = process.env;
+const oldEnvMailer = process.env;
 
 beforeEach(() => {
   jest.resetModules();
-  process.env = { ...oldEnv };
+  process.env = { ...oldEnvMailer };
 });
 
 afterAll(() => {
-  process.env = oldEnv;
+  process.env = oldEnvMailer;
 });
 
 describe("Mailer config tests", () => {

@@ -1,12 +1,12 @@
-const oldEnv = process.env;
+const oldEnvSession = process.env;
 
 beforeEach(() => {
   jest.resetModules();
-  process.env = { ...oldEnv };
+  process.env = { ...oldEnvSession };
 });
 
 afterAll(() => {
-  process.env = oldEnv;
+  process.env = oldEnvSession;
 });
 
 describe("Session config tests", () => {
