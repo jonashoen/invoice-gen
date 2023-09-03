@@ -403,8 +403,8 @@ const checkResetPasswordCode = async ({
   }
 
   if (
-    !passwordHelper.compare(code, passwordReset.code) &&
-    dayjs.utc().isBefore(passwordReset.expires)
+    !passwordHelper.compare(code, passwordReset.code) ||
+    dayjs.utc().isAfter(dayjs.utc(passwordReset.expires))
   ) {
     return null;
   }
@@ -517,6 +517,16 @@ const resendVerifyCode = async ({ username }: { username: string }) => {
   });
 
   if (!user || user.verified) {
+    return null;
+  }
+
+  const oldUserVerify = await db.userVerify.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (!oldUserVerify) {
     return null;
   }
 
