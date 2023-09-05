@@ -28,6 +28,12 @@ const Api = {
   DeleteInvoice: "/invoices/delete",
   PublishInvoice: "/invoices/publish",
   ShowInvoice: "/invoices/show",
+  TimeTracking: "/time-tracking",
+  RunningTimeTrack: "/time-tracking/running",
+  StartTimeTracking: "/time-tracking/start",
+  StopTimeTracking: "/time-tracking/stop",
+  DeleteTimeTracking: "/time-tracking/delete",
+  EditTimeTracking: "/time-tracking/edit",
 };
 
 export default Api;

@@ -86,6 +86,7 @@ model Project {
   customerId     Int
   customer       Customer       @relation(fields: [customerId], references: [id])
   invoices       Invoice[]
+  timeTrack      TimeTrack[]
 
   @@unique([name, customerId])
 }
@@ -110,6 +111,15 @@ model InvoicePosition {
   price       Float
   invoiceId   Int
   invoice     Invoice             @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model TimeTrack {
+  id          Int       @id @default(autoincrement())
+  projectId   Int
+  project     Project   @relation(fields: [projectId], references: [id])
+  startTime   DateTime  @default(now())
+  endTime     DateTime?
+  description String?
 }
 
 enum PaymentDueUnit {

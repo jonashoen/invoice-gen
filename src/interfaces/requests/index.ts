@@ -6,4 +6,5 @@
 export * from './customer';
 export * from './invoice';
 export * from './project';
+export * from './timeTrack';
 export * from './user';

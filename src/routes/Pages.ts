@@ -3,6 +3,7 @@ const Pages = {
   Register: "/register",
   ForgotPassword: "/forgot-password",
   Invoices: "/invoices",
+  TimeTracking: "/time-tracking",
   Projects: "/projects",
   Customers: "/customers",
   Profile: "/profile",
