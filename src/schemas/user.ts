@@ -2,21 +2,21 @@ import Joi from "joi";
 import * as ibantools from "ibantools";
 
 export const login = Joi.object({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
+  username: Joi.string().trim().required(),
+  password: Joi.string().trim().required(),
 }).meta({ className: "LoginRequest" });
 
 export const register = Joi.object({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
+  username: Joi.string().trim().required(),
+  password: Joi.string().trim().required(),
   passwordRepeated: Joi.ref("password"),
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  zipCode: Joi.string().required(),
-  city: Joi.string().required(),
-  street: Joi.string().required(),
-  houseNumber: Joi.string().required(),
-  bank: Joi.string().required(),
+  firstName: Joi.string().trim().required(),
+  lastName: Joi.string().trim().required(),
+  zipCode: Joi.string().trim().required(),
+  city: Joi.string().trim().required(),
+  street: Joi.string().trim().required(),
+  houseNumber: Joi.string().trim().required(),
+  bank: Joi.string().trim().required(),
   iban: Joi.string()
     .custom((value, helpers) => {
       if (!ibantools.isValidIBAN(value)) {
@@ -35,21 +35,21 @@ export const register = Joi.object({
       return value;
     })
     .required(),
-  taxNumber: Joi.string().required(),
-  vatId: Joi.string().required(),
-  telephone: Joi.string().required(),
-  email: Joi.string().email().required(),
+  taxNumber: Joi.string().trim().required(),
+  vatId: Joi.string().trim().required(),
+  telephone: Joi.string().trim().required(),
+  email: Joi.string().trim().email().required(),
 }).meta({ className: "RegisterRequest" });
 
 export const editUser = Joi.object({
-  username: Joi.string().optional(),
-  firstName: Joi.string().optional(),
-  lastName: Joi.string().optional(),
-  zipCode: Joi.string().optional(),
-  city: Joi.string().optional(),
-  street: Joi.string().optional(),
-  houseNumber: Joi.string().optional(),
-  bank: Joi.string().optional(),
+  username: Joi.string().trim().optional(),
+  firstName: Joi.string().trim().optional(),
+  lastName: Joi.string().trim().optional(),
+  zipCode: Joi.string().trim().optional(),
+  city: Joi.string().trim().optional(),
+  street: Joi.string().trim().optional(),
+  houseNumber: Joi.string().trim().optional(),
+  bank: Joi.string().trim().optional(),
   iban: Joi.string()
     .custom((value, helpers) => {
       if (!ibantools.isValidIBAN(value)) {
@@ -68,41 +68,41 @@ export const editUser = Joi.object({
       return value;
     })
     .optional(),
-  taxNumber: Joi.string().optional(),
-  vatId: Joi.string().optional(),
-  telephone: Joi.string().optional(),
-  email: Joi.string().email().optional(),
+  taxNumber: Joi.string().trim().optional(),
+  vatId: Joi.string().trim().optional(),
+  telephone: Joi.string().trim().optional(),
+  email: Joi.string().trim().email().optional(),
 }).meta({ className: "EditUserRequest" });
 
 export const changePassword = Joi.object({
-  oldPassword: Joi.string().required(),
-  newPassword: Joi.string().required(),
+  oldPassword: Joi.string().trim().required(),
+  newPassword: Joi.string().trim().required(),
   newPasswordRepeated: Joi.ref("newPassword"),
 }).meta({ className: "ChangePasswordRequest" });
 
 export const requestResetPassword = Joi.object({
-  email: Joi.string().email().required(),
+  email: Joi.string().trim().email().required(),
 }).meta({ className: "RequestResetPasswordRequest" });
 
 export const checkResetPasswordCode = Joi.object({
-  email: Joi.string().email().required(),
-  code: Joi.string().required(),
+  email: Joi.string().trim().email().required(),
+  code: Joi.string().trim().required(),
 }).meta({ className: "CheckResetPasswordCodeRequest" });
 
 export const resetPassword = Joi.object({
-  email: Joi.string().email().required(),
-  code: Joi.string().required(),
-  newPassword: Joi.string().required(),
+  email: Joi.string().trim().email().required(),
+  code: Joi.string().trim().required(),
+  newPassword: Joi.string().trim().required(),
   newPasswordRepeated: Joi.ref("newPassword"),
 }).meta({ className: "ResetPasswordRequest" });
 
 export const verifyAccount = Joi.object({
-  username: Joi.string().required(),
-  code: Joi.string().required(),
+  username: Joi.string().trim().required(),
+  code: Joi.string().trim().required(),
 }).meta({ className: "VerifyAccountRequest" });
 
 export const resendVerifyCode = Joi.object({
-  username: Joi.string().required(),
+  username: Joi.string().trim().required(),
 }).meta({ className: "ResendVerifyCodeRequest" });
 
 export default {

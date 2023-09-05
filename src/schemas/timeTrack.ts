@@ -6,14 +6,14 @@ export const startTimeTrackRequest = Joi.object({
 
 export const stopTimeTrackRequest = Joi.object({
   timeTrackId: Joi.number().integer().positive().required(),
-  description: Joi.string().required(),
+  description: Joi.string().trim().required(),
 }).meta({ className: "StopTimeTrackRequest" });
 
 export const editTimeTrackRequest = Joi.object({
   timeTrackId: Joi.number().integer().positive().required(),
   startDate: Joi.date().optional(),
   endDate: Joi.date().optional(),
-  description: Joi.string().optional(),
+  description: Joi.string().trim().optional(),
 }).meta({ className: "EditTimeTrackRequest" });
 
 export const deleteTimeTrackRequest = Joi.object({

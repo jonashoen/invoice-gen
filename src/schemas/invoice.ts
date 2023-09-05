@@ -11,7 +11,7 @@ export const addInvoice = Joi.object({
         unit: Joi.string()
           .valid(...Object.values(InvoicePositionUnit))
           .required(),
-        description: Joi.string().required(),
+        description: Joi.string().trim().required(),
         price: Joi.number().positive().required(),
       }).required()
     )
@@ -32,7 +32,7 @@ export const editInvoice = Joi.object({
         unit: Joi.string()
           .valid(...Object.values(InvoicePositionUnit))
           .optional(),
-        description: Joi.string().optional(),
+        description: Joi.string().trim().optional(),
         price: Joi.number().positive().optional(),
         added: Joi.boolean().optional(),
       })

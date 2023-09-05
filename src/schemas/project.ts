@@ -3,7 +3,7 @@ import Joi from "joi";
 import { PaymentDueUnit } from "@prisma/client";
 
 export const addProject = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string().trim().required(),
   paymentDue: Joi.number().integer().positive().required(),
   paymentDueUnit: Joi.string()
     .valid(...Object.values(PaymentDueUnit))
@@ -13,7 +13,7 @@ export const addProject = Joi.object({
 
 export const editProject = Joi.object({
   id: Joi.number().integer().positive().required(),
-  name: Joi.string().optional(),
+  name: Joi.string().trim().optional(),
   paymentDue: Joi.number().integer().positive().optional(),
   paymentDueUnit: Joi.string()
     .valid(...Object.values(PaymentDueUnit))
