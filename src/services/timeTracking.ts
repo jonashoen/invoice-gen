@@ -101,6 +101,22 @@ const edit = async (
     return null;
   }
 
+  if (
+    startTime &&
+    timeTrack.endTime &&
+    startTime.valueOf() > timeTrack.endTime.valueOf()
+  ) {
+    return null;
+  }
+
+  if (endTime && endTime.valueOf() < timeTrack.startTime.valueOf()) {
+    return null;
+  }
+
+  if (startTime && endTime && startTime.valueOf() > endTime.valueOf()) {
+    return null;
+  }
+
   return await db.timeTrack.update({
     where: {
       id: timeTrackId,
