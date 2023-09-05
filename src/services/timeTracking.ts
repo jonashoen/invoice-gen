@@ -7,9 +7,27 @@ dayjs.extend(utc);
 const get = async (userId: number) => {
   return await db.timeTrack.findMany({
     where: {
+      endTime: {
+        not: null,
+      },
       project: {
         customer: {
           userId,
+        },
+      },
+    },
+    orderBy: {
+      startTime: "desc",
+    },
+    include: {
+      project: {
+        select: {
+          name: true,
+          customer: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },
@@ -20,6 +38,18 @@ const getRunning = async (userId: number) => {
   return await db.timeTrack.findFirst({
     where: {
       endTime: null,
+    },
+    include: {
+      project: {
+        select: {
+          name: true,
+          customer: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 };
