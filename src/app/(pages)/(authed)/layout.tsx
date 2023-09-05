@@ -12,6 +12,7 @@ import Pages from "@/routes/Pages";
 
 const links = [
   { text: "Rechnungen", url: Pages.Invoices },
+  { text: "Zeiterfassung", url: Pages.TimeTracking },
   { text: "Projekte", url: Pages.Projects },
   { text: "Kunden", url: Pages.Customers },
   { text: "Profil", url: Pages.Profile },
