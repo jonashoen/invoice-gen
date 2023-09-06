@@ -1,13 +1,14 @@
 import React, { ForwardedRef } from "react";
 import Button from "@/components/Button";
 import Form from "@/components/Form";
-import TextArea from "@/components/TextArea";
 import useApiMutation from "@/hooks/useApiMutation";
 import { StopTimeTrackRequest } from "@/interfaces/requests";
 import Api from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
 import { useState } from "react";
 import Info from "@/components/Info";
+import EditableList from "@/components/EditableActivitiesList";
+import { TimeTrackActivity } from "@prisma/client";
 
 interface Props {
   timeTrackId: number;
@@ -34,42 +35,41 @@ const StopTimeTracking = (
   });
 
   const [error, setError] = useState("");
-  const [description, setDescription] = useState("");
+  const [activities, setActivities] = useState<TimeTrackActivity[]>([]);
 
   const stopTimeTracking = () => {
     stopTimeTrackingMutation.mutate({
       timeTrackId,
-      description,
+      activities: activities.map((activity) => activity.description),
     });
   };
 
   return (
-    <Form onSubmit={stopTimeTracking}>
+    <div className="flex flex-col gap-5">
       {error && (
         <Info severity="error" className="mt-4">
           {error}
         </Info>
       )}
 
-      <TextArea
-        label="Beschreibung"
-        value={description}
-        setValue={setDescription}
-        required
-        className="h-[200px]"
+      <EditableList
+        label="Tätigkeiten"
+        value={activities}
+        setValue={setActivities}
       />
 
       <div className="flex justify-end mt-10">
         <Button
           className="bg-ice"
           type="submit"
-          disabled={!description}
+          disabled={activities.length === 0}
           loading={stopTimeTrackingMutation.isLoading}
+          onClick={stopTimeTracking}
         >
           Stoppen
         </Button>
       </div>
-    </Form>
+    </div>
   );
 };
 

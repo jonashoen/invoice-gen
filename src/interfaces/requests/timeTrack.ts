@@ -8,10 +8,18 @@ export interface DeleteTimeTrackRequest {
 }
 
 export interface EditTimeTrackRequest {
-  description?: string;
-  endDate?: Date;
-  startDate?: Date;
+  addedActivities?: {
+    description: string;
+  }[];
+  deletedActivities?: number[];
+  endTime?: Date;
+  projectId?: number;
+  startTime?: Date;
   timeTrackId: number;
+  updatedActivities?: {
+    description: string;
+    id: number;
+  }[];
 }
 
 export interface StartTimeTrackRequest {
@@ -19,6 +27,6 @@ export interface StartTimeTrackRequest {
 }
 
 export interface StopTimeTrackRequest {
-  description: string;
+  activities: string[];
   timeTrackId: number;
 }

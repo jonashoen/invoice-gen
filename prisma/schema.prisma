@@ -114,12 +114,19 @@ model InvoicePosition {
 }
 
 model TimeTrack {
+  id         Int                 @id @default(autoincrement())
+  projectId  Int
+  project    Project             @relation(fields: [projectId], references: [id])
+  startTime  DateTime            @default(now())
+  endTime    DateTime?
+  activities TimeTrackActivity[]
+}
+
+model TimeTrackActivity {
   id          Int       @id @default(autoincrement())
-  projectId   Int
-  project     Project   @relation(fields: [projectId], references: [id])
-  startTime   DateTime  @default(now())
-  endTime     DateTime?
-  description String?
+  timeTrackId Int
+  timeTrack   TimeTrack @relation(fields: [timeTrackId], references: [id], onDelete: Cascade)
+  description String
 }
 
 enum PaymentDueUnit {

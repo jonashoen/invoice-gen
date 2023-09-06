@@ -30,6 +30,11 @@ const get = async (userId: number) => {
           },
         },
       },
+      activities: {
+        orderBy: {
+          id: "asc",
+        },
+      },
     },
   });
 };
@@ -55,6 +60,12 @@ const getRunning = async (userId: number) => {
 };
 
 const start = async (userId: number, { projectId }: { projectId: number }) => {
+  const runningTimeTracking = await getRunning(userId);
+
+  if (runningTimeTracking) {
+    return null;
+  }
+
   const project = await db.project.findUnique({
     where: {
       id: projectId,
@@ -74,7 +85,7 @@ const start = async (userId: number, { projectId }: { projectId: number }) => {
 
 const stop = async (
   userId: number,
-  { timeTrackId, description }: { timeTrackId: number; description: string }
+  { timeTrackId, activities }: { timeTrackId: number; activities: string[] }
 ) => {
   const timeTrack = await db.timeTrack.findUnique({
     where: {
@@ -97,7 +108,11 @@ const stop = async (
     },
     data: {
       endTime: dayjs.utc().toDate(),
-      description,
+      activities: {
+        createMany: {
+          data: activities.map((activity) => ({ description: activity })),
+        },
+      },
     },
   });
 };
@@ -108,12 +123,16 @@ const edit = async (
     timeTrackId,
     startTime,
     endTime,
-    description,
+    addedActivities,
+    updatedActivities,
+    deletedActivities,
   }: {
     timeTrackId: number;
     startTime?: Date;
     endTime?: Date;
-    description?: string;
+    addedActivities?: { description: string }[];
+    updatedActivities?: { id: number; description: string }[];
+    deletedActivities?: number[];
   }
 ) => {
   const timeTrack = await db.timeTrack.findUnique({
@@ -125,26 +144,55 @@ const edit = async (
         },
       },
     },
+    include: {
+      activities: true,
+    },
   });
 
   if (!timeTrack) {
     return null;
   }
 
-  if (
+  if (startTime && endTime) {
+    if (startTime.valueOf() > endTime.valueOf()) {
+      return null;
+    }
+  } else if (
     startTime &&
     timeTrack.endTime &&
     startTime.valueOf() > timeTrack.endTime.valueOf()
   ) {
     return null;
-  }
-
-  if (endTime && endTime.valueOf() < timeTrack.startTime.valueOf()) {
+  } else if (endTime && endTime.valueOf() < timeTrack.startTime.valueOf()) {
     return null;
   }
 
-  if (startTime && endTime && startTime.valueOf() > endTime.valueOf()) {
-    return null;
+  if (updatedActivities && updatedActivities.length !== 0) {
+    const oldActivitiesToEditCount = await db.timeTrackActivity.count({
+      where: {
+        id: {
+          in: [...updatedActivities.map((activity) => activity.id)],
+        },
+      },
+    });
+
+    if (oldActivitiesToEditCount !== updatedActivities.length) {
+      return null;
+    }
+  }
+
+  if (deletedActivities && deletedActivities.length !== 0) {
+    const oldActivitiesToDeleteCount = await db.timeTrackActivity.count({
+      where: {
+        id: {
+          in: deletedActivities,
+        },
+      },
+    });
+
+    if (oldActivitiesToDeleteCount !== deletedActivities.length) {
+      return null;
+    }
   }
 
   return await db.timeTrack.update({
@@ -154,7 +202,24 @@ const edit = async (
     data: {
       startTime: startTime && dayjs.utc(startTime).toDate(),
       endTime: endTime && dayjs.utc(endTime).toDate(),
-      description,
+      activities: {
+        createMany: addedActivities && {
+          data: addedActivities,
+        },
+        updateMany:
+          updatedActivities &&
+          updatedActivities.map((activity) => ({
+            where: {
+              id: activity.id,
+            },
+            data: {
+              description: activity.description,
+            },
+          })),
+        deleteMany:
+          deletedActivities &&
+          deletedActivities.map((activity) => ({ id: activity })),
+      },
     },
   });
 };

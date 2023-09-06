@@ -13,8 +13,7 @@ import dateToDateString from "@/helper/dateToDateString";
 import dayjs from "dayjs";
 import CreateInvoice from "./CreateInvoice";
 import ShowInvoice from "./ShowInvoice";
-import Container from "@/components/Container";
-import { useState } from "react";
+import Details from "@/components/Details";
 
 const Pages = () => {
   const showModal = useModalStore((state) => state.show);
@@ -27,9 +26,6 @@ const Pages = () => {
   >({
     route: Api.Invoices,
   });
-
-  const [openInvoicesOpen, setOpenInvoicesOpen] = useState(true);
-  const [createdInvoicesOpen, setCreatedInvoicesOpen] = useState(true);
 
   const openInvoices = invoices?.filter((invoice) => !invoice.locked);
   const createdInvoices = invoices?.filter((invoice) => invoice.locked);
@@ -58,26 +54,7 @@ const Pages = () => {
             </p>
           )}
           {openInvoices && openInvoices.length !== 0 && (
-            <details open={openInvoicesOpen}>
-              <summary
-                className="flex items-center gap-2 w-fit list-none select-none"
-                onClick={(e) => e.preventDefault()}
-              >
-                <Container className="w-fit bg-purple gap-2">
-                  <h3 className="text-xl text-white">
-                    Offene ({openInvoices.length})
-                  </h3>
-                </Container>
-                <Button
-                  className={[
-                    "transition-colors !w-[48px] !h-[48px] text-center",
-                    openInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
-                  ].join(" ")}
-                  onClick={() => setOpenInvoicesOpen((o) => !o)}
-                >
-                  {openInvoicesOpen ? "-" : "+"}
-                </Button>
-              </summary>
+            <Details title={`Offene (${openInvoices.length})`}>
               <div className="flex flex-col gap-4 mt-4">
                 {openInvoices.map((invoice) => (
                   <Paper className="!flex-row justify-between" key={invoice.id}>
@@ -128,30 +105,11 @@ const Pages = () => {
                   </Paper>
                 ))}
               </div>
-            </details>
+            </Details>
           )}
 
           {createdInvoices && createdInvoices.length !== 0 && (
-            <details open={createdInvoicesOpen}>
-              <summary
-                className="flex items-center gap-2 w-fit list-none select-none"
-                onClick={(e) => e.preventDefault()}
-              >
-                <Container className="w-fit bg-purple gap-2">
-                  <h3 className="text-xl text-white">
-                    Erstellte ({createdInvoices.length})
-                  </h3>
-                </Container>
-                <Button
-                  className={[
-                    "transition-colors !w-[48px] !h-[48px] text-center",
-                    createdInvoicesOpen ? "bg-red-600 text-white" : "bg-green",
-                  ].join(" ")}
-                  onClick={() => setCreatedInvoicesOpen((o) => !o)}
-                >
-                  {createdInvoicesOpen ? "-" : "+"}
-                </Button>
-              </summary>
+            <Details title={`Erstellte (${createdInvoices.length})`}>
               <div className="flex flex-col gap-4 mt-4">
                 {createdInvoices.map((invoice) => (
                   <Paper key={invoice.id}>
@@ -216,7 +174,7 @@ const Pages = () => {
                   </Paper>
                 ))}
               </div>
-            </details>
+            </Details>
           )}
         </div>
       ) : (

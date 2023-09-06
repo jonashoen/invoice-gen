@@ -1,9 +1,13 @@
 "use client";
 
 import Button from "@/components/Button";
+import EditableList from "@/components/EditableActivitiesList";
 import Form from "@/components/Form";
 import Info from "@/components/Info";
 import Select from "@/components/Select";
+import TextArea from "@/components/TextArea";
+import TextField from "@/components/TextField";
+import dateToDateString from "@/helper/dateToDateString";
 import useApi from "@/hooks/useApi";
 import useApiMutation from "@/hooks/useApiMutation";
 import {
@@ -13,15 +17,27 @@ import {
 } from "@/interfaces/requests";
 import Api from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
-import { Customer, Project } from "@prisma/client";
+import { Customer, Project, TimeTrackActivity } from "@prisma/client";
+import dayjs from "dayjs";
 import { StatusCodes } from "http-status-codes";
+import { boolean } from "joi";
 import { useState } from "react";
 
 interface Props {
   timeTrackId?: number;
+  oldProjectId?: number;
+  oldStartTime?: Date;
+  oldEndTime?: Date;
+  oldActivities?: TimeTrackActivity[];
 }
 
-const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
+const AddTimeTracking: React.FC<Props> = ({
+  timeTrackId,
+  oldProjectId = "",
+  oldStartTime,
+  oldEndTime,
+  oldActivities = [],
+}) => {
   const hideModal = useModalStore((state) => state.hide);
 
   const { data: projects, isFetching: projectsFetching } = useApi<
@@ -47,7 +63,7 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
     onSuccess: hideModal,
     onError: (apiError) => {
       if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
-        setError("Das Startdatum muss vor dem Enddatum liegen!");
+        setError("Die Startzeit muss vor der Endzeit liegen!");
       } else {
         setError(
           "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
@@ -69,7 +85,15 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
   });
 
   const [error, setError] = useState("");
-  const [projectId, setProjectId] = useState("");
+  const [projectId, setProjectId] = useState(oldProjectId.toString());
+  const [startTime, setStartTime] = useState(
+    dateToLocalIsoString(oldStartTime)
+  );
+  const [endTime, setEndTime] = useState(dateToLocalIsoString(oldEndTime));
+  const [activities, setActivities] =
+    useState<(TimeTrackActivity & { added?: boolean; deleted?: boolean })[]>(
+      oldActivities
+    );
 
   const startTimeTracking = () => {
     setError("");
@@ -84,7 +108,26 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
 
     setError("");
 
-    editTimeTrackingMutation.mutate({ timeTrackId });
+    editTimeTrackingMutation.mutate({
+      timeTrackId,
+      projectId: parseInt(projectId),
+      startTime: startTime ? new Date(startTime) : undefined,
+      endTime: endTime ? new Date(endTime) : undefined,
+      addedActivities: activities
+        .filter((a) => a.added && !a.deleted)
+        .map((a) => ({
+          description: a.description,
+        })),
+      updatedActivities: activities
+        .filter((a) => !a.added && !a.deleted)
+        .map((a) => ({
+          id: a.id,
+          description: a.description,
+        })),
+      deletedActivities: activities
+        .filter((a) => a.deleted && !a.added)
+        .map((a) => a.id),
+    });
   };
 
   const deleteTimeTracking = () => {
@@ -96,6 +139,31 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
 
     deleteTimeTrackingMutation.mutate({ timeTrackId });
   };
+
+  const startTrackingDisabled = !projectId;
+
+  const editTrackingDisabled =
+    startTrackingDisabled ||
+    !startTime ||
+    !endTime ||
+    activities.filter((a) => !a.deleted).length === 0 ||
+    activities.every((activity) => {
+      if (activity.deleted) {
+        return activity.added;
+      }
+
+      const oldActivity = oldActivities.find((a) => a.id === activity.id);
+
+      if (!oldActivity) {
+        return false;
+      }
+
+      return activity.description === oldActivity.description;
+    });
+
+  const submitDisabled = timeTrackId
+    ? editTrackingDisabled
+    : startTrackingDisabled;
 
   return (
     <Form
@@ -119,6 +187,32 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
         label="Projekt"
       />
 
+      {timeTrackId && (
+        <>
+          <TextField
+            label="Startzeit"
+            value={startTime}
+            setValue={setStartTime}
+            type="datetime-local"
+            max={endTime}
+          />
+
+          <TextField
+            label="Endzeit"
+            value={endTime}
+            setValue={setEndTime}
+            type="datetime-local"
+            min={startTime}
+          />
+
+          <EditableList
+            label="Tätigkeiten"
+            value={activities}
+            setValue={setActivities}
+          />
+        </>
+      )}
+
       <div
         className={[
           "flex mt-10",
@@ -129,7 +223,12 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
           <Button
             type="button"
             className="bg-red-600 text-white"
-            loading={projectsFetching}
+            loading={
+              projectsFetching ||
+              startTimeTrackingMutation.isLoading ||
+              editTimeTrackingMutation.isLoading ||
+              deleteTimeTrackingMutation.isLoading
+            }
             onClick={deleteTimeTracking}
           >
             Löschen
@@ -138,10 +237,15 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
         <Button
           type="submit"
           className="bg-ice"
-          loading={projectsFetching}
-          disabled={!projectId}
+          loading={
+            projectsFetching ||
+            startTimeTrackingMutation.isLoading ||
+            editTimeTrackingMutation.isLoading ||
+            deleteTimeTrackingMutation.isLoading
+          }
+          disabled={submitDisabled}
         >
-          Starten
+          {timeTrackId ? "Speichern" : "Starten"}
         </Button>
       </div>
     </Form>
@@ -149,3 +253,6 @@ const AddTimeTracking: React.FC<Props> = ({ timeTrackId }) => {
 };
 
 export default AddTimeTracking;
+
+const dateToLocalIsoString = (date?: Date) =>
+  date ? dayjs(date).format("YYYY-MM-DD[T]HH:mm") : "";
