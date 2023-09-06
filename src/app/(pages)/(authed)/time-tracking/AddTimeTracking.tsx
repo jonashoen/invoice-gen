@@ -143,23 +143,24 @@ const AddTimeTracking: React.FC<Props> = ({
   const startTrackingDisabled = !projectId;
 
   const editTrackingDisabled =
-    startTrackingDisabled ||
-    !startTime ||
-    !endTime ||
     activities.filter((a) => !a.deleted).length === 0 ||
-    activities.every((activity) => {
-      if (activity.deleted) {
-        return activity.added;
-      }
+    (dateToLocalIsoString(new Date(startTime)) ===
+      dateToLocalIsoString(oldStartTime) &&
+      dateToLocalIsoString(new Date(endTime)) ===
+        dateToLocalIsoString(oldEndTime) &&
+      activities.every((activity) => {
+        if (activity.deleted) {
+          return activity.added;
+        }
 
-      const oldActivity = oldActivities.find((a) => a.id === activity.id);
+        const oldActivity = oldActivities.find((a) => a.id === activity.id);
 
-      if (!oldActivity) {
-        return false;
-      }
+        if (!oldActivity) {
+          return false;
+        }
 
-      return activity.description === oldActivity.description;
-    });
+        return activity.description === oldActivity.description;
+      }));
 
   const submitDisabled = timeTrackId
     ? editTrackingDisabled
