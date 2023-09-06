@@ -142,7 +142,7 @@ const TimeTracking = () => {
               )}
               {Object.keys(groupedTimeTracks).map((day) => (
                 <Details title={day} key={day}>
-                  <div className="flex flex-col gap-4 mt-4">
+                  <div className="flex flex-col gap-4">
                     {groupedTimeTracks[day].map((timeTrack) => (
                       <Paper key={timeTrack.id}>
                         <div className="flex justify-between items-center">
@@ -165,7 +165,7 @@ const TimeTracking = () => {
                               {getDurationString(
                                 timeTrack.startTime,
                                 timeTrack.endTime
-                              )}
+                              ) || "0h"}
                             </p>
                             <Button
                               onClick={() =>
@@ -233,6 +233,6 @@ const getDurationString = (
   const days = Math.floor(duration.asDays());
 
   return days > 0
-    ? `${durationString} +${days} ${days > 1 ? "Tage" : "Tag"}`
-    : durationString;
+    ? `${durationString} +${days} ${days > 1 ? "Tage" : "Tag"}`.trim()
+    : durationString.trim();
 };

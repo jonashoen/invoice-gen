@@ -28,7 +28,7 @@ const Details: React.FC<Props> = ({ title, children, ...props }) => {
           {isOpen ? "-" : "+"}
         </Button>
       </summary>
-      {children}
+      <div className="mt-4">{children}</div>
     </details>
   );
 };
