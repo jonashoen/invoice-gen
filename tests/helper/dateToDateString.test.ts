@@ -1,6 +1,6 @@
 import dateToDateString from "@/helper/dateToDateString";
 
-describe("Date string formatter tests", () => {
+describe("Date to date string formatter tests", () => {
   test("With date object", () => {
     const dateString = dateToDateString(new Date(1970, 1, 1));
 
