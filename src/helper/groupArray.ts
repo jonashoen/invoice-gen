@@ -21,7 +21,7 @@ const group = <T>(array: T[], props: Props<T>) => {
     if (props.cb) {
       group = props.cb(item);
     } else {
-      group = props.key!;
+      group = item[props.key] as ObjectIndexType;
     }
 
     if (!groups[group]) {
