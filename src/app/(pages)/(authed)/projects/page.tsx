@@ -56,7 +56,7 @@ const Projects = () => {
             </p>
           )}
           {Object.keys(groupedProjects).map((group) => (
-            <Details title={group}>
+            <Details key={group} title={group}>
               {groupedProjects[group].map((project) => (
                 <Paper key={project.id}>
                   <div className="flex flex-row justify-between items-center">
