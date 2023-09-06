@@ -5,7 +5,6 @@ export const startTimeTrackRequest = Joi.object({
 }).meta({ className: "StartTimeTrackRequest" });
 
 export const stopTimeTrackRequest = Joi.object({
-  timeTrackId: Joi.number().integer().positive().required(),
   activities: Joi.array().items(Joi.string().trim().required()).required(),
 }).meta({ className: "StopTimeTrackRequest" });
 

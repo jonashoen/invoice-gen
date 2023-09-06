@@ -142,7 +142,7 @@ const edit = async (
     const oldPositionsToEditCount = await db.invoicePosition.count({
       where: {
         id: {
-          in: [...updatedPositions.map((position) => position.id)],
+          in: updatedPositions.map((position) => position.id),
         },
       },
     });

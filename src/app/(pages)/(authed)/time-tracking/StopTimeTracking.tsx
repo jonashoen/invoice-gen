@@ -1,6 +1,5 @@
 import React, { ForwardedRef } from "react";
 import Button from "@/components/Button";
-import Form from "@/components/Form";
 import useApiMutation from "@/hooks/useApiMutation";
 import { StopTimeTrackRequest } from "@/interfaces/requests";
 import Api from "@/routes/Api";
@@ -10,14 +9,7 @@ import Info from "@/components/Info";
 import EditableList from "@/components/EditableActivitiesList";
 import { TimeTrackActivity } from "@prisma/client";
 
-interface Props {
-  timeTrackId: number;
-}
-
-const StopTimeTracking = (
-  { timeTrackId }: Props,
-  ref: ForwardedRef<number>
-) => {
+const StopTimeTracking = ({}, ref: ForwardedRef<number>) => {
   const hideModal = useModalStore((state) => state.hide);
 
   const stopTimeTrackingMutation = useApiMutation<StopTimeTrackRequest>({
@@ -39,7 +31,6 @@ const StopTimeTracking = (
 
   const stopTimeTracking = () => {
     stopTimeTrackingMutation.mutate({
-      timeTrackId,
       activities: activities.map((activity) => activity.description),
     });
   };
@@ -73,4 +64,4 @@ const StopTimeTracking = (
   );
 };
 
-export default React.forwardRef<number, Props>(StopTimeTracking);
+export default React.forwardRef<number>(StopTimeTracking);

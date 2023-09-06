@@ -85,18 +85,13 @@ const start = async (userId: number, { projectId }: { projectId: number }) => {
 
 const stop = async (
   userId: number,
-  { timeTrackId, activities }: { timeTrackId: number; activities: string[] }
+  { activities }: { activities: string[] }
 ) => {
-  const timeTrack = await db.timeTrack.findUnique({
-    where: {
-      id: timeTrackId,
-      project: {
-        customer: {
-          userId,
-        },
-      },
-    },
-  });
+  if (activities.length === 0) {
+    return null;
+  }
+
+  const timeTrack = await getRunning(userId);
 
   if (!timeTrack) {
     return null;
@@ -104,7 +99,7 @@ const stop = async (
 
   return await db.timeTrack.update({
     where: {
-      id: timeTrackId,
+      id: timeTrack.id,
     },
     data: {
       endTime: dayjs.utc().toDate(),
@@ -171,7 +166,7 @@ const edit = async (
     const oldActivitiesToEditCount = await db.timeTrackActivity.count({
       where: {
         id: {
-          in: [...updatedActivities.map((activity) => activity.id)],
+          in: updatedActivities.map((activity) => activity.id),
         },
       },
     });

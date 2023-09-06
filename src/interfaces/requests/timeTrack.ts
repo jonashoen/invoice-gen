@@ -28,5 +28,4 @@ export interface StartTimeTrackRequest {
 
 export interface StopTimeTrackRequest {
   activities: string[];
-  timeTrackId: number;
 }

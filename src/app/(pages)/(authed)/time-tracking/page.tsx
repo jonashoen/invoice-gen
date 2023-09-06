@@ -120,12 +120,7 @@ const TimeTracking = () => {
                     onClick={() =>
                       showModal({
                         title: "Zeiterfassung stoppen",
-                        content: (
-                          <StopTimeTracking
-                            ref={intervalRef}
-                            timeTrackId={runningTimeTrack.id}
-                          />
-                        ),
+                        content: <StopTimeTracking ref={intervalRef} />,
                       })
                     }
                   >
