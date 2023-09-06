@@ -223,7 +223,6 @@ const getDurationString = (
   const hours = duration.get("hours");
   const minutes = duration.get("minutes");
   const seconds = duration.get("seconds");
-  minutes ? `${minutes}min` : "";
 
   const durationString = [
     hours ? `${hours}h` : "",
@@ -233,7 +232,7 @@ const getDurationString = (
 
   const days = Math.floor(duration.asDays());
 
-  return days
+  return days > 0
     ? `${durationString} +${days} ${days > 1 ? "Tage" : "Tag"}`
     : durationString;
 };
