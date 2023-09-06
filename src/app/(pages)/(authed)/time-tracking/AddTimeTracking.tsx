@@ -224,7 +224,6 @@ const AddTimeTracking: React.FC<Props> = ({
             type="button"
             className="bg-red-600 text-white"
             loading={
-              projectsFetching ||
               startTimeTrackingMutation.isLoading ||
               editTimeTrackingMutation.isLoading ||
               deleteTimeTrackingMutation.isLoading
