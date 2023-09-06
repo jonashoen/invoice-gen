@@ -101,20 +101,26 @@ const edit = async (
   {
     id,
     projectId,
+    addedPositions,
+    updatedPositions,
     deletedPositions,
-    positions,
   }: {
     id: number;
     projectId?: number;
-    deletedPositions?: number[];
-    positions?: {
+    addedPositions?: {
+      amount: number;
+      unit: InvoicePositionUnit;
+      description: string;
+      price: number;
+    }[];
+    updatedPositions?: {
       id: number;
       amount?: number;
       unit?: InvoicePositionUnit;
       description?: string;
       price?: number;
-      added?: boolean;
     }[];
+    deletedPositions?: number[];
   }
 ) => {
   const invoice = await db.invoice.findUnique({
@@ -131,9 +137,6 @@ const edit = async (
   if (!invoice || invoice.locked) {
     return null;
   }
-
-  const updatedPositions = positions?.filter((position) => !position.added);
-  const addedPositions = positions?.filter((position) => position.added);
 
   if (updatedPositions && updatedPositions.length !== 0) {
     const oldPositionsToEditCount = await db.invoicePosition.count({
@@ -163,19 +166,6 @@ const edit = async (
     }
   }
 
-  if (addedPositions) {
-    for (const addedPosition of addedPositions) {
-      if (
-        !addedPosition.amount ||
-        !addedPosition.unit ||
-        !addedPosition.description ||
-        !addedPosition.price
-      ) {
-        return null;
-      }
-    }
-  }
-
   return await db.invoice.update({
     where: {
       id,
@@ -185,12 +175,7 @@ const edit = async (
       positions: {
         deleteMany: deletedPositions?.map((position) => ({ id: position })),
         createMany: addedPositions && {
-          data: addedPositions.map((position) => ({
-            amount: position.amount!,
-            unit: position.unit!,
-            description: position.description!,
-            price: position.price!,
-          })),
+          data: addedPositions,
         },
         updateMany: updatedPositions?.map((position) => ({
           where: { id: position.id },

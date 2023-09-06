@@ -152,19 +152,27 @@ const AddInvoice: React.FC<Props> = ({
     editInvoiceMutation.mutate({
       id,
       projectId: parseInt(projectId),
-      deletedPositions: positions
-        .filter((position) => position.deleted && !position.added)
-        .map((position) => position.id),
-      positions: positions
-        .filter((position) => !position.deleted)
+      addedPositions: positions
+        .filter((position) => position.added && !position.deleted)
         .map((position) => ({
           id: position.id,
           amount: position.amount,
           unit: position.unit,
           description: position.description,
           price: position.price,
-          added: position.added,
         })),
+      updatedPositions: positions
+        .filter((position) => !position.deleted && !position.added)
+        .map((position) => ({
+          id: position.id,
+          amount: position.amount,
+          unit: position.unit,
+          description: position.description,
+          price: position.price,
+        })),
+      deletedPositions: positions
+        .filter((position) => position.deleted && !position.added)
+        .map((position) => position.id),
     });
   };
 
@@ -213,10 +221,7 @@ const AddInvoice: React.FC<Props> = ({
     });
 
   return (
-    <Form
-      className="flex flex-col gap-5"
-      onSubmit={id ? editInvoice : addInvoice}
-    >
+    <Form className="gap-5" onSubmit={id ? editInvoice : addInvoice}>
       {error && (
         <Info severity="error" className="mt-4">
           {error}

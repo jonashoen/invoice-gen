@@ -98,7 +98,7 @@ describe("Invoice service tests", () => {
 
       const invoice = await invoiceService.edit(userId, {
         id: testInvoice.id,
-        positions: [testInvoicePosition],
+        updatedPositions: [testInvoicePosition],
       });
 
       expect(invoice).toBeNull();
@@ -116,17 +116,6 @@ describe("Invoice service tests", () => {
       expect(invoice).toBeNull();
     });
 
-    test("Positions to add have undefined values", async () => {
-      prismaMock.invoice.findUnique.mockResolvedValueOnce(testInvoice);
-
-      const invoice = await invoiceService.edit(userId, {
-        id: testInvoice.id,
-        positions: [{ ...testInvoicePosition, price: undefined, added: true }],
-      });
-
-      expect(invoice).toBeNull();
-    });
-
     test("Valid data", async () => {
       prismaMock.invoice.findUnique.mockResolvedValueOnce(testInvoice);
       prismaMock.invoicePosition.count.mockResolvedValueOnce(1);
@@ -135,10 +124,8 @@ describe("Invoice service tests", () => {
 
       const invoice = await invoiceService.edit(userId, {
         id: testInvoice.id,
-        positions: [
-          testInvoicePosition,
-          { ...testInvoicePosition, added: true },
-        ],
+        updatedPositions: [testInvoicePosition],
+        addedPositions: [testInvoicePosition],
         deletedPositions: [1],
       });
 
@@ -153,10 +140,8 @@ describe("Invoice service tests", () => {
 
       const invoice = await invoiceService.edit(userId, {
         id: testInvoice.id,
-        positions: [
-          testInvoicePosition,
-          { ...testInvoicePosition, added: true },
-        ],
+        updatedPositions: [testInvoicePosition],
+        addedPositions: [testInvoicePosition],
       });
 
       expect(invoice).toEqual(testInvoice);
@@ -184,7 +169,7 @@ describe("Invoice service tests", () => {
 
       const invoice = await invoiceService.edit(userId, {
         id: testInvoice.id,
-        positions: [testInvoicePosition],
+        updatedPositions: [testInvoicePosition],
         deletedPositions: [1],
       });
 

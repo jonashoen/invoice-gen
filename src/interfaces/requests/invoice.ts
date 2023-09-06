@@ -18,17 +18,22 @@ export interface DeleteInvoiceRequest {
 }
 
 export interface EditInvoiceRequest {
+  addedPositions?: ({
+    amount: number;
+    description: string;
+    price: number;
+    unit: 'hours' | 'pieces';
+  })[];
   deletedPositions?: number[];
   id: number;
-  positions?: ({
-    added?: boolean;
+  projectId?: number;
+  updatedPositions?: ({
     amount?: number;
     description?: string;
     id: number;
     price?: number;
     unit?: 'hours' | 'pieces';
   })[];
-  projectId?: number;
 }
 
 export interface PublishInvoiceRequest {

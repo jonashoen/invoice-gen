@@ -21,10 +21,19 @@ export const addInvoice = Joi.object({
 export const editInvoice = Joi.object({
   id: Joi.number().integer().positive().required(),
   projectId: Joi.number().integer().positive().optional(),
-  deletedPositions: Joi.array()
-    .items(Joi.number().integer().positive().required())
+  addedPositions: Joi.array()
+    .items(
+      Joi.object({
+        amount: Joi.number().positive().required(),
+        unit: Joi.string()
+          .valid(...Object.values(InvoicePositionUnit))
+          .required(),
+        description: Joi.string().trim().required(),
+        price: Joi.number().positive().required(),
+      }).optional()
+    )
     .optional(),
-  positions: Joi.array()
+  updatedPositions: Joi.array()
     .items(
       Joi.object({
         id: Joi.number().integer().positive().required(),
@@ -34,9 +43,11 @@ export const editInvoice = Joi.object({
           .optional(),
         description: Joi.string().trim().optional(),
         price: Joi.number().positive().optional(),
-        added: Joi.boolean().optional(),
-      })
+      }).optional()
     )
+    .optional(),
+  deletedPositions: Joi.array()
+    .items(Joi.number().integer().positive().optional())
     .optional(),
 }).meta({ className: "EditInvoiceRequest" });
 
