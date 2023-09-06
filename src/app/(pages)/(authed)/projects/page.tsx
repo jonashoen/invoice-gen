@@ -9,6 +9,10 @@ import AddProject from "./AddProject";
 import Loader from "@/components/Loader";
 import Paper from "@/components/Paper";
 import { Customer, Project } from "@prisma/client";
+import { useState } from "react";
+import group from "@/helper/groupArray";
+import Details from "@/components/Details";
+import t from "@/i18n/t";
 
 const Projects = () => {
   const showModal = useModalStore((state) => state.show);
@@ -17,7 +21,16 @@ const Projects = () => {
     (Project & { customer: Customer })[]
   >({
     route: Api.Projects,
+    onSuccess(data) {
+      const grouped = group(data, { cb: (i) => i.customer.name });
+
+      setGroupedProjects(grouped);
+    },
   });
+
+  const [groupedProjects, setGroupedProjects] = useState<{
+    [key: string]: typeof projects;
+  }>({});
 
   return (
     <main>
@@ -42,36 +55,45 @@ const Projects = () => {
               Noch keine Projekte angelegt
             </p>
           )}
-          {projects.map((project) => (
-            <Paper key={project.id}>
-              <div className="flex flex-row justify-between items-center">
-                <div>
-                  <p className="text-xl">{project.name}</p>
-                  <p className="text-sm">{project.customer.name}</p>
-                </div>
-                <Button
-                  onClick={() => {
-                    showModal({
-                      title: "Kunden bearbeiten",
-                      content: (
-                        <AddProject
-                          id={project.id}
-                          hasInvoices={
-                            (project as any)["_count"].invoices !== 0
-                          }
-                          oldName={project.name}
-                          oldPaymentDue={project.paymentDue.toString()}
-                          oldPaymentDueUnit={project.paymentDueUnit}
-                          oldCustomerId={project.customerId.toString()}
-                        />
-                      ),
-                    });
-                  }}
-                >
-                  Bearbeiten
-                </Button>
-              </div>
-            </Paper>
+          {Object.keys(groupedProjects).map((group) => (
+            <Details title={group}>
+              {groupedProjects[group].map((project) => (
+                <Paper key={project.id}>
+                  <div className="flex flex-row justify-between items-center">
+                    <div>
+                      <p className="text-xl">{project.name}</p>
+                      <p className="text-sm">
+                        <span>Zahlungsziel:</span>{" "}
+                        <span>
+                          {project.paymentDue} {t(project.paymentDueUnit)}
+                        </span>
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        showModal({
+                          title: "Kunden bearbeiten",
+                          content: (
+                            <AddProject
+                              id={project.id}
+                              hasInvoices={
+                                (project as any)["_count"].invoices !== 0
+                              }
+                              oldName={project.name}
+                              oldPaymentDue={project.paymentDue.toString()}
+                              oldPaymentDueUnit={project.paymentDueUnit}
+                              oldCustomerId={project.customerId.toString()}
+                            />
+                          ),
+                        });
+                      }}
+                    >
+                      Bearbeiten
+                    </Button>
+                  </div>
+                </Paper>
+              ))}
+            </Details>
           ))}
         </div>
       ) : (
