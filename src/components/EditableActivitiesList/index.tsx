@@ -72,13 +72,20 @@ const EditableActivitiesList: React.FC<
           {value.map((item, i) => (
             <div
               key={i}
-              className="flex relative w-full justify-between items-center py-2 gap-2"
+              className="flex justify-between items-center py-2 gap-2"
             >
-              <TextField
-                value={item.description}
-                setValue={(newValue) => editItem(i, newValue)}
-                disabled={item.deleted}
-              />
+              <p>-</p>
+              <div className="flex-grow relative">
+                <TextField
+                  value={item.description}
+                  setValue={(newValue) => editItem(i, newValue)}
+                  disabled={item.deleted}
+                />
+                {item.deleted && (
+                  <div className="transition-opacity absolute left-[5px] top-1/2 h-[2px] bg-gray-500 w-[calc(100%-10px)]" />
+                )}
+              </div>
+
               <Button
                 type="button"
                 onClick={() => (item.deleted ? unDeleteItem(i) : deleteItem(i))}
@@ -89,9 +96,6 @@ const EditableActivitiesList: React.FC<
               >
                 {item.deleted ? "+" : "x"}
               </Button>
-              {item.deleted && (
-                <div className="transition-opacity absolute left-[5px] h-[2px] bg-gray-500 w-[calc(100%-68px)]" />
-              )}
             </div>
           ))}
         </div>
@@ -99,6 +103,7 @@ const EditableActivitiesList: React.FC<
         <div className="mt-4">
           <p>Neue Tätigkeit:</p>
           <div className="flex items-center gap-2">
+            <p>-</p>
             <TextField value={newItem} setValue={setNewItem} />
             <Button
               type="button"
