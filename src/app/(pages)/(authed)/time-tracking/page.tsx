@@ -114,7 +114,13 @@ const TimeTracking = () => {
                 </div>
 
                 <div className="flex items-center gap-10">
-                  <p className="text-xl">{runningTimeTrackDuration}</p>
+                  <div className="flex items-center gap-5">
+                    <div className="bg-red-600 h-5 aspect-square rounded-full">
+                      <div className="bg-inherit w-full h-full rounded-full animate-ping" />
+                    </div>
+                    <p className="text-xl">{runningTimeTrackDuration}</p>
+                  </div>
+
                   <Button
                     className="bg-red-600"
                     onClick={() =>
