@@ -104,7 +104,15 @@ const EditableActivitiesList: React.FC<
           <p>Neue Tätigkeit:</p>
           <div className="flex items-center gap-2">
             <p>-</p>
-            <TextField value={newItem} setValue={setNewItem} />
+            <TextField
+              value={newItem}
+              setValue={setNewItem}
+              onKeyUp={(e) => {
+                if (e.code === "ArrowDown") {
+                  addItem();
+                }
+              }}
+            />
             <Button
               type="button"
               onClick={addItem}
