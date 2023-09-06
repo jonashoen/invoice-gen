@@ -7,6 +7,12 @@ describe("Date to time string formatter tests", () => {
     expect(timeString).toBe("12:00");
   });
 
+  test("Include seconds", () => {
+    const timeString = dateToTimeString(new Date(1970, 1, 1, 12, 0, 24), true);
+
+    expect(timeString).toBe("12:00:24");
+  });
+
   test("With string", () => {
     const dateString = "1970-05-01T20:25:00Z";
 
