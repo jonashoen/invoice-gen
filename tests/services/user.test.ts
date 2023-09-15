@@ -693,4 +693,40 @@ describe("User service tests", () => {
       expect(password.compare(mailCode!, verify!.code)).toBe(true);
     });
   });
+
+  describe("Check username tests", () => {
+    test("User doesn't exist", async () => {
+      prismaMock.user.findUnique.mockResolvedValueOnce(null);
+
+      const userExists = await userService.checkUsername(testUser.username);
+
+      expect(userExists).toBe(false);
+    });
+
+    test("User does exist", async () => {
+      prismaMock.user.findUnique.mockResolvedValueOnce({} as User);
+
+      const userExists = await userService.checkUsername(testUser.username);
+
+      expect(userExists).toBe(true);
+    });
+  });
+
+  describe("Check email tests", () => {
+    test("Email doesn't exist", async () => {
+      prismaMock.user.findFirst.mockResolvedValueOnce(null);
+
+      const emailExists = await userService.checkEmail(testUser.email);
+
+      expect(emailExists).toBe(false);
+    });
+
+    test("User does exist", async () => {
+      prismaMock.user.findFirst.mockResolvedValueOnce({} as User);
+
+      const emailExists = await userService.checkEmail(testUser.email);
+
+      expect(emailExists).toBe(true);
+    });
+  });
 });
