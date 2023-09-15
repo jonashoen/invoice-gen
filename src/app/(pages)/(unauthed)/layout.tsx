@@ -19,9 +19,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   return (
     isAuthed === false && (
-      <main className="mx-auto h-screen flex flex-col justify-center">
+      <main className="mx-auto min-h-screen flex flex-col justify-center">
         <div className="container flex flex-col mx-auto gap-20">
-          <Container className="bg-green">
+          <Container className="bg-green mt-20">
             <p className="font-bold py-4 text-6xl flex justify-between">
               <span>invoice-gen</span>
               <span>v1.1.0</span>

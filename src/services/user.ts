@@ -549,6 +549,29 @@ const resendVerifyCode = async ({ username }: { username: string }) => {
   return userVerify;
 };
 
+const checkUsername = async (username: string) => {
+  const user = await db.user.findUnique({
+    where: { username },
+    select: { id: true },
+  });
+
+  return !!user;
+};
+
+const checkEmail = async (email: string) => {
+  const user = await db.user.findFirst({
+    where: {
+      verified: true,
+      profile: {
+        email,
+      },
+    },
+    select: { id: true },
+  });
+
+  return !!user;
+};
+
 export default {
   register,
   login,
@@ -562,6 +585,8 @@ export default {
   resetPassword,
   verify,
   resendVerifyCode,
+  checkUsername,
+  checkEmail,
 };
 
 const generateCode = (codeLength: number = 6) => {

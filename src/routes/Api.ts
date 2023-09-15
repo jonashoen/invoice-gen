@@ -3,6 +3,8 @@ const Prefix = "/api";
 const Api = {
   Authed: "/user/is-authed",
   Login: "/user/login",
+  CheckUsername: "/user/check-username",
+  CheckEmail: "/user/check-email",
   Register: "/user/register",
   VerifyAccount: "/user/verify",
   ResendVerifyCode: "/user/resend-verify-code",

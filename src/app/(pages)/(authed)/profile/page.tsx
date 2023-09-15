@@ -7,16 +7,19 @@ import Info from "@/components/Info";
 import Loader from "@/components/Loader";
 import Paper from "@/components/Paper";
 import TextField from "@/components/TextField";
+import dateToDateString from "@/helper/dateToDateString";
 import useApi from "@/hooks/useApi";
 import useApiMutation from "@/hooks/useApiMutation";
 import {
   ChangePasswordRequest,
+  CheckEmailRequest,
+  CheckUsernameRequest,
   EditUserRequest,
 } from "@/interfaces/requests/user";
 import Api from "@/routes/Api";
 import { Profile, User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 
 const Profile = () => {
   const { data: user, isFetching } = useApi<User & { profile: Profile }>({
@@ -44,6 +47,30 @@ const Profile = () => {
 
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<boolean | null>(null);
+
+  const [usernameAvailable, setUsernameAvailable] = useState<
+    boolean | undefined
+  >();
+
+  const [emailAvailable, setEmailAvailable] = useState<boolean | undefined>();
+
+  const checkUsernameMutation = useApiMutation<CheckUsernameRequest>({
+    route: Api.CheckUsername,
+    onSuccess: () => setUsernameAvailable(true),
+    onError: () => setUsernameAvailable(false),
+  });
+
+  const checkEmailMutation = useApiMutation<CheckEmailRequest>({
+    route: Api.CheckEmail,
+    onSuccess: () => setEmailAvailable(true),
+    onError: (apiError) => {
+      if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
+        setEmailAvailable(false);
+      } else {
+        setEmailAvailable(true);
+      }
+    },
+  });
 
   const editUserMutation = useApiMutation<EditUserRequest>({
     route: Api.EditUser,
@@ -78,6 +105,7 @@ const Profile = () => {
   });
 
   const [username, setUsername] = useState("");
+  const debouncedUsername = useDeferredValue(username);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [zipCode, setZipCode] = useState("");
@@ -91,6 +119,37 @@ const Profile = () => {
   const [vatId, setVatId] = useState("");
   const [telephone, setTelephone] = useState("");
   const [email, setEmail] = useState("");
+  const debouncedEmail = useDeferredValue(email);
+
+  const callCheckUsername = checkUsernameMutation.mutate;
+
+  useEffect(() => {
+    if (!debouncedUsername) {
+      return;
+    }
+
+    if (debouncedUsername === user.username) {
+      setUsernameAvailable(undefined);
+      return;
+    }
+
+    callCheckUsername({ username: debouncedUsername });
+  }, [debouncedUsername, user?.username, callCheckUsername]);
+
+  const callCheckEmail = checkEmailMutation.mutate;
+
+  useEffect(() => {
+    if (!debouncedEmail) {
+      return;
+    }
+
+    if (debouncedEmail === user.profile.email) {
+      setEmailAvailable(undefined);
+      return;
+    }
+
+    callCheckEmail({ email: debouncedEmail });
+  }, [debouncedEmail, user?.profile.email, callCheckEmail]);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -132,6 +191,7 @@ const Profile = () => {
   const editButtonEnabled =
     !isFetching &&
     username &&
+    usernameAvailable !== false &&
     firstName &&
     lastName &&
     zipCode &&
@@ -144,6 +204,7 @@ const Profile = () => {
     (taxNumber || vatId) &&
     telephone &&
     email &&
+    emailAvailable !== false &&
     (user.username !== username ||
       user.profile.firstName !== firstName ||
       user.profile.lastName !== lastName ||
@@ -186,16 +247,30 @@ const Profile = () => {
               )}
 
               <p className="text-xl">
-                Erstellt am: {new Date(user.createdAt).toLocaleDateString()}
+                Erstellt am: {dateToDateString(user.createdAt)}
               </p>
 
-              <TextField
-                name="username"
-                value={username}
-                setValue={setUsername}
-                label="Nutzername"
-                required
-              />
+              <div className="flex flex-col">
+                <TextField
+                  name="username"
+                  value={username}
+                  setValue={setUsername}
+                  label="Nutzername"
+                  required
+                />
+
+                {usernameAvailable === false && (
+                  <p className="text-red-600 text-sm">
+                    Der Nutzername ist bereits vergeben.
+                  </p>
+                )}
+
+                {usernameAvailable === true && (
+                  <p className="text-emerald-500 text-sm">
+                    Der Nutzername ist verfügbar.
+                  </p>
+                )}
+              </div>
 
               <div className="flex justify-between gap-4">
                 <TextField
@@ -299,14 +374,28 @@ const Profile = () => {
                   type="tel"
                 />
 
-                <TextField
-                  name="email"
-                  value={email}
-                  setValue={setEmail}
-                  label="E-Mail"
-                  required
-                  type="email"
-                />
+                <div className="flex flex-col flex-1">
+                  <TextField
+                    name="email"
+                    value={email}
+                    setValue={setEmail}
+                    label="E-Mail"
+                    required
+                    type="email"
+                  />
+
+                  {emailAvailable === false && (
+                    <p className="text-red-600 text-sm">
+                      Die E-Mail Adresse ist bereits vergeben.
+                    </p>
+                  )}
+
+                  {emailAvailable === true && (
+                    <p className="text-emerald-500 text-sm">
+                      Die E-Mail Adresse ist verfügbar.
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="flex justify-end mt-10">

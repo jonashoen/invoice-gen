@@ -9,9 +9,17 @@ export interface ChangePasswordRequest {
   oldPassword: string;
 }
 
+export interface CheckEmailRequest {
+  email: string;
+}
+
 export interface CheckResetPasswordCodeRequest {
   code: string;
   email: string;
+}
+
+export interface CheckUsernameRequest {
+  username: string;
 }
 
 export interface EditUserRequest {

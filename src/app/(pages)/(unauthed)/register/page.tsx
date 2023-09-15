@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 
 import Form from "@/components/Form";
 import Paper from "@/components/Paper";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
 import useApiMutation from "@/hooks/useApiMutation";
-import { RegisterRequest } from "@/interfaces/requests/user";
+import {
+  CheckEmailRequest,
+  CheckUsernameRequest,
+  RegisterRequest,
+} from "@/interfaces/requests/user";
 import Api from "@/routes/Api";
 import Link from "next/link";
 import Pages from "@/routes/Pages";
@@ -16,9 +26,34 @@ import VerifyAccount from "./VerifyAccount";
 import { User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import Info from "@/components/Info";
+import useApi from "@/hooks/useApi";
 
 const Register = () => {
   const showModal = useModalStore((state) => state.show);
+
+  const [usernameAvailable, setUsernameAvailable] = useState<
+    boolean | undefined
+  >();
+
+  const [emailAvailable, setEmailAvailable] = useState<boolean | undefined>();
+
+  const checkUsernameMutation = useApiMutation<CheckUsernameRequest>({
+    route: Api.CheckUsername,
+    onSuccess: () => setUsernameAvailable(true),
+    onError: () => setUsernameAvailable(false),
+  });
+
+  const checkEmailMutation = useApiMutation<CheckEmailRequest>({
+    route: Api.CheckEmail,
+    onSuccess: () => setEmailAvailable(true),
+    onError: (apiError) => {
+      if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
+        setEmailAvailable(false);
+      } else {
+        setEmailAvailable(undefined);
+      }
+    },
+  });
 
   const register = useApiMutation<RegisterRequest, User>({
     route: Api.Register,
@@ -33,7 +68,7 @@ const Register = () => {
       if (apiError.statusCode === StatusCodes.BAD_REQUEST) {
         setError("Der Nutzername oder die E-Mail ist schon vergeben.");
       } else if (apiError.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
-        setError("Die IBAN oder die BIC sind ungültig.");
+        setError("Die IBAN, BIC oder E-Mail-Adresse ist ungültig.");
       } else {
         setError(
           "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
@@ -45,6 +80,7 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const [username, setUsername] = useState("");
+  const debouncedUsername = useDeferredValue(username);
   const [password, setPassword] = useState("");
   const [passwordRepeated, setPasswordRepeated] = useState("");
 
@@ -61,6 +97,27 @@ const Register = () => {
   const [vatId, setVatId] = useState("");
   const [telephone, setTelephone] = useState("");
   const [email, setEmail] = useState("");
+  const debouncedEmail = useDeferredValue(email);
+
+  const callCheckUsername = checkUsernameMutation.mutate;
+
+  useEffect(() => {
+    if (!debouncedUsername) {
+      return;
+    }
+
+    callCheckUsername({ username: debouncedUsername });
+  }, [callCheckUsername, debouncedUsername]);
+
+  const callCheckEmail = checkEmailMutation.mutate;
+
+  useEffect(() => {
+    if (!debouncedEmail) {
+      return;
+    }
+
+    callCheckEmail({ email: debouncedEmail });
+  }, [callCheckEmail, debouncedEmail]);
 
   const onSubmit = () => {
     register.mutate({
@@ -102,13 +159,27 @@ const Register = () => {
           </Info>
         )}
 
-        <TextField
-          name="username"
-          value={username}
-          setValue={setUsername}
-          label="Nutzername"
-          required
-        />
+        <div className="flex flex-col">
+          <TextField
+            name="username"
+            value={username}
+            setValue={setUsername}
+            label="Nutzername"
+            required
+          />
+
+          {usernameAvailable === false && (
+            <p className="text-red-600 text-sm">
+              Der Nutzername ist bereits vergeben.
+            </p>
+          )}
+
+          {usernameAvailable === true && (
+            <p className="text-emerald-500 text-sm">
+              Der Nutzername ist verfügbar.
+            </p>
+          )}
+        </div>
 
         <div className="flex justify-between gap-4">
           <TextField
@@ -236,18 +307,37 @@ const Register = () => {
             type="tel"
           />
 
-          <TextField
-            name="email"
-            value={email}
-            setValue={setEmail}
-            label="E-Mail"
-            required
-            type="email"
-          />
+          <div className="flex flex-col flex-1">
+            <TextField
+              name="email"
+              value={email}
+              setValue={setEmail}
+              label="E-Mail"
+              required
+              type="email"
+            />
+
+            {emailAvailable === false && (
+              <p className="text-red-600 text-sm">
+                Die E-Mail Adresse ist bereits vergeben.
+              </p>
+            )}
+
+            {emailAvailable === true && (
+              <p className="text-emerald-500 text-sm">
+                Die E-Mail Adresse ist verfügbar.
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="flex justify-end mt-4 ">
-          <Button type="submit" className="bg-ice" loading={register.isLoading}>
+          <Button
+            type="submit"
+            className="bg-ice"
+            loading={register.isLoading}
+            disabled={usernameAvailable === false || emailAvailable === false}
+          >
             Registrieren
           </Button>
         </div>

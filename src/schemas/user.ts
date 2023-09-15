@@ -105,6 +105,14 @@ export const resendVerifyCode = Joi.object({
   username: Joi.string().trim().required(),
 }).meta({ className: "ResendVerifyCodeRequest" });
 
+export const checkUsername = Joi.object({
+  username: Joi.string().trim().required(),
+}).meta({ className: "CheckUsernameRequest" });
+
+export const checkEmail = Joi.object({
+  email: Joi.string().email().trim().required(),
+}).meta({ className: "CheckEmailRequest" });
+
 export default {
   login,
   register,
@@ -115,4 +123,6 @@ export default {
   resetPassword,
   verifyAccount,
   resendVerifyCode,
+  checkUsername,
+  checkEmail,
 };
