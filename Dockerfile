@@ -10,7 +10,6 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -32,8 +31,6 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY pdfs ./pdfs
-
-RUN npm install prisma
 
 EXPOSE 5000
 
