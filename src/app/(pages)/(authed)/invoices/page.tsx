@@ -55,7 +55,7 @@ const Pages = () => {
           )}
           {openInvoices && openInvoices.length !== 0 && (
             <Details title={`Offene (${openInvoices.length})`}>
-              <div className="flex flex-col gap-4 mt-4">
+              <div className="flex flex-col gap-4">
                 {openInvoices.map((invoice) => (
                   <Paper className="!flex-row justify-between" key={invoice.id}>
                     <div className="flex flex-col justify-center">
@@ -110,7 +110,7 @@ const Pages = () => {
 
           {createdInvoices && createdInvoices.length !== 0 && (
             <Details title={`Erstellte (${createdInvoices.length})`}>
-              <div className="flex flex-col gap-4 mt-4">
+              <div className="flex flex-col gap-4">
                 {createdInvoices.map((invoice) => (
                   <Paper key={invoice.id}>
                     <div className="flex justify-between items-center">

@@ -57,42 +57,44 @@ const Projects = () => {
           )}
           {Object.keys(groupedProjects).map((group) => (
             <Details key={group} title={group}>
-              {groupedProjects[group].map((project) => (
-                <Paper key={project.id}>
-                  <div className="flex flex-row justify-between items-center">
-                    <div>
-                      <p className="text-xl">{project.name}</p>
-                      <p className="text-sm">
-                        <span>Zahlungsziel:</span>{" "}
-                        <span>
-                          {project.paymentDue} {t(project.paymentDueUnit)}
-                        </span>
-                      </p>
+              <div className="flex flex-col gap-4">
+                {groupedProjects[group].map((project) => (
+                  <Paper key={project.id}>
+                    <div className="flex flex-row justify-between items-center">
+                      <div>
+                        <p className="text-xl">{project.name}</p>
+                        <p className="text-sm">
+                          <span>Zahlungsziel:</span>{" "}
+                          <span>
+                            {project.paymentDue} {t(project.paymentDueUnit)}
+                          </span>
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          showModal({
+                            title: "Kunden bearbeiten",
+                            content: (
+                              <AddProject
+                                id={project.id}
+                                hasInvoices={
+                                  (project as any)["_count"].invoices !== 0
+                                }
+                                oldName={project.name}
+                                oldPaymentDue={project.paymentDue.toString()}
+                                oldPaymentDueUnit={project.paymentDueUnit}
+                                oldCustomerId={project.customerId.toString()}
+                              />
+                            ),
+                          });
+                        }}
+                      >
+                        Bearbeiten
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() => {
-                        showModal({
-                          title: "Kunden bearbeiten",
-                          content: (
-                            <AddProject
-                              id={project.id}
-                              hasInvoices={
-                                (project as any)["_count"].invoices !== 0
-                              }
-                              oldName={project.name}
-                              oldPaymentDue={project.paymentDue.toString()}
-                              oldPaymentDueUnit={project.paymentDueUnit}
-                              oldCustomerId={project.customerId.toString()}
-                            />
-                          ),
-                        });
-                      }}
-                    >
-                      Bearbeiten
-                    </Button>
-                  </div>
-                </Paper>
-              ))}
+                  </Paper>
+                ))}
+              </div>
             </Details>
           ))}
         </div>
