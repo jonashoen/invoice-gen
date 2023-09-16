@@ -2,15 +2,15 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { ObjectSchema } from "joi";
 
 const parse = async <T>(schema: ObjectSchema, request: BaseRequest<T>) => {
-  const body = await request.json();
+  try {
+    const body = await request.json();
 
-  const validationResult = schema.validate(body);
+    const validationResult = await schema.validateAsync(body);
 
-  if (validationResult.error) {
+    return validationResult as T;
+  } catch {
     return null;
   }
-
-  return validationResult.value as T;
 };
 
 export default parse;
