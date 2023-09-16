@@ -11,12 +11,10 @@ const withMiddleware = <T = unknown>(
   handler: RequestHandler<T>
 ) => {
   return async (req: BaseRequest<T>) => {
-    let middlewareIndex = 0;
-
     const next = () => {
-      const middleware = middlewares[middlewareIndex++] ?? handler;
+      const middlewareOrHandler = middlewares.shift() ?? handler;
 
-      return middleware(req, next);
+      return middlewareOrHandler(req, next);
     };
 
     return await next();
