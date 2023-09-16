@@ -1,9 +1,7 @@
-import { NextResponse } from "next/server";
 import BaseRequest from "./BaseRequest";
 
 type RequestHandler<TRequest = unknown> = (
-  req: BaseRequest<TRequest>,
-  res: NextResponse
+  req: BaseRequest<TRequest>
 ) => Promise<Response>;
 
 export default RequestHandler;
