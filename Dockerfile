@@ -32,6 +32,8 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY pdfs ./pdfs
 
+RUN npm install prisma
+
 EXPOSE 5000
 
 ENV PORT 5000
