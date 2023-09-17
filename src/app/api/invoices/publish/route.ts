@@ -4,25 +4,19 @@ import { NextResponse } from "next/server";
 
 import apiError from "@/lib/apiError";
 import invoice from "@/services/invoice";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { PublishInvoiceRequest } from "@/interfaces/requests/invoice";
 import invoiceSchemas from "@/schemas/invoice";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<PublishInvoiceRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const handler: RequestHandler<PublishInvoiceRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(invoiceSchemas.publishInvoice, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const publishedInvoice = await invoice.publish(session, body);
+  const publishedInvoice = await invoice.publish(userId, payload);
 
   if (!publishedInvoice) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -30,5 +24,10 @@ const POST = async (request: BaseRequest<PublishInvoiceRequest>) => {
 
   return NextResponse.json(publishedInvoice);
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(invoiceSchemas.publishInvoice)],
+  handler
+);
 
 export { POST };

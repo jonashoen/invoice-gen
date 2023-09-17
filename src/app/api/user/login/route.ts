@@ -1,30 +1,19 @@
 "use server";
 
-import { NextResponse } from "next/server";
-
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { LoginRequest } from "@/interfaces/requests/user";
 import user from "@/services/user";
 import apiError from "@/lib/apiError";
 import createSession from "@/lib/createSession";
 import { StatusCodes } from "http-status-codes";
-import Pages from "@/routes/Pages";
 import userSchemas from "@/schemas/user";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<LoginRequest>) => {
-  const oldSession = await isAuthed();
-  if (oldSession) {
-    return NextResponse.redirect(Pages.Invoices);
-  }
+const handler: RequestHandler<LoginRequest> = async (req) => {
+  const paylaod = req.data!;
 
-  const body = await parse(userSchemas.login, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const session = await user.login(body);
+  const session = await user.login(paylaod);
 
   if (!session) {
     return apiError(StatusCodes.UNAUTHORIZED);
@@ -36,5 +25,7 @@ const POST = async (request: BaseRequest<LoginRequest>) => {
 
   return createSession(session.sessionId);
 };
+
+const POST = withMiddleware([validateBody(userSchemas.login)], handler);
 
 export { POST };

@@ -5,25 +5,18 @@ import { NextResponse } from "next/server";
 import apiError from "@/lib/apiError";
 import timeTracking from "@/services/timeTracking";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { StopTimeTrackRequest } from "@/interfaces/requests";
-import parse from "@/lib/parse";
 import timeTrakingSchemas from "@/schemas/timeTrack";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<StopTimeTrackRequest>) => {
-  const session = await isAuthed();
+const handler: RequestHandler<StopTimeTrackRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
-
-  const body = await parse(timeTrakingSchemas.stopTimeTrackRequest, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const stopedTimeTrack = await timeTracking.stop(session, body);
+  const stopedTimeTrack = await timeTracking.stop(userId, payload);
 
   if (!stopedTimeTrack) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -31,5 +24,10 @@ const POST = async (request: BaseRequest<StopTimeTrackRequest>) => {
 
   return NextResponse.json(stopedTimeTrack);
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(timeTrakingSchemas.stopTimeTrackRequest)],
+  handler
+);
 
 export { POST };

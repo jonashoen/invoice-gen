@@ -8,20 +8,16 @@ import { CheckResetPasswordCodeRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import Pages from "@/routes/Pages";
 import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import parse from "@/lib/validate";
+import withMiddleware from "@/middlewares/withMiddleware";
+import unauthenticate from "@/middlewares/unauthenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<CheckResetPasswordCodeRequest>) => {
-  const session = await isAuthed();
-  if (session) {
-    return NextResponse.redirect(Pages.Invoices);
-  }
+const handler: RequestHandler<CheckResetPasswordCodeRequest> = async (req) => {
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.checkResetPasswordCode, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const result = await user.checkResetPasswordCode(body);
+  const result = await user.checkResetPasswordCode(payload);
 
   if (!result) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -29,5 +25,9 @@ const POST = async (request: BaseRequest<CheckResetPasswordCodeRequest>) => {
 
   return new NextResponse();
 };
+const POST = withMiddleware(
+  [unauthenticate, validateBody(userSchemas.checkResetPasswordCode)],
+  handler
+);
 
 export { POST };

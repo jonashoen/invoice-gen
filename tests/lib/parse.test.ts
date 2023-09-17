@@ -1,35 +1,24 @@
-import BaseRequest from "@/interfaces/requests/BaseRequest";
-import parse from "@/lib/parse";
+import validate from "@/lib/validate";
 import Joi from "joi";
 
 const testSchema = Joi.object({
   test: Joi.string().required(),
 });
 
-interface TestRequest {
-  test: string;
-}
-
 describe("Test body parser", () => {
   test("Validation error", async () => {
-    const request = {
-      json: () => ({ foo: "bar" }),
-    } as any as BaseRequest<TestRequest>;
+    const obj = { foo: "bar" };
 
-    const result = await parse(testSchema, request);
+    const result = validate(testSchema, obj);
 
     expect(result).toBeNull();
   });
 
   test("Validation success", async () => {
-    const request = {
-      json: (): TestRequest => ({ test: "Test Content" }),
-    } as any as BaseRequest<TestRequest>;
+    const obj = { test: "Test Content" };
 
-    const result = await parse(testSchema, request);
+    const result = await validate(testSchema, obj);
 
-    expect(result).toEqual({
-      ...request.json(),
-    });
+    expect(result).toEqual({ ...obj });
   });
 });

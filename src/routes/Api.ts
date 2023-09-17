@@ -9,7 +9,7 @@ const Api = {
   VerifyAccount: "/user/verify",
   ResendVerifyCode: "/user/resend-verify-code",
   Logout: "/user/logout",
-  GetUser: "/user/get",
+  GetUser: "/user",
   EditUser: "/user/edit",
   ChangePassword: "/user/change-password",
   RequestResetPassword: "/user/request-reset-password",

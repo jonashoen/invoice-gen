@@ -59,9 +59,14 @@ export const publishInvoice = Joi.object({
   id: Joi.number().integer().positive().required(),
 }).meta({ className: "PublishInvoiceRequest" });
 
+export const showInvoice = Joi.object({
+  filename: Joi.string().trim().required(),
+}).meta({ className: "ShowInvoiceRequest" });
+
 export default {
   addInvoice,
   editInvoice,
   deleteInvoice,
   publishInvoice,
+  showInvoice,
 };

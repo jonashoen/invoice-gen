@@ -5,29 +5,28 @@ import { NextResponse } from "next/server";
 import apiError from "@/lib/apiError";
 import customer from "@/services/customer";
 import { AddCustomerRequest } from "@/interfaces/requests/customer";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import customerRequests from "@/schemas/customer";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<AddCustomerRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const handler: RequestHandler<AddCustomerRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(customerRequests.addCustomer, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const createdCustomer = await customer.addCustomer(session, body);
+  const createdCustomer = await customer.addCustomer(userId, payload);
   if (!createdCustomer) {
     return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return NextResponse.json(createdCustomer);
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(customerRequests.addCustomer)],
+  handler
+);
 
 export { POST };

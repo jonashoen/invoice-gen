@@ -1,7 +1,9 @@
 "use server";
 
-import destroySession from "@/lib/destroySession";
+import { NextResponse } from "next/server";
+
 import user from "@/services/user";
+
 import withMiddleware from "@/middlewares/withMiddleware";
 import authenticate from "@/middlewares/authenticate";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
@@ -9,11 +11,11 @@ import RequestHandler from "@/interfaces/requests/RequestHandler";
 const handler: RequestHandler = async (req) => {
   const userId = req.user!;
 
-  await user.logout(userId);
+  const loggedInUser = await user.get(userId);
 
-  return destroySession();
+  return NextResponse.json(loggedInUser);
 };
 
-const POST = withMiddleware([authenticate], handler);
+const GET = withMiddleware([authenticate], handler);
 
-export { POST };
+export { GET };

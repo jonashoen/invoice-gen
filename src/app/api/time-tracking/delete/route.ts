@@ -5,25 +5,18 @@ import { NextResponse } from "next/server";
 import apiError from "@/lib/apiError";
 import timeTracking from "@/services/timeTracking";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { DeleteTimeTrackRequest } from "@/interfaces/requests";
-import parse from "@/lib/parse";
 import timeTrakingSchemas from "@/schemas/timeTrack";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<DeleteTimeTrackRequest>) => {
-  const session = await isAuthed();
+const handler: RequestHandler<DeleteTimeTrackRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
-
-  const body = await parse(timeTrakingSchemas.deleteTimeTrackRequest, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const deleteTimeTrack = await timeTracking.deleteEntry(session, body);
+  const deleteTimeTrack = await timeTracking.deleteEntry(userId, payload);
 
   if (!deleteTimeTrack) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -31,5 +24,10 @@ const POST = async (request: BaseRequest<DeleteTimeTrackRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(timeTrakingSchemas.deleteTimeTrackRequest)],
+  handler
+);
 
 export { POST };

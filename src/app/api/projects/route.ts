@@ -2,21 +2,19 @@
 
 import { NextResponse } from "next/server";
 
-import apiError from "@/lib/apiError";
 import project from "@/services/project";
-import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const GET = async () => {
-  const session = await isAuthed();
+const handler: RequestHandler = async (req) => {
+  const userId = req.user!;
 
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
-
-  const projects = await project.getProjects(session);
+  const projects = await project.getProjects(userId);
 
   return NextResponse.json(projects);
 };
+
+const GET = withMiddleware([authenticate], handler);
 
 export { GET };

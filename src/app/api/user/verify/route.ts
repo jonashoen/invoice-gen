@@ -9,20 +9,16 @@ import { VerifyAccountRequest } from "@/interfaces/requests/user";
 import createSession from "@/lib/createSession";
 import userSchemas from "@/schemas/user";
 import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import parse from "@/lib/validate";
+import withMiddleware from "@/middlewares/withMiddleware";
+import unauthenticate from "@/middlewares/unauthenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
-  const oldSession = await isAuthed();
-  if (oldSession) {
-    return NextResponse.redirect(Pages.Invoices);
-  }
+const handler: RequestHandler<VerifyAccountRequest> = async (req) => {
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.verifyAccount, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const session = await user.verify(body);
+  const session = await user.verify(payload);
 
   if (!session) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -30,5 +26,10 @@ const POST = async (request: BaseRequest<VerifyAccountRequest>) => {
 
   return createSession(session.sessionId);
 };
+
+const POST = withMiddleware(
+  [unauthenticate, validateBody(userSchemas.verifyAccount)],
+  handler
+);
 
 export { POST };

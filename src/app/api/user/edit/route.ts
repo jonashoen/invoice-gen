@@ -3,26 +3,20 @@
 import { NextResponse } from "next/server";
 
 import user from "@/services/user";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import apiError from "@/lib/apiError";
 import { EditUserRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<EditUserRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const handler: RequestHandler<EditUserRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.editUser, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const editedUser = await user.edit(session, body);
+  const editedUser = await user.edit(userId, payload);
 
   if (!editedUser) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -30,5 +24,10 @@ const POST = async (request: BaseRequest<EditUserRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(userSchemas.editUser)],
+  handler
+);
 
 export { POST };

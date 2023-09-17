@@ -4,25 +4,19 @@ import { NextResponse } from "next/server";
 
 import apiError from "@/lib/apiError";
 import project from "@/services/project";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { AddProjectRequest } from "@/interfaces/requests/project";
 import projectSchemas from "@/schemas/project";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<AddProjectRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const handler: RequestHandler<AddProjectRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(projectSchemas.addProject, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const addedProject = await project.add(session, body);
+  const addedProject = await project.add(userId, payload);
 
   if (!addedProject) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -30,5 +24,10 @@ const POST = async (request: BaseRequest<AddProjectRequest>) => {
 
   return NextResponse.json(addedProject);
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(projectSchemas.addProject)],
+  handler
+);
 
 export { POST };

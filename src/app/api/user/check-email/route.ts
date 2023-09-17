@@ -1,20 +1,16 @@
 import { NextResponse } from "next/server";
 
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import user from "@/services/user";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 import { CheckEmailRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<CheckEmailRequest>) => {
-  const body = await parse(userSchemas.checkEmail, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const { email } = body;
+const handler: RequestHandler<CheckEmailRequest> = async (req) => {
+  const { email } = req.data!;
 
   const userExists = await user.checkEmail(email);
 
@@ -24,5 +20,7 @@ const POST = async (request: BaseRequest<CheckEmailRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware([validateBody(userSchemas.checkEmail)], handler);
 
 export { POST };

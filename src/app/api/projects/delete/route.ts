@@ -9,20 +9,17 @@ import { DeleteProjectRequest } from "@/interfaces/requests/project";
 import projectSchemas from "@/schemas/project";
 import { StatusCodes } from "http-status-codes";
 import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import parse from "@/lib/validate";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<DeleteProjectRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const hander: RequestHandler<DeleteProjectRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(projectSchemas.deleteProject, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const deletedProject = await project.deleteProject(session, body);
+  const deletedProject = await project.deleteProject(userId, payload);
 
   if (!deletedProject) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -30,5 +27,10 @@ const POST = async (request: BaseRequest<DeleteProjectRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(projectSchemas.deleteProject)],
+  hander
+);
 
 export { POST };

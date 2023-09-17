@@ -1,20 +1,26 @@
 import { ObjectSchema } from "joi";
 import { Middleware } from "./withMiddleware";
-import parse from "@/lib/parse";
+import validate from "@/lib/validate";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 
 const validateBody = <T>(schema: ObjectSchema): Middleware<T> => {
   return async (req, next) => {
-    const body = await parse(schema, req);
+    try {
+      const body = await req.json();
 
-    if (!body) {
+      const payload = validate<T>(schema, body);
+
+      if (!payload) {
+        return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
+      }
+
+      req.data = payload;
+
+      return next();
+    } catch {
       return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
     }
-
-    req.data = body;
-
-    return next();
   };
 };
 

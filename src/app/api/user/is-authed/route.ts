@@ -2,18 +2,13 @@
 
 import { NextResponse } from "next/server";
 
-import apiError from "@/lib/apiError";
-import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
 
-const GET = async () => {
-  const session = await isAuthed();
-
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
-
+const handler = async () => {
   return new NextResponse();
 };
+
+const GET = withMiddleware([authenticate], handler);
 
 export { GET };

@@ -2,21 +2,19 @@
 
 import { NextResponse } from "next/server";
 
-import apiError from "@/lib/apiError";
 import invoice from "@/services/invoice";
-import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const GET = async () => {
-  const session = await isAuthed();
+const handler: RequestHandler = async (req) => {
+  const userId = req.user!;
 
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
-
-  const invoices = await invoice.getInvoices(session);
+  const invoices = await invoice.getInvoices(userId);
 
   return NextResponse.json(invoices);
 };
+
+const GET = withMiddleware([authenticate], handler);
 
 export { GET };

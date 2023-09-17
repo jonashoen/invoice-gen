@@ -5,25 +5,18 @@ import { NextResponse } from "next/server";
 import apiError from "@/lib/apiError";
 import timeTracking from "@/services/timeTracking";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { EditTimeTrackRequest } from "@/interfaces/requests";
-import parse from "@/lib/parse";
 import timeTrakingSchemas from "@/schemas/timeTrack";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<EditTimeTrackRequest>) => {
-  const session = await isAuthed();
+const handler: RequestHandler<EditTimeTrackRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
-
-  const body = await parse(timeTrakingSchemas.editTimeTrackRequest, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const editedTimeTrack = await timeTracking.edit(session, body);
+  const editedTimeTrack = await timeTracking.edit(userId, payload);
 
   if (!editedTimeTrack) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -31,5 +24,10 @@ const POST = async (request: BaseRequest<EditTimeTrackRequest>) => {
 
   return NextResponse.json(editedTimeTrack);
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(timeTrakingSchemas.editTimeTrackRequest)],
+  handler
+);
 
 export { POST };

@@ -2,27 +2,21 @@
 
 import { NextResponse } from "next/server";
 
-import isAuthed from "@/lib/isAuthed";
 import user from "@/services/user";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import apiError from "@/lib/apiError";
 import { ChangePasswordRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import { StatusCodes } from "http-status-codes";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<ChangePasswordRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const handler: RequestHandler<ChangePasswordRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.changePassword, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const editedUser = await user.changePassword(session, body);
+  const editedUser = await user.changePassword(userId, payload);
 
   if (!editedUser) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -30,5 +24,10 @@ const POST = async (request: BaseRequest<ChangePasswordRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(userSchemas.changePassword)],
+  handler
+);
 
 export { POST };

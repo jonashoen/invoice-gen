@@ -1,7 +1,8 @@
 import BaseRequest from "./BaseRequest";
 
-type RequestHandler<TRequest = unknown> = (
-  req: BaseRequest<TRequest>
+type RequestHandler<TBody = unknown, TParams = undefined> = (
+  req: BaseRequest<TBody>,
+  params: { params: TParams }
 ) => Promise<Response>;
 
 export default RequestHandler;

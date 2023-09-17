@@ -4,30 +4,29 @@ import { NextResponse } from "next/server";
 
 import apiError from "@/lib/apiError";
 import invoice from "@/services/invoice";
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import { AddInvoiceRequest } from "@/interfaces/requests/";
 import invoiceSchemas from "@/schemas/invoice";
 import { StatusCodes } from "http-status-codes";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import authenticate from "@/middlewares/authenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<AddInvoiceRequest>) => {
-  const session = await isAuthed();
-  if (!session) {
-    return apiError(StatusCodes.UNAUTHORIZED);
-  }
+const handler: RequestHandler<AddInvoiceRequest> = async (req) => {
+  const userId = req.user!;
+  const payload = req.data!;
 
-  const body = await parse(invoiceSchemas.addInvoice, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const addedInvoice = await invoice.add(session, body);
+  const addedInvoice = await invoice.add(userId, payload);
   if (!addedInvoice) {
     return apiError(StatusCodes.BAD_REQUEST);
   }
 
   return NextResponse.json(addedInvoice);
 };
+
+const POST = withMiddleware(
+  [authenticate, validateBody(invoiceSchemas.addInvoice)],
+  handler
+);
 
 export { POST };

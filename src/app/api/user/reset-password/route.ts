@@ -1,27 +1,19 @@
 import { NextResponse } from "next/server";
 
-import BaseRequest from "@/interfaces/requests/BaseRequest";
 import user from "@/services/user";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
-import Pages from "@/routes/Pages";
 import { ResetPasswordRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
-import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import withMiddleware from "@/middlewares/withMiddleware";
+import validateBody from "@/middlewares/validateBody";
+import unauthenticate from "@/middlewares/unauthenticate";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<ResetPasswordRequest>) => {
-  const session = await isAuthed();
-  if (session) {
-    return NextResponse.redirect(Pages.Invoices);
-  }
+const handler: RequestHandler<ResetPasswordRequest> = async (req) => {
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.resetPassword, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const result = await user.resetPassword(body);
+  const result = await user.resetPassword(payload);
 
   if (!result) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -29,5 +21,10 @@ const POST = async (request: BaseRequest<ResetPasswordRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [unauthenticate, validateBody(userSchemas.resetPassword)],
+  handler
+);
 
 export { POST };

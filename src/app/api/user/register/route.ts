@@ -8,20 +8,16 @@ import { StatusCodes } from "http-status-codes";
 import Pages from "@/routes/Pages";
 import userSchemas from "@/schemas/user";
 import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import parse from "@/lib/validate";
+import withMiddleware from "@/middlewares/withMiddleware";
+import unauthenticate from "@/middlewares/unauthenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<RegisterRequest>) => {
-  const session = await isAuthed();
-  if (session) {
-    return NextResponse.redirect(Pages.Invoices);
-  }
+const handler: RequestHandler<RegisterRequest> = async (req) => {
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.register, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const registeredUser = await user.register(body);
+  const registeredUser = await user.register(payload);
 
   if (!registeredUser) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -29,5 +25,10 @@ const POST = async (request: BaseRequest<RegisterRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [unauthenticate, validateBody(userSchemas.register)],
+  handler
+);
 
 export { POST };

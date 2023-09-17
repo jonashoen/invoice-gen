@@ -6,15 +6,19 @@ type Middleware<T> = (
   next: () => Promise<Response>
 ) => Promise<Response>;
 
-const withMiddleware = <T = unknown>(
-  middlewares: Middleware<T>[],
-  handler: RequestHandler<T>
+const withMiddleware = <TBody = unknown, TParams = unknown>(
+  middlewares: Middleware<TBody>[],
+  handler: RequestHandler<TBody, TParams>
 ) => {
-  return async (req: BaseRequest<T>) => {
+  return async (req: BaseRequest<TBody>, params: { params: TParams }) => {
     const next = () => {
-      const middlewareOrHandler = middlewares.shift() ?? handler;
+      const middleware = middlewares.shift();
 
-      return middlewareOrHandler(req, next);
+      if (middleware) {
+        return middleware(req, next);
+      }
+
+      return handler(req, params);
     };
 
     return await next();

@@ -8,20 +8,16 @@ import Pages from "@/routes/Pages";
 import { ResendVerifyCodeRequest } from "@/interfaces/requests/user";
 import userSchemas from "@/schemas/user";
 import isAuthed from "@/lib/isAuthed";
-import parse from "@/lib/parse";
+import parse from "@/lib/validate";
+import withMiddleware from "@/middlewares/withMiddleware";
+import unauthenticate from "@/middlewares/unauthenticate";
+import validateBody from "@/middlewares/validateBody";
+import RequestHandler from "@/interfaces/requests/RequestHandler";
 
-const POST = async (request: BaseRequest<ResendVerifyCodeRequest>) => {
-  const session = await isAuthed();
-  if (session) {
-    return NextResponse.redirect(Pages.Invoices);
-  }
+const handler: RequestHandler<ResendVerifyCodeRequest> = async (req) => {
+  const payload = req.data!;
 
-  const body = await parse(userSchemas.resendVerifyCode, request);
-  if (!body) {
-    return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
-  }
-
-  const result = await user.resendVerifyCode(body);
+  const result = await user.resendVerifyCode(payload);
 
   if (!result) {
     return apiError(StatusCodes.BAD_REQUEST);
@@ -29,5 +25,10 @@ const POST = async (request: BaseRequest<ResendVerifyCodeRequest>) => {
 
   return new NextResponse();
 };
+
+const POST = withMiddleware(
+  [unauthenticate, validateBody(userSchemas.resendVerifyCode)],
+  handler
+);
 
 export { POST };

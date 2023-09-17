@@ -39,3 +39,7 @@ export interface EditInvoiceRequest {
 export interface PublishInvoiceRequest {
   id: number;
 }
+
+export interface ShowInvoiceRequest {
+  filename: string;
+}
