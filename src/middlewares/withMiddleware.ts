@@ -11,8 +11,10 @@ const withMiddleware = <TBody = unknown, TParams = unknown>(
   handler: RequestHandler<TBody, TParams>
 ) => {
   return async (req: BaseRequest<TBody>, params: { params: TParams }) => {
+    let currentMiddlewareIndex = 0;
+
     const next = () => {
-      const middleware = middlewares.shift();
+      const middleware = middlewares[currentMiddlewareIndex++];
 
       if (middleware) {
         return middleware(req, next);

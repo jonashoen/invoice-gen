@@ -3,7 +3,6 @@
 import { NextResponse } from "next/server";
 
 import user from "@/services/user";
-
 import withMiddleware from "@/middlewares/withMiddleware";
 import authenticate from "@/middlewares/authenticate";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
