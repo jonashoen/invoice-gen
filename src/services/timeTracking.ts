@@ -43,6 +43,11 @@ const getRunning = async (userId: number) => {
   return await db.timeTrack.findFirst({
     where: {
       endTime: null,
+      project: {
+        customer: {
+          userId,
+        },
+      },
     },
     include: {
       project: {

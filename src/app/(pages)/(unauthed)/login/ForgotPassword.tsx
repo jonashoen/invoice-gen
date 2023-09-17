@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import CodeInput, { CODE_LENGHT } from "@/components/CodeInput";
+import CodeInput from "@/components/CodeInput";
 import Form from "@/components/Form";
 import Info from "@/components/Info";
 import TextField from "@/components/TextField";
@@ -12,7 +12,7 @@ import {
 import Api from "@/routes/Api";
 import useModalStore from "@/store/modalStore";
 import { StatusCodes } from "http-status-codes";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 enum Steps {
   Email = 1,

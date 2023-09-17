@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, InputHTMLAttributes } from "react";
+import React, { HTMLAttributes } from "react";
 import styles from "./Chip.module.css";
 
 const Chip: React.FC<HTMLAttributes<HTMLElement>> = ({

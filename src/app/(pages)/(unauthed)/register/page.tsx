@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Suspense,
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 
 import Form from "@/components/Form";
 import Paper from "@/components/Paper";
@@ -26,7 +20,6 @@ import VerifyAccount from "./VerifyAccount";
 import { User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import Info from "@/components/Info";
-import useApi from "@/hooks/useApi";
 
 const Register = () => {
   const showModal = useModalStore((state) => state.show);
@@ -60,7 +53,7 @@ const Register = () => {
     onSuccess: (user) => {
       showModal({
         title: "Account verifizieren",
-        content: <VerifyAccount username={username} />,
+        content: <VerifyAccount username={user.username} />,
         cancelable: false,
       });
     },

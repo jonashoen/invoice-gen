@@ -5,9 +5,7 @@ import EditableList from "@/components/EditableActivitiesList";
 import Form from "@/components/Form";
 import Info from "@/components/Info";
 import Select from "@/components/Select";
-import TextArea from "@/components/TextArea";
 import TextField from "@/components/TextField";
-import dateToDateString from "@/helper/dateToDateString";
 import useApi from "@/hooks/useApi";
 import useApiMutation from "@/hooks/useApiMutation";
 import {
@@ -20,7 +18,6 @@ import useModalStore from "@/store/modalStore";
 import { Customer, Project, TimeTrackActivity } from "@prisma/client";
 import dayjs from "dayjs";
 import { StatusCodes } from "http-status-codes";
-import { boolean } from "joi";
 import { useState } from "react";
 
 interface Props {

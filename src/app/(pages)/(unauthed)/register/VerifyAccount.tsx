@@ -13,7 +13,7 @@ import useModalStore from "@/store/modalStore";
 import useUserStore from "@/store/userStore";
 import { StatusCodes } from "http-status-codes";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   username: string;
