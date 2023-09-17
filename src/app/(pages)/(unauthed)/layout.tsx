@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <Container className="bg-green mt-20">
             <p className="font-bold py-4 text-6xl flex justify-between">
               <span>invoice-gen</span>
-              <span>v1.1.0</span>
+              <span>v1.2.0</span>
             </p>
           </Container>
           {children}
