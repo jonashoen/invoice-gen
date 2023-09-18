@@ -6,7 +6,7 @@ type Middleware<T> = (
   next: () => Promise<Response>
 ) => Promise<Response>;
 
-const withMiddleware = <TBody = unknown, TParams = unknown>(
+const withMiddleware = <TBody, TParams>(
   middlewares: Middleware<TBody>[],
   handler: RequestHandler<TBody, TParams>
 ) => {
