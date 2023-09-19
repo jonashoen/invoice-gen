@@ -4,7 +4,7 @@ import isAuthed from "@/lib/isAuthed";
 import { StatusCodes } from "http-status-codes";
 import Authed from "@/interfaces/requests/AuthedRequest";
 
-const authenticate: Middleware<unknown, unknown> = async (req, next) => {
+const authenticate: Middleware = async (req, next) => {
   const userId = await isAuthed();
 
   if (!userId) {

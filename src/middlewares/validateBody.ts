@@ -4,7 +4,7 @@ import validate from "@/lib/validate";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 
-const validateBody = <T>(schema: ObjectSchema): Middleware<T, unknown> => {
+const validateBody = <T>(schema: ObjectSchema): Middleware<T> => {
   return async (req, next) => {
     try {
       const body = await req.json();
