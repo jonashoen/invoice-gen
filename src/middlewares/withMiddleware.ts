@@ -2,7 +2,7 @@ import BaseRequest from "@/interfaces/requests/BaseRequest";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 import AuthedRequestHandler from "@/interfaces/requests/AuthedRequestHandler";
 
-type Middleware<TBody = undefined, TParams = undefined> = (
+type Middleware<TBody, TParams> = (
   req: BaseRequest<TBody, TParams>,
   next: () => Promise<Response>
 ) => Promise<Response>;
