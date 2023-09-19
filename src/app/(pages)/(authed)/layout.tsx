@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { redirect, usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
 import Chip from "@/components/Chip";
 import Link from "next/link";
 import Pages from "@/routes/Pages";
@@ -15,11 +15,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div
-      className={["flex flex-grow items-center min-h-screen flex-col"].join(
-        " "
-      )}
-    >
+    <div className="flex flex-grow items-center min-h-screen flex-col">
       <header className="flex  w-screen justify-center bg-purple py-4 border-b-8 border-black sticky top-0 z-40">
         <div className="container flex flex-wrap justify-center 2xl:justify-between items-center gap-4">
           <Link href={Pages.Invoices}>
