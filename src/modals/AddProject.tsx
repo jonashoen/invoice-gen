@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import Form from "@/components/Form";
 import Info from "@/components/Info";

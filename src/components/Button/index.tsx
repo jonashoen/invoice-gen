@@ -1,12 +1,11 @@
+"use client";
+
 import React, { ButtonHTMLAttributes } from "react";
 
 import styles from "./Button.module.css";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  disabled?: boolean;
   loading?: boolean;
-  className?: string;
 }
 
 const Button: React.FC<Props> = ({

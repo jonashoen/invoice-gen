@@ -11,24 +11,21 @@ import { LoginRequest } from "@/interfaces/requests/user";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import useUserStore from "@/store/userStore";
 import Pages from "@/routes/Pages";
 import useModalStore from "@/store/modalStore";
-import ForgotPassword from "./ForgotPassword";
+import ForgotPassword from "@/modals/ForgotPassword";
 import { StatusCodes } from "http-status-codes";
-import VerifyAccount from "../register/VerifyAccount";
+import VerifyAccount from "@/modals/VerifyAccount";
 import Info from "@/components/Info";
 
 const Login = () => {
   const router = useRouter();
 
   const showModal = useModalStore((state) => state.show);
-  const loginLocal = useUserStore((state) => state.login);
 
   const login = useApiMutation<LoginRequest>({
     route: Api.Login,
     onSuccess: () => {
-      loginLocal();
       router.replace(Pages.Invoices);
     },
     onError: (apiError) => {

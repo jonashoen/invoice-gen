@@ -1,3 +1,5 @@
+"use client";
+
 import React, { TextareaHTMLAttributes } from "react";
 import styles from "./TextArea.module.css";
 

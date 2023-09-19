@@ -1,3 +1,5 @@
+"use client";
+
 import { Dispatch, InputHTMLAttributes, SetStateAction, useState } from "react";
 import TextField from "../TextField";
 

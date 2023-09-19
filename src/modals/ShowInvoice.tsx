@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import Api, { Prefix } from "@/routes/Api";

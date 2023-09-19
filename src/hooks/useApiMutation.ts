@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from "react-query";
 import { ApiError, tryParseContent } from "./useApi";
 import { Prefix } from "@/routes/Api";
 import { StatusCodes } from "http-status-codes";
-import useUserStore from "@/store/userStore";
+import { useRouter } from "next/navigation";
+import Pages from "@/routes/Pages";
 
 interface Props<TResponse> {
   route: string;
@@ -19,10 +20,7 @@ const useApiMutation = <TRequest = any, TResponse = any>({
 }: Props<TResponse>) => {
   const queryClient = useQueryClient();
 
-  const [isAuthed, logout] = useUserStore((state) => [
-    state.isAuthed,
-    state.logout,
-  ]);
+  const router = useRouter();
 
   return useMutation(
     [route],
@@ -37,8 +35,8 @@ const useApiMutation = <TRequest = any, TResponse = any>({
       });
 
       if (!response.ok) {
-        if (response.status === StatusCodes.UNAUTHORIZED && isAuthed) {
-          logout();
+        if (response.status === StatusCodes.UNAUTHORIZED) {
+          router.push(Pages.Login);
         }
 
         throw new ApiError("Error while fetching the API", response.status);
@@ -51,6 +49,8 @@ const useApiMutation = <TRequest = any, TResponse = any>({
         if (onSuccess) onSuccess(data);
 
         if (invalidates) {
+          router.refresh();
+
           await Promise.all(
             invalidates.map((invalidator) =>
               queryClient.invalidateQueries(invalidator, { exact: true })

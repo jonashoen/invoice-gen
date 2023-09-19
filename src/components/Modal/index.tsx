@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import Paper from "../Paper";
 import useModalStore from "@/store/modalStore";

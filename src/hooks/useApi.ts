@@ -1,7 +1,8 @@
 import { useQuery } from "react-query";
 import { Prefix } from "@/routes/Api";
-import useUserStore from "@/store/userStore";
 import { StatusCodes } from "http-status-codes";
+import Pages from "@/routes/Pages";
+import { useRouter } from "next/navigation";
 
 class ApiError extends Error {
   statusCode: number;
@@ -29,10 +30,7 @@ const useApi = <TResponse>({
   initialData,
   enabled,
 }: Props<TResponse>) => {
-  const [isAuthed, logout] = useUserStore((state) => [
-    state.isAuthed,
-    state.logout,
-  ]);
+  const router = useRouter();
 
   const query = useQuery<any, ApiError, TResponse>(
     [route],
@@ -43,8 +41,8 @@ const useApi = <TResponse>({
       });
 
       if (!response.ok) {
-        if (response.status === StatusCodes.UNAUTHORIZED && isAuthed) {
-          logout();
+        if (response.status === StatusCodes.UNAUTHORIZED) {
+          router.push(Pages.Login);
         }
 
         throw new ApiError("Error while fetching the API", response.status);

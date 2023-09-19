@@ -1,5 +1,3 @@
-"use server";
-
 /* istanbul ignore file */
 
 import React, { ReactElement } from "react";

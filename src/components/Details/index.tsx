@@ -1,3 +1,5 @@
+"use client";
+
 import { DetailsHTMLAttributes, useState } from "react";
 import Button from "../Button";
 import Container from "../Container";

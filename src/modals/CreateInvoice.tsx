@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import Info from "@/components/Info";
 import dateToDateString from "@/helper/dateToDateString";
@@ -15,7 +17,9 @@ import { useState } from "react";
 
 interface Props {
   invoice: Invoice & {
-    project: Project & { customer: Customer };
+    project: Pick<Project, "name" | "paymentDue" | "paymentDueUnit"> & {
+      customer: Pick<Customer, "name">;
+    };
     positions: InvoicePosition[];
   };
 }
