@@ -24,6 +24,9 @@ steps:
       password:
         from_secret: DOCKER_PASSWORD
       tags: latest
+    when:
+      branch:
+        - main
 
   - name: notify
     image: appleboy/drone-discord
@@ -35,4 +38,4 @@ steps:
       webhook_token:
         from_secret: DISCORD_WEBHOOK_TOKEN
     when:
-      status: [ success, failure ]
+      status: [success, failure]
