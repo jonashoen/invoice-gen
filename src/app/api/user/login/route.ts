@@ -11,7 +11,7 @@ import validateBody from "@/middlewares/validateBody";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 
 const handler: RequestHandler<LoginRequest> = async (req) => {
-  const paylaod = req.data!;
+  const paylaod = req.data;
 
   const session = await user.login(paylaod);
 

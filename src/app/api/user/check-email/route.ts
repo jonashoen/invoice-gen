@@ -10,7 +10,7 @@ import validateBody from "@/middlewares/validateBody";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 
 const handler: RequestHandler<CheckEmailRequest> = async (req) => {
-  const { email } = req.data!;
+  const { email } = req.data;
 
   const userExists = await user.checkEmail(email);
 

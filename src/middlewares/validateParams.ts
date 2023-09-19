@@ -4,18 +4,18 @@ import validate from "@/lib/validate";
 import apiError from "@/lib/apiError";
 import { StatusCodes } from "http-status-codes";
 
-const validateBody = <T>(schema: ObjectSchema): Middleware<T, unknown> => {
+const validateParams = <T>(schema: ObjectSchema): Middleware<unknown, any> => {
   return async (req, next) => {
     try {
-      const body = await req.json();
+      const params = req.params;
 
-      const payload = validate<T>(schema, body);
+      const payload = validate<T>(schema, params);
 
       if (!payload) {
         return apiError(StatusCodes.UNPROCESSABLE_ENTITY);
       }
 
-      req.data = payload;
+      req.params = payload;
 
       return next();
     } catch {
@@ -24,4 +24,4 @@ const validateBody = <T>(schema: ObjectSchema): Middleware<T, unknown> => {
   };
 };
 
-export default validateBody;
+export default validateParams;

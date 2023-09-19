@@ -11,7 +11,7 @@ import validateBody from "@/middlewares/validateBody";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 
 const handler: RequestHandler<RegisterRequest> = async (req) => {
-  const payload = req.data!;
+  const payload = req.data;
 
   const registeredUser = await user.register(payload);
 

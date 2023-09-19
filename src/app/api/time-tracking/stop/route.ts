@@ -10,11 +10,11 @@ import timeTrakingSchemas from "@/schemas/timeTrack";
 import withMiddleware from "@/middlewares/withMiddleware";
 import authenticate from "@/middlewares/authenticate";
 import validateBody from "@/middlewares/validateBody";
-import RequestHandler from "@/interfaces/requests/RequestHandler";
+import AuthedRequestHandler from "@/interfaces/requests/AuthedRequestHandler";
 
-const handler: RequestHandler<StopTimeTrackRequest> = async (req) => {
-  const userId = req.user!;
-  const payload = req.data!;
+const handler: AuthedRequestHandler<StopTimeTrackRequest> = async (req) => {
+  const userId = req.user;
+  const payload = req.data;
 
   const stopedTimeTrack = await timeTracking.stop(userId, payload);
 

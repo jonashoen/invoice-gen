@@ -11,7 +11,7 @@ import unauthenticate from "@/middlewares/unauthenticate";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 
 const handler: RequestHandler<ResetPasswordRequest> = async (req) => {
-  const payload = req.data!;
+  const payload = req.data;
 
   const result = await user.resetPassword(payload);
 

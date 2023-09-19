@@ -10,11 +10,11 @@ import timeTrakingSchemas from "@/schemas/timeTrack";
 import withMiddleware from "@/middlewares/withMiddleware";
 import authenticate from "@/middlewares/authenticate";
 import validateBody from "@/middlewares/validateBody";
-import RequestHandler from "@/interfaces/requests/RequestHandler";
+import AuthedRequestHandler from "@/interfaces/requests/AuthedRequestHandler";
 
-const handler: RequestHandler<EditTimeTrackRequest> = async (req) => {
-  const userId = req.user!;
-  const payload = req.data!;
+const handler: AuthedRequestHandler<EditTimeTrackRequest> = async (req) => {
+  const userId = req.user;
+  const payload = req.data;
 
   const editedTimeTrack = await timeTracking.edit(userId, payload);
 

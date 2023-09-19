@@ -10,7 +10,7 @@ import validateBody from "@/middlewares/validateBody";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 
 const handler: RequestHandler<CheckUsernameRequest> = async (req) => {
-  const { username } = req.data!;
+  const { username } = req.data;
 
   const userExists = await user.checkUsername(username);
 

@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
 
-interface BaseRequest<T> extends NextRequest {
-  user?: number;
-  data?: T;
+interface BaseRequest<TBody, TParams> extends NextRequest {
+  params: TParams;
+  data: TBody;
 }
 
 export default BaseRequest;

@@ -10,11 +10,11 @@ import { StatusCodes } from "http-status-codes";
 import withMiddleware from "@/middlewares/withMiddleware";
 import authenticate from "@/middlewares/authenticate";
 import validateBody from "@/middlewares/validateBody";
-import RequestHandler from "@/interfaces/requests/RequestHandler";
+import AuthedRequestHandler from "@/interfaces/requests/AuthedRequestHandler";
 
-const hander: RequestHandler<DeleteProjectRequest> = async (req) => {
-  const userId = req.user!;
-  const payload = req.data!;
+const hander: AuthedRequestHandler<DeleteProjectRequest> = async (req) => {
+  const userId = req.user;
+  const payload = req.data;
 
   const deletedProject = await project.deleteProject(userId, payload);
 

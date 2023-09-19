@@ -10,11 +10,11 @@ import { StatusCodes } from "http-status-codes";
 import withMiddleware from "@/middlewares/withMiddleware";
 import authenticate from "@/middlewares/authenticate";
 import validateBody from "@/middlewares/validateBody";
-import RequestHandler from "@/interfaces/requests/RequestHandler";
+import AuthedRequestHandler from "@/interfaces/requests/AuthedRequestHandler";
 
-const handler: RequestHandler<EditCustomerRequest> = async (req) => {
-  const userId = req.user!;
-  const payload = req.data!;
+const handler: AuthedRequestHandler<EditCustomerRequest> = async (req) => {
+  const userId = req.user;
+  const payload = req.data;
 
   const editedCustomer = await customer.editCustomer(userId, payload);
   if (!editedCustomer) {

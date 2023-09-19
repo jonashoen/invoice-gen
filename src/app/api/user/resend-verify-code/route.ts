@@ -11,7 +11,7 @@ import validateBody from "@/middlewares/validateBody";
 import RequestHandler from "@/interfaces/requests/RequestHandler";
 
 const handler: RequestHandler<ResendVerifyCodeRequest> = async (req) => {
-  const payload = req.data!;
+  const payload = req.data;
 
   const result = await user.resendVerifyCode(payload);
 

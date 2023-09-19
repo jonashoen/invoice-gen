@@ -1,13 +1,13 @@
 import { ObjectSchema } from "joi";
 
-const validate = <T>(schema: ObjectSchema, obj: any) => {
+const validate = <T>(schema: ObjectSchema<T>, obj: any) => {
   const validationResult = schema.validate(obj);
 
   if (validationResult.error) {
     return null;
   }
 
-  return validationResult.value as T;
+  return validationResult.value;
 };
 
 export default validate;
