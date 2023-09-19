@@ -16,7 +16,7 @@ import Api from "@/routes/Api";
 import Link from "next/link";
 import Pages from "@/routes/Pages";
 import useModalStore from "@/store/modalStore";
-import VerifyAccount from "./VerifyAccount";
+import VerifyAccount from "@/modals/VerifyAccount";
 import { User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import Info from "@/components/Info";

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ForwardedRef } from "react";
 import Button from "@/components/Button";
 import useApiMutation from "@/hooks/useApiMutation";
@@ -9,7 +11,7 @@ import Info from "@/components/Info";
 import EditableList from "@/components/EditableActivitiesList";
 import { TimeTrackActivity } from "@prisma/client";
 
-const StopTimeTracking = ({}, ref: ForwardedRef<number>) => {
+const StopTimeTracking = () => {
   const hideModal = useModalStore((state) => state.hide);
 
   const stopTimeTrackingMutation = useApiMutation<StopTimeTrackRequest>({
@@ -17,7 +19,6 @@ const StopTimeTracking = ({}, ref: ForwardedRef<number>) => {
     invalidates: [Api.TimeTracking, Api.RunningTimeTrack],
     onSuccess: () => {
       hideModal();
-      clearInterval((ref as React.MutableRefObject<number | null>).current!);
     },
     onError: () => {
       setError(
@@ -64,4 +65,4 @@ const StopTimeTracking = ({}, ref: ForwardedRef<number>) => {
   );
 };
 
-export default React.forwardRef<number>(StopTimeTracking);
+export default StopTimeTracking;

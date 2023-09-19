@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ClassAttributes, InputHTMLAttributes } from "react";
 import styles from "./TextField.module.css";
 

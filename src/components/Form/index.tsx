@@ -1,3 +1,5 @@
+"use client";
+
 import { FormHTMLAttributes } from "react";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {

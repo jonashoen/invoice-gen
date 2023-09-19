@@ -10,7 +10,6 @@ import {
 import Api from "@/routes/Api";
 import Pages from "@/routes/Pages";
 import useModalStore from "@/store/modalStore";
-import useUserStore from "@/store/userStore";
 import { StatusCodes } from "http-status-codes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,13 +21,11 @@ interface Props {
 const VerifyAccount: React.FC<Props> = ({ username }) => {
   const router = useRouter();
 
-  const login = useUserStore((state) => state.login);
   const hideModal = useModalStore((state) => state.hide);
 
   const verifyAccountMutation = useApiMutation<VerifyAccountRequest>({
     route: Api.VerifyAccount,
     onSuccess: () => {
-      login();
       hideModal();
       router.push(Pages.Invoices);
     },

@@ -1,38 +1,21 @@
-"use client";
-
-import "@fontsource/lexend-mega";
-import "@fontsource/lexend-mega/700.css";
-import "@fontsource/lexend-mega/900.css";
-
-import { QueryClient, QueryClientProvider } from "react-query";
+import { Lexend_Mega } from "next/font/google";
 
 import "./globals.css";
-import useModalStore from "@/store/modalStore";
+import Provider from "@/components/Provider";
 
-const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: false,
-    },
-    mutations: {
-      retry: false,
-    },
-  },
+const lexendMega = Lexend_Mega({
+  subsets: ["latin"],
+  display: "swap",
 });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const modalOpen = useModalStore((state) => state.open);
-
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="de">
-      <body className={["bg-yellow", modalOpen && "overflow-hidden"].join(" ")}>
-        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      <body className={["bg-yellow", lexendMega.className].join(" ")}>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

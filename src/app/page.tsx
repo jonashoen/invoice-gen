@@ -2,7 +2,7 @@ import isAuthed from "@/lib/isAuthed";
 import Pages from "@/routes/Pages";
 import { redirect } from "next/navigation";
 
-export default async function Home() {
+const Home = async () => {
   const session = await isAuthed();
 
   if (!session) {
@@ -10,4 +10,6 @@ export default async function Home() {
   } else {
     redirect(Pages.Invoices);
   }
-}
+};
+
+export default Home;
