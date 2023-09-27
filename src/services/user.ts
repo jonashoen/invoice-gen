@@ -466,9 +466,16 @@ const verify = async ({
     where: {
       username,
     },
+    include: {
+      profile: {
+        select: {
+          email: true,
+        },
+      },
+    },
   });
 
-  if (!user) {
+  if (!user || !user.profile) {
     return null;
   }
 
@@ -495,6 +502,15 @@ const verify = async ({
       verifiedAt: dayjs.utc().toDate(),
       verify: {
         delete: true,
+      },
+    },
+  });
+
+  await db.user.deleteMany({
+    where: {
+      verified: false,
+      profile: {
+        email: user.profile.email,
       },
     },
   });
