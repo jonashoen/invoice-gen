@@ -615,12 +615,18 @@ describe("User service tests", () => {
       const sessionId = "Session Id";
       const expires = new Date();
 
-      prismaMock.user.findUnique.mockResolvedValueOnce(testUser);
+      prismaMock.user.findUnique.mockResolvedValueOnce({
+        ...testUser,
+        profile: {
+          ...testUser,
+        },
+      } as any);
       prismaMock.userVerify.findUnique.mockResolvedValueOnce({
         userId: testUser.id,
         code: password.hash(code),
       });
       prismaMock.user.update.mockResolvedValueOnce(testUser);
+      prismaMock.user.deleteMany.mockResolvedValueOnce({} as any);
       prismaMock.session.upsert.mockResolvedValueOnce({
         userId: testUser.id,
         sessionId,
