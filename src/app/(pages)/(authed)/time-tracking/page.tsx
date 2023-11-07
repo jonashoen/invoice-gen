@@ -46,13 +46,19 @@ const TimeTracking = async () => {
             <Paper className="!bg-purple_dark text-white">
               <div className="flex justify-between items-center">
                 <div className="flex flex-col">
-                  <p>{dateToDateString(runningTimeTrack.startTime)}</p>
+                  <p>
+                    <span>
+                      {dateToDateString(runningTimeTrack.startTime)},{" "}
+                    </span>
+                    <span>
+                      {dateToTimeString(runningTimeTrack.startTime)} Uhr
+                    </span>
+                  </p>
                   <p className="text-xl">
                     {runningTimeTrack.project.name} (
                     {runningTimeTrack.project.customer.name})
                   </p>
                 </div>
-
                 <div className="flex items-center gap-10">
                   <div className="flex items-center gap-5">
                     <div className="bg-red-600 h-5 aspect-square rounded-full">
@@ -90,7 +96,7 @@ const TimeTracking = async () => {
                 <div className="flex flex-col gap-4">
                   {groupedTimeTracks[day].map((timeTrack) => (
                     <Paper key={timeTrack.id}>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center border-black border-b pb-4">
                         <div className="flex flex-col">
                           <p>{dateToDateString(timeTrack.startTime)}</p>
                           <p className="text-xl">
