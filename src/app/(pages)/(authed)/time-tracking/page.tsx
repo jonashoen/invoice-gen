@@ -68,7 +68,10 @@ const TimeTracking = async () => {
                       {dateToDateString(runningTimeTrack.startTime)},{" "}
                     </span>
                     <span>
-                      {dateToTimeString(runningTimeTrack.startTime)} Uhr
+                      {dateToTimeString(
+                        dayjs(runningTimeTrack.startTime).toDate()
+                      )}{" "}
+                      Uhr
                     </span>
                   </p>
                   <p className="text-xl">
@@ -139,9 +142,19 @@ const TimeTracking = async () => {
                           </div>
 
                           <div className="flex flex-ol gap-4">
-                            <p>{dateToTimeString(timeTrack.startTime)} Uhr</p>
+                            <p>
+                              {dateToTimeString(
+                                dayjs(timeTrack.startTime).toDate()
+                              )}{" "}
+                              Uhr
+                            </p>
                             <p>-</p>
-                            <p>{dateToTimeString(timeTrack.endTime!)} Uhr</p>
+                            <p>
+                              {dateToTimeString(
+                                dayjs(timeTrack.endTime).toDate()
+                              )}{" "}
+                              Uhr
+                            </p>
                           </div>
 
                           <div className="flex items-center gap-10">
