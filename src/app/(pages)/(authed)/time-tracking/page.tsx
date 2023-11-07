@@ -11,6 +11,7 @@ import isAuthed from "@/lib/isAuthed";
 import timeTracking from "@/services/timeTracking";
 import Stopwatch from "@/components/Stopwatch";
 import getDurationString from "@/helper/getDurationString";
+import RestartTimeTrackingButton from "@/components/Button/RestartTimeTrackingButton";
 
 const metadata = { title: "Zeiterfassung - ig" };
 
@@ -118,22 +119,28 @@ const TimeTracking = async () => {
                               timeTrack.endTime
                             ) || "0h"}
                           </p>
-                          <ModalButton
-                            modal={{
-                              title: "Zeiterfassung bearbeiten",
-                              content: (
-                                <AddTimeTracking
-                                  timeTrackId={timeTrack.id}
-                                  oldProjectId={timeTrack.projectId}
-                                  oldStartTime={new Date(timeTrack.startTime)}
-                                  oldEndTime={new Date(timeTrack.endTime!)}
-                                  oldActivities={timeTrack.activities}
-                                />
-                              ),
-                            }}
-                          >
-                            Bearbeiten
-                          </ModalButton>
+                          <div className="flex gap-2">
+                            <ModalButton
+                              modal={{
+                                title: "Zeiterfassung bearbeiten",
+                                content: (
+                                  <AddTimeTracking
+                                    timeTrackId={timeTrack.id}
+                                    oldProjectId={timeTrack.projectId}
+                                    oldStartTime={new Date(timeTrack.startTime)}
+                                    oldEndTime={new Date(timeTrack.endTime!)}
+                                    oldActivities={timeTrack.activities}
+                                  />
+                                ),
+                              }}
+                            >
+                              Bearbeiten
+                            </ModalButton>
+                            <RestartTimeTrackingButton
+                              projectId={timeTrack.projectId}
+                              disabled={!!runningTimeTrack}
+                            />
+                          </div>
                         </div>
                       </div>
 
