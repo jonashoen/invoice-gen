@@ -12,8 +12,24 @@ import timeTracking from "@/services/timeTracking";
 import Stopwatch from "@/components/Stopwatch";
 import getDurationString from "@/helper/getDurationString";
 import RestartTimeTrackingButton from "@/components/Button/RestartTimeTrackingButton";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import duration from "dayjs/plugin/duration";
+import "dayjs/locale/de";
 
-const metadata = { title: "Zeiterfassung - ig" };
+dayjs.extend(utc);
+dayjs.extend(duration);
+
+const generateMetadata = async () => {
+  const userId = await isAuthed();
+  const runningTimeTrack = await timeTracking.getRunning(userId!);
+
+  const title = "Zeiterfassung - ig";
+
+  return {
+    title: runningTimeTrack ? `${title} 🔴` : title,
+  };
+};
 
 const TimeTracking = async () => {
   const userId = await isAuthed();
@@ -92,68 +108,87 @@ const TimeTracking = async () => {
                 Noch keine Zeiten erfasst
               </p>
             )}
-            {Object.keys(groupedTimeTracks).map((day) => (
-              <Details title={day} key={day}>
-                <div className="flex flex-col gap-4">
-                  {groupedTimeTracks[day].map((timeTrack) => (
-                    <Paper key={timeTrack.id}>
-                      <div className="flex justify-between items-center border-black border-b pb-4">
-                        <div className="flex flex-col">
-                          <p>{dateToDateString(timeTrack.startTime)}</p>
-                          <p className="text-xl">
-                            {timeTrack.project.name} (
-                            {timeTrack.project.customer.name})
-                          </p>
-                        </div>
+            {Object.keys(groupedTimeTracks).map((day) => {
+              const millisecondsTracked = groupedTimeTracks[day].reduce(
+                (sum, tt) => {
+                  return sum + dayjs.utc(tt.endTime).diff(tt.startTime);
+                },
+                0
+              );
 
-                        <div className="flex flex-ol gap-4">
-                          <p>{dateToTimeString(timeTrack.startTime)} Uhr</p>
-                          <p>-</p>
-                          <p>{dateToTimeString(timeTrack.endTime!)} Uhr</p>
-                        </div>
+              const virtualTrackingStarted = dayjs
+                .utc()
+                .subtract(millisecondsTracked, "milliseconds")
+                .toDate();
 
-                        <div className="flex items-center gap-10">
-                          <p className="text-xl">
-                            {getDurationString(
-                              timeTrack.startTime,
-                              timeTrack.endTime
-                            ) || "0h"}
-                          </p>
-                          <div className="flex gap-2">
-                            <ModalButton
-                              modal={{
-                                title: "Zeiterfassung bearbeiten",
-                                content: (
-                                  <AddTimeTracking
-                                    timeTrackId={timeTrack.id}
-                                    oldProjectId={timeTrack.projectId}
-                                    oldStartTime={new Date(timeTrack.startTime)}
-                                    oldEndTime={new Date(timeTrack.endTime!)}
-                                    oldActivities={timeTrack.activities}
-                                  />
-                                ),
-                              }}
-                            >
-                              Bearbeiten
-                            </ModalButton>
-                            <RestartTimeTrackingButton
-                              projectId={timeTrack.projectId}
-                              disabled={!!runningTimeTrack}
-                            />
+              const trackedTodayString =
+                getDurationString(virtualTrackingStarted) || "0h";
+
+              return (
+                <Details title={`${day} (${trackedTodayString})`} key={day}>
+                  <div className="flex flex-col gap-4">
+                    {groupedTimeTracks[day].map((timeTrack) => (
+                      <Paper key={timeTrack.id}>
+                        <div className="flex justify-between items-center border-black border-b pb-4">
+                          <div className="flex flex-col">
+                            <p>{dateToDateString(timeTrack.startTime)}</p>
+                            <p className="text-xl">
+                              {timeTrack.project.name} (
+                              {timeTrack.project.customer.name})
+                            </p>
+                          </div>
+
+                          <div className="flex flex-ol gap-4">
+                            <p>{dateToTimeString(timeTrack.startTime)} Uhr</p>
+                            <p>-</p>
+                            <p>{dateToTimeString(timeTrack.endTime!)} Uhr</p>
+                          </div>
+
+                          <div className="flex items-center gap-10">
+                            <p className="text-xl">
+                              {getDurationString(
+                                timeTrack.startTime,
+                                timeTrack.endTime
+                              ) || "0h"}
+                            </p>
+                            <div className="flex gap-2">
+                              <ModalButton
+                                modal={{
+                                  title: "Zeiterfassung bearbeiten",
+                                  content: (
+                                    <AddTimeTracking
+                                      timeTrackId={timeTrack.id}
+                                      oldProjectId={timeTrack.projectId}
+                                      oldStartTime={
+                                        new Date(timeTrack.startTime)
+                                      }
+                                      oldEndTime={new Date(timeTrack.endTime!)}
+                                      oldActivities={timeTrack.activities}
+                                    />
+                                  ),
+                                }}
+                              >
+                                Bearbeiten
+                              </ModalButton>
+                              <RestartTimeTrackingButton
+                                projectId={timeTrack.projectId}
+                                disabled={!!runningTimeTrack}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <ul className="mt-2">
-                        {timeTrack.activities.map((activity) => (
-                          <li key={activity.id}>- {activity.description}</li>
-                        ))}
-                      </ul>
-                    </Paper>
-                  ))}
-                </div>
-              </Details>
-            ))}
+                        <ul className="mt-2">
+                          {timeTrack.activities.map((activity) => (
+                            <li key={activity.id}>- {activity.description}</li>
+                          ))}
+                        </ul>
+                      </Paper>
+                    ))}
+                  </div>
+                </Details>
+              );
+            })}
           </>
         </div>
       </div>
@@ -162,4 +197,4 @@ const TimeTracking = async () => {
 };
 
 export default TimeTracking;
-export { metadata };
+export { generateMetadata };
