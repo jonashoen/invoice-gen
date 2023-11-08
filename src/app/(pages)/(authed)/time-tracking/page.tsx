@@ -3,7 +3,6 @@ import AddTimeTracking from "@/modals/AddTimeTracking";
 import Paper from "@/components/Paper";
 import dateToDateString from "@/helper/dateToDateString";
 import StopTimeTracking from "@/modals/StopTimeTracking";
-import dateToTimeString from "@/helper/dateToTimeString";
 import group from "@/helper/groupArray";
 import Details from "@/components/Details";
 import ModalButton from "@/components/Button/ModalButton";
@@ -16,6 +15,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import duration from "dayjs/plugin/duration";
 import "dayjs/locale/de";
+import LocalTime from "@/components/LocalTime";
 
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -67,12 +67,10 @@ const TimeTracking = async () => {
                     <span>
                       {dateToDateString(runningTimeTrack.startTime)},{" "}
                     </span>
-                    <span>
-                      {dateToTimeString(
-                        dayjs(runningTimeTrack.startTime).toDate()
-                      )}{" "}
-                      Uhr
-                    </span>
+                    <LocalTime
+                      date={runningTimeTrack.startTime}
+                      component="span"
+                    />
                   </p>
                   <p className="text-xl">
                     {runningTimeTrack.project.name} (
@@ -133,7 +131,7 @@ const TimeTracking = async () => {
                     {groupedTimeTracks[day].map((timeTrack) => (
                       <Paper key={timeTrack.id}>
                         <div className="flex justify-between items-center border-black border-b pb-4">
-                          <div className="flex flex-col">
+                          <div className="flex flex-1 flex-col">
                             <p>{dateToDateString(timeTrack.startTime)}</p>
                             <p className="text-xl">
                               {timeTrack.project.name} (
@@ -141,23 +139,13 @@ const TimeTracking = async () => {
                             </p>
                           </div>
 
-                          <div className="flex flex-ol gap-4">
-                            <p>
-                              {dateToTimeString(
-                                dayjs(timeTrack.startTime).toDate()
-                              )}{" "}
-                              Uhr
-                            </p>
+                          <div className="flex gap-4">
+                            <LocalTime date={timeTrack.startTime} />
                             <p>-</p>
-                            <p>
-                              {dateToTimeString(
-                                dayjs(timeTrack.endTime).toDate()
-                              )}{" "}
-                              Uhr
-                            </p>
+                            <LocalTime date={timeTrack.endTime!} />
                           </div>
 
-                          <div className="flex items-center gap-10">
+                          <div className="flex flex-1 items-center justify-end gap-10">
                             <p className="text-xl">
                               {getDurationString(
                                 timeTrack.startTime,
