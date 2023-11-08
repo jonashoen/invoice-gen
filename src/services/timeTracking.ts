@@ -84,7 +84,6 @@ const start = async (userId: number, { projectId }: { projectId: number }) => {
   return await db.timeTrack.create({
     data: {
       projectId,
-      startTime: dayjs.utc().startOf("minute").toDate(),
     },
   });
 };
@@ -108,6 +107,7 @@ const stop = async (
       id: timeTrack.id,
     },
     data: {
+      startTime: dayjs.utc(timeTrack.startTime).startOf("minute").toDate(),
       endTime: dayjs.utc().startOf("minute").toDate(),
       activities: {
         createMany: {
