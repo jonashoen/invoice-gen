@@ -1,18 +1,25 @@
 "use client";
 
-import React, { HTMLAttributes } from "react";
+import React, { Suspense, TimeHTMLAttributes } from "react";
 
 import dateToTimeString from "@/helper/dateToTimeString";
+import useHydration from "@/hooks/useHydration";
 
-interface Props extends HTMLAttributes<HTMLParagraphElement> {
+interface Props extends TimeHTMLAttributes<HTMLTimeElement> {
   date: Date;
-  component?: string;
 }
 
-const LocalTime: React.FC<Props> = ({ date, component, ...props }) => {
-  const c = component ?? "p";
+const LocalTime: React.FC<Props> = ({ date, ...props }) => {
+  const hydrated = useHydration();
 
-  return React.createElement(c, props, dateToTimeString(date) + " Uhr");
+  return (
+    <Suspense key={hydrated ? "local" : "utc"}>
+      <time dateTime={new Date(date).toISOString()} {...props}>
+        {dateToTimeString(date)} Uhr
+        {!hydrated && " (UTC)"}
+      </time>
+    </Suspense>
+  );
 };
 
 export default LocalTime;

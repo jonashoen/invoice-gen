@@ -67,10 +67,7 @@ const TimeTracking = async () => {
                     <span>
                       {dateToDateString(runningTimeTrack.startTime)},{" "}
                     </span>
-                    <LocalTime
-                      date={runningTimeTrack.startTime}
-                      component="span"
-                    />
+                    <LocalTime date={runningTimeTrack.startTime} />
                   </p>
                   <p className="text-xl">
                     {runningTimeTrack.project.name} (
@@ -144,7 +141,6 @@ const TimeTracking = async () => {
                             <p>-</p>
                             <LocalTime date={timeTrack.endTime!} />
                           </div>
-
                           <div className="flex flex-1 items-center justify-end gap-10">
                             <p className="text-xl">
                               {getDurationString(
