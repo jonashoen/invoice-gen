@@ -16,7 +16,8 @@ jest.mock(
   }))
 );
 
-const testUser: User & Profile = {
+const testUser: User &
+  Profile & { taxNumber: string | undefined; vatId: string | undefined } = {
   id: -1,
   username: "Test Username",
   password: "Test Password",
