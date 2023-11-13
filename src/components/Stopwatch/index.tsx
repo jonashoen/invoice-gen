@@ -14,8 +14,6 @@ const Stopwatch: React.FC<Props> = ({ startTime }) => {
 
   useEffect(() => {
     const updateTime = () => {
-      console.log("update");
-
       setRunningTimeTrackDuration(
         getDurationString(startTime, undefined, true)
       );
@@ -30,7 +28,7 @@ const Stopwatch: React.FC<Props> = ({ startTime }) => {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [startTime]);
 
   return runningTimeTrackDuration;
 };
