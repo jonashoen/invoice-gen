@@ -36,8 +36,8 @@ model Profile {
   bank        String
   iban        String
   bic         String
-  taxNumber   String
-  vatId       String
+  taxNumber   String?
+  vatId       String?
   telephone   String
   email       String
 }
@@ -45,19 +45,19 @@ model Profile {
 model Session {
   sessionId String   @unique
   userId    Int      @unique
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expires   DateTime @db.Timestamp()
 }
 
 model UserVerify {
   userId Int    @id
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   code   String
 }
 
 model UserPasswordReset {
   userId  Int      @id
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   code    String
   expires DateTime
 }

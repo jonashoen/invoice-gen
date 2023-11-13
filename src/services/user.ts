@@ -41,8 +41,8 @@ const register = async ({
   bank: string;
   iban: string;
   bic: string;
-  taxNumber: string;
-  vatId: string;
+  taxNumber?: string;
+  vatId?: string;
   telephone: string;
   email: string;
 }) => {

@@ -35,11 +35,13 @@ export const register = Joi.object({
       return value;
     })
     .required(),
-  taxNumber: Joi.string().trim().required(),
-  vatId: Joi.string().trim().required(),
+  taxNumber: Joi.string().trim().allow(""),
+  vatId: Joi.string().trim().allow(""),
   telephone: Joi.string().trim().required(),
   email: Joi.string().trim().email().required(),
-}).meta({ className: "RegisterRequest" });
+})
+  .or("taxNumber", "vatId")
+  .meta({ className: "RegisterRequest" });
 
 export const editUser = Joi.object({
   username: Joi.string().trim().optional(),

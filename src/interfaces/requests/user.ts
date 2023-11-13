@@ -56,10 +56,10 @@ export interface RegisterRequest {
   password: string;
   passwordRepeated?: any;
   street: string;
-  taxNumber: string;
+  taxNumber?: string;
   telephone: string;
   username: string;
-  vatId: string;
+  vatId?: string;
   zipCode: string;
 }
 
