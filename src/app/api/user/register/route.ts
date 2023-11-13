@@ -19,7 +19,9 @@ const handler: RequestHandler<RegisterRequest> = async (req) => {
     return apiError(StatusCodes.BAD_REQUEST);
   }
 
-  return new NextResponse();
+  return NextResponse.json({
+    username: registeredUser.username,
+  });
 };
 
 const POST = withMiddleware(
