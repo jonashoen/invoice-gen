@@ -126,8 +126,8 @@ const Register = () => {
       bank,
       iban,
       bic,
-      taxNumber,
-      vatId,
+      taxNumber: taxNumber || undefined,
+      vatId: vatId || undefined,
       telephone,
       email,
     });

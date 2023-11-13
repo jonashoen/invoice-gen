@@ -35,8 +35,8 @@ const Profile = () => {
       setBank(data.profile.bank);
       setIban(data.profile.iban);
       setBic(data.profile.bic);
-      setTaxNumber(data.profile.taxNumber);
-      setVatId(data.profile.vatId);
+      setTaxNumber(data.profile.taxNumber ?? "");
+      setVatId(data.profile.vatId ?? "");
       setTelephone(data.profile.telephone);
       setEmail(data.profile.email);
     },
@@ -170,8 +170,8 @@ const Profile = () => {
       bank,
       iban,
       bic,
-      taxNumber,
-      vatId,
+      taxNumber: taxNumber || undefined,
+      vatId: vatId || undefined,
       telephone,
       email,
     });

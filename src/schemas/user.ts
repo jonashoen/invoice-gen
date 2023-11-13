@@ -35,8 +35,8 @@ export const register = Joi.object({
       return value;
     })
     .required(),
-  taxNumber: Joi.string().trim().allow(""),
-  vatId: Joi.string().trim().allow(""),
+  taxNumber: Joi.string().trim(),
+  vatId: Joi.string().trim(),
   telephone: Joi.string().trim().required(),
   email: Joi.string().trim().email().required(),
 })
