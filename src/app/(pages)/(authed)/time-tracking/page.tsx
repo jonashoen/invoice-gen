@@ -16,12 +16,18 @@ import utc from "dayjs/plugin/utc";
 import duration from "dayjs/plugin/duration";
 import "dayjs/locale/de";
 import LocalTime from "@/components/LocalTime";
+import { Metadata } from "next";
 
 dayjs.extend(utc);
 dayjs.extend(duration);
 
-const generateMetadata = async () => {
+const generateMetadata = async (): Promise<Metadata> => {
   const userId = await isAuthed();
+
+  if (!userId) {
+    return {};
+  }
+
   const runningTimeTrack = await timeTracking.getRunning(userId!);
 
   const title = "Zeiterfassung - ig";
