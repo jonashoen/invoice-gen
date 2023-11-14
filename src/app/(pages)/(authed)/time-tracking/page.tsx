@@ -134,13 +134,10 @@ const TimeTracking = async () => {
                     {groupedTimeTracks[day].map((timeTrack) => (
                       <Paper key={timeTrack.id}>
                         <div className="flex justify-between items-center border-black border-b pb-4">
-                          <div className="flex flex-1 flex-col">
-                            <p>{dateToDateString(timeTrack.startTime)}</p>
-                            <p className="text-xl">
-                              {timeTrack.project.name} (
-                              {timeTrack.project.customer.name})
-                            </p>
-                          </div>
+                          <p className="flex-1 text-xl">
+                            {timeTrack.project.name} (
+                            {timeTrack.project.customer.name})
+                          </p>
 
                           <div className="flex gap-4">
                             <LocalTime date={timeTrack.startTime} />
