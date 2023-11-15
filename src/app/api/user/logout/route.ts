@@ -1,5 +1,3 @@
-"use server";
-
 import destroySession from "@/lib/destroySession";
 import user from "@/services/user";
 import withMiddleware from "@/middlewares/withMiddleware";

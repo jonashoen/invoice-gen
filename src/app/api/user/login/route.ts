@@ -1,5 +1,3 @@
-"use server";
-
 import { LoginRequest } from "@/interfaces/requests/user";
 import user from "@/services/user";
 import apiError from "@/lib/apiError";
