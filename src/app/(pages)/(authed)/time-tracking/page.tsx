@@ -146,7 +146,7 @@ const TimeTracking = async () => {
                   <div className="flex flex-col gap-4">
                     {groupedTimeTracks[day].map((timeTrack) => (
                       <Paper key={timeTrack.id}>
-                        <div className="flex justify-between items-center border-black border-b pb-4">
+                        <div className="flex justify-between items-center border-black border-b pb-[12px]">
                           <p className="flex-1 text-xl">
                             {timeTrack.project.name} (
                             {timeTrack.project.customer.name})
