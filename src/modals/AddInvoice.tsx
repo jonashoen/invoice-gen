@@ -191,7 +191,6 @@ const AddInvoice: React.FC<Props> = ({
   const addPositionDiabled = !amount || !unit || !price || !description;
 
   const addDisabled =
-    !projectId ||
     positions.filter((position) => !position.deleted).length === 0 ||
     positions.some(
       (position) =>
@@ -239,6 +238,7 @@ const AddInvoice: React.FC<Props> = ({
           text: `${project.name} (${project.customer.name})`,
         }))}
         label="Projekt"
+        required
       />
 
       <p>Positionen:</p>

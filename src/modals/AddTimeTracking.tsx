@@ -137,8 +137,6 @@ const AddTimeTracking: React.FC<Props> = ({
     deleteTimeTrackingMutation.mutate({ timeTrackId });
   };
 
-  const startTrackingDisabled = !projectId;
-
   const editTrackingDisabled =
     activities.filter((a) => !a.deleted).length === 0 ||
     (dateToLocalIsoString(new Date(startTime)) ===
@@ -157,11 +155,8 @@ const AddTimeTracking: React.FC<Props> = ({
         }
 
         return activity.description === oldActivity.description;
-      }));
-
-  const submitDisabled = timeTrackId
-    ? editTrackingDisabled
-    : startTrackingDisabled;
+      }) &&
+      projectId === oldProjectId.toString());
 
   return (
     <Form
@@ -183,6 +178,7 @@ const AddTimeTracking: React.FC<Props> = ({
           text: `${project.name} (${project.customer.name})`,
         }))}
         label="Projekt"
+        required
       />
 
       {timeTrackId && (
@@ -240,7 +236,7 @@ const AddTimeTracking: React.FC<Props> = ({
             editTimeTrackingMutation.isLoading ||
             deleteTimeTrackingMutation.isLoading
           }
-          disabled={submitDisabled}
+          disabled={timeTrackId ? editTrackingDisabled : false}
         >
           {timeTrackId ? "Speichern" : "Starten"}
         </Button>

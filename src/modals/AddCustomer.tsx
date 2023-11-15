@@ -129,17 +129,13 @@ const AddCustomer: React.FC<Props> = ({
     });
   };
 
-  const buttonDisabled =
-    !name || !number || !zipCode || !city || !street || !houseNumber;
-
   const buttonEnabledEdit =
-    !buttonDisabled &&
-    (oldName !== name ||
-      oldNumber !== number ||
-      oldZipCode !== zipCode ||
-      oldCity !== city ||
-      oldStreet !== street ||
-      oldHouseNumber !== houseNumber);
+    oldName !== name ||
+    oldNumber !== number ||
+    oldZipCode !== zipCode ||
+    oldCity !== city ||
+    oldStreet !== street ||
+    oldHouseNumber !== houseNumber;
 
   return (
     <Form className="gap-5" onSubmit={id ? editCustomer : addCustomer}>
@@ -228,7 +224,7 @@ const AddCustomer: React.FC<Props> = ({
             editCustomerMutation.isLoading ||
             deleteCustomerMutation.isLoading
           }
-          disabled={id ? !buttonEnabledEdit : buttonDisabled}
+          disabled={id ? !buttonEnabledEdit : false}
         >
           {id ? "Bearbeiten" : "Anlegen"}
         </Button>

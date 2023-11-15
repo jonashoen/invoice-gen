@@ -129,15 +129,12 @@ const AddProject: React.FC<Props> = ({
     });
   };
 
-  const buttonDisabled = !name || !paymentDue || !paymentDueUnit || !customerId;
-
   const buttonEnabledEdit =
-    !buttonDisabled &&
-    (oldName !== name ||
-      oldName !== name ||
-      oldPaymentDue !== paymentDue ||
-      oldPaymentDueUnit !== paymentDueUnit ||
-      oldCustomerId !== customerId);
+    oldName !== name ||
+    oldName !== name ||
+    oldPaymentDue !== paymentDue ||
+    oldPaymentDueUnit !== paymentDueUnit ||
+    oldCustomerId !== customerId;
 
   return (
     <Form className="gap-5" onSubmit={id ? editProject : addProject}>
@@ -221,7 +218,7 @@ const AddProject: React.FC<Props> = ({
             editProjectMutation.isLoading ||
             deleteProjectMutation.isLoading
           }
-          disabled={id ? !buttonEnabledEdit : buttonDisabled}
+          disabled={id ? !buttonEnabledEdit : false}
         >
           {id ? "Bearbeiten" : "Anlegen"}
         </Button>

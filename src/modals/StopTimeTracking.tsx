@@ -1,6 +1,5 @@
 "use client";
 
-import React, { ForwardedRef } from "react";
 import Button from "@/components/Button";
 import useApiMutation from "@/hooks/useApiMutation";
 import { StopTimeTrackRequest } from "@/interfaces/requests";
@@ -10,6 +9,7 @@ import { useState } from "react";
 import Info from "@/components/Info";
 import EditableList from "@/components/EditableActivitiesList";
 import { TimeTrackActivity } from "@prisma/client";
+import Form from "@/components/Form";
 
 const StopTimeTracking = () => {
   const hideModal = useModalStore((state) => state.hide);
@@ -28,11 +28,15 @@ const StopTimeTracking = () => {
   });
 
   const [error, setError] = useState("");
-  const [activities, setActivities] = useState<TimeTrackActivity[]>([]);
+  const [activities, setActivities] = useState<
+    (TimeTrackActivity & { added?: boolean; deleted?: boolean })[]
+  >([]);
+
+  const addedActivities = activities.filter((activity) => !activity.deleted);
 
   const stopTimeTracking = () => {
     stopTimeTrackingMutation.mutate({
-      activities: activities.map((activity) => activity.description),
+      activities: addedActivities.map((activity) => activity.description),
     });
   };
 
@@ -44,23 +48,24 @@ const StopTimeTracking = () => {
         </Info>
       )}
 
-      <EditableList
-        label="Tätigkeiten"
-        value={activities}
-        setValue={setActivities}
-      />
+      <Form onSubmit={stopTimeTracking}>
+        <EditableList
+          label="Tätigkeiten"
+          value={activities}
+          setValue={setActivities}
+        />
 
-      <div className="flex justify-end mt-10">
-        <Button
-          className="bg-ice"
-          type="submit"
-          disabled={activities.length === 0}
-          loading={stopTimeTrackingMutation.isLoading}
-          onClick={stopTimeTracking}
-        >
-          Stoppen
-        </Button>
-      </div>
+        <div className="flex justify-end mt-10">
+          <Button
+            className="bg-ice"
+            type="submit"
+            loading={stopTimeTrackingMutation.isLoading}
+            disabled={addedActivities.length === 0}
+          >
+            Stoppen
+          </Button>
+        </div>
+      </Form>
     </div>
   );
 };

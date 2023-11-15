@@ -99,7 +99,6 @@ const VerifyAccount: React.FC<Props> = ({ username }) => {
         <Button
           type="submit"
           className="bg-ice"
-          disabled={code.length !== CODE_LENGHT}
           loading={
             verifyAccountMutation.isLoading ||
             resendVerifyCodeMutation.isLoading
