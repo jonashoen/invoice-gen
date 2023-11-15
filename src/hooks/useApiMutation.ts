@@ -42,7 +42,7 @@ const useApiMutation = <TRequest = any, TResponse = any>({
         throw new ApiError("Error while fetching the API", response.status);
       }
 
-      return await tryParseContent(response);
+      return (await tryParseContent(response)) as TResponse;
     },
     {
       onSuccess: async (data) => {

@@ -27,6 +27,7 @@
     "bcrypt": "^5.1.0",
     "cookie-signature": "^1.2.1",
     "dayjs": "^1.11.9",
+    "export-to-csv": "^1.2.1",
     "html-react-parser": "^4.2.1",
     "http-status-codes": "^2.2.0",
     "ibantools": "^4.3.3",

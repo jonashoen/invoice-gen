@@ -1,4 +1,6 @@
 import db from "@/db";
+import group from "@/helper/groupArray";
+import TimeTrackExportResponse from "@/interfaces/responses/TimeTrackExportResponse";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -251,4 +253,87 @@ const deleteEntry = async (
   });
 };
 
-export default { get, getRunning, start, stop, edit, deleteEntry };
+const exportTimeTracking = async (
+  userId: number,
+  {
+    projectId,
+    startDate,
+    endDate,
+  }: { projectId: number; startDate: Date; endDate: Date }
+) => {
+  const project = await db.project.findUnique({
+    where: {
+      id: projectId,
+
+      customer: {
+        userId,
+      },
+    },
+  });
+
+  if (!project) {
+    return null;
+  }
+
+  const timeTracks = await db.timeTrack.findMany({
+    where: {
+      projectId,
+      startTime: {
+        gte: startDate,
+      },
+      endTime: {
+        lte: dayjs.utc(endDate).endOf("day").toDate(),
+      },
+    },
+    orderBy: {
+      startTime: "asc",
+    },
+    include: {
+      activities: true,
+    },
+  });
+
+  const groupedTimeTracks = group(timeTracks, {
+    cb: (tt) => dayjs.utc(tt.startTime).startOf("day").toISOString(),
+  });
+
+  const timeTrackExportData: TimeTrackExportResponse[] = [];
+
+  for (const date of Object.keys(groupedTimeTracks)) {
+    timeTrackExportData.push({
+      date: dayjs.utc(date).toDate(),
+      duration: groupedTimeTracks[date].reduce(
+        (hours, { startTime, endTime }) => {
+          const startDateSeconds = dayjs.utc(startTime).valueOf() / 1000;
+          const endDateSeconds = dayjs.utc(endTime).valueOf() / 1000;
+
+          const secondsDelta = Math.round(endDateSeconds - startDateSeconds);
+          const deltaMinutes = Math.floor(secondsDelta / 60);
+          const deltaHours = Math.floor(
+            (secondsDelta - deltaMinutes * 60) / 60
+          );
+
+          return hours + deltaHours + deltaMinutes / 60;
+        },
+        0
+      ),
+      activities: groupedTimeTracks[date]
+        .map((timeTrack) =>
+          timeTrack.activities.map((activity) => activity.description)
+        )
+        .flat(),
+    });
+  }
+
+  return timeTrackExportData;
+};
+
+export default {
+  get,
+  getRunning,
+  start,
+  stop,
+  edit,
+  deleteEntry,
+  exportTimeTracking,
+};

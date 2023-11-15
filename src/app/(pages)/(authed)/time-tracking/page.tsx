@@ -17,6 +17,7 @@ import duration from "dayjs/plugin/duration";
 import "dayjs/locale/de";
 import LocalTime from "@/components/LocalTime";
 import { Metadata } from "next";
+import ExportTimeTracking from "@/modals/ExportTimeTracking";
 
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -50,16 +51,28 @@ const TimeTracking = async () => {
   return (
     <main>
       <Header title="Zeiterfassung">
-        <ModalButton
-          className="bg-pink text-white"
-          disabled={!!runningTimeTrack}
-          modal={{
-            title: "Zeiterfassung starten",
-            content: <AddTimeTracking />,
-          }}
-        >
-          Starten
-        </ModalButton>
+        <div className="flex gap-8">
+          <ModalButton
+            className="bg-orange text-white"
+            modal={{
+              title: "Zeiterfassung exportieren",
+              content: <ExportTimeTracking />,
+            }}
+          >
+            Exportieren
+          </ModalButton>
+
+          <ModalButton
+            className="bg-pink text-white"
+            disabled={!!runningTimeTrack}
+            modal={{
+              title: "Zeiterfassung starten",
+              content: <AddTimeTracking />,
+            }}
+          >
+            Starten
+          </ModalButton>
+        </div>
       </Header>
 
       <div className="flex flex-col gap-12">

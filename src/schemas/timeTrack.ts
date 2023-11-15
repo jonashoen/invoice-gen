@@ -37,9 +37,16 @@ export const deleteTimeTrackRequest = Joi.object({
   timeTrackId: Joi.number().integer().positive().required(),
 }).meta({ className: "DeleteTimeTrackRequest" });
 
+export const exportTimeTracks = Joi.object({
+  projectId: Joi.number().integer().positive().required(),
+  startDate: Joi.date().required(),
+  endDate: Joi.date().required(),
+}).meta({ className: "ExportTimeTrackRequest" });
+
 export default {
   startTimeTrackRequest,
   stopTimeTrackRequest,
   editTimeTrackRequest,
   deleteTimeTrackRequest,
+  exportTimeTracks,
 };

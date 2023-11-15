@@ -36,6 +36,7 @@ const Api = {
   StopTimeTracking: "/time-tracking/stop",
   DeleteTimeTracking: "/time-tracking/delete",
   EditTimeTracking: "/time-tracking/edit",
+  ExportTimeTracking: "/time-tracking/export",
 };
 
 export default Api;

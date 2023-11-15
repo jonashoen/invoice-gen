@@ -22,6 +22,12 @@ export interface EditTimeTrackRequest {
   }[];
 }
 
+export interface ExportTimeTrackRequest {
+  endDate: Date;
+  projectId: number;
+  startDate: Date;
+}
+
 export interface StartTimeTrackRequest {
   projectId: number;
 }

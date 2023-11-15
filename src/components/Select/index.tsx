@@ -10,7 +10,7 @@ interface Props extends SelectHTMLAttributes<HTMLSelectElement> {
   loading?: boolean;
 }
 
-const Select: React.FC<Props> = ({
+function Select({
   label,
   className,
   setValue,
@@ -18,37 +18,39 @@ const Select: React.FC<Props> = ({
   loading,
   disabled,
   ...props
-}) => (
-  <label className="flex-1">
-    {label}
-    {label && ":"}
-    <select
-      className={[className, styles.select, loading && "animate-wiggle"].join(
-        " "
-      )}
-      disabled={loading || disabled}
-      {...props}
-      onChange={
-        setValue
-          ? (e) => {
-              setValue(e.target.value);
-            }
-          : props.onChange
-      }
-    >
-      <option value="" disabled hidden>
-        {loading ? "lädt..." : "Bitte wählen"}
-      </option>
-      {options.map((option) => (
-        <option
-          key={option.value || option.text}
-          value={option.value || option.text}
-        >
-          {option.text}
+}: Props) {
+  return (
+    <label className="flex-1">
+      {label}
+      {label && ":"}
+      <select
+        className={[className, styles.select, loading && "animate-wiggle"].join(
+          " "
+        )}
+        disabled={loading || disabled}
+        {...props}
+        onChange={
+          setValue
+            ? (e) => {
+                setValue(e.target.value);
+              }
+            : props.onChange
+        }
+      >
+        <option value="" disabled hidden>
+          {loading ? "lädt..." : "Bitte wählen"}
         </option>
-      ))}
-    </select>
-  </label>
-);
+        {options.map((option) => (
+          <option
+            key={option.value || option.text}
+            value={option.value || option.text}
+          >
+            {option.text}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
 
 export default Select;
