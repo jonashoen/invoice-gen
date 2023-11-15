@@ -300,6 +300,12 @@ const exportTimeTracking = async (
   const timeTrackExportData: TimeTrackExportResponse[] = [];
 
   for (const date of Object.keys(groupedTimeTracks)) {
+    const allActivitiesOfDay = groupedTimeTracks[date]
+      .map((timeTrack) =>
+        timeTrack.activities.map((activity) => activity.description)
+      )
+      .flat();
+
     timeTrackExportData.push({
       date: dayjs.utc(date).toDate(),
       duration: groupedTimeTracks[date].reduce(
@@ -317,11 +323,9 @@ const exportTimeTracking = async (
         },
         0
       ),
-      activities: groupedTimeTracks[date]
-        .map((timeTrack) =>
-          timeTrack.activities.map((activity) => activity.description)
-        )
-        .flat(),
+      activities: allActivitiesOfDay.filter(
+        (activity, index) => allActivitiesOfDay.indexOf(activity) === index
+      ),
     });
   }
 
