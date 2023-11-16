@@ -3,8 +3,10 @@ import group from "@/helper/groupArray";
 import TimeTrackExportResponse from "@/interfaces/responses/TimeTrackExportResponse";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import duration from "dayjs/plugin/duration";
 
 dayjs.extend(utc);
+dayjs.extend(duration);
 
 const get = async (userId: number) => {
   return await db.timeTrack.findMany({
@@ -310,16 +312,12 @@ const exportTimeTracking = async (
       date: dayjs.utc(date).toDate(),
       duration: groupedTimeTracks[date].reduce(
         (hours, { startTime, endTime }) => {
-          const startDateSeconds = dayjs.utc(startTime).valueOf() / 1000;
-          const endDateSeconds = dayjs.utc(endTime).valueOf() / 1000;
-
-          const secondsDelta = Math.round(endDateSeconds - startDateSeconds);
-          const deltaMinutes = Math.floor(secondsDelta / 60);
-          const deltaHours = Math.floor(
-            (secondsDelta - deltaMinutes * 60) / 60
+          const trackDuration = dayjs.duration(
+            dayjs(endTime).diff(startTime, "minutes"),
+            "minutes"
           );
 
-          return hours + deltaHours + deltaMinutes / 60;
+          return hours + trackDuration.as("hours");
         },
         0
       ),
