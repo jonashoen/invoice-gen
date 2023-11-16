@@ -27,6 +27,7 @@ const get = async (userId: number) => {
       project: {
         select: {
           name: true,
+          archived: true,
           customer: {
             select: {
               name: true,
@@ -146,6 +147,7 @@ const edit = async (
     where: {
       id: timeTrackId,
       project: {
+        archived: false,
         customer: {
           userId,
         },

@@ -164,30 +164,36 @@ const TimeTracking = async () => {
                                 timeTrack.endTime
                               ) || "0h"}
                             </p>
-                            <div className="flex gap-2">
-                              <ModalButton
-                                modal={{
-                                  title: "Zeiterfassung bearbeiten",
-                                  content: (
-                                    <AddTimeTracking
-                                      timeTrackId={timeTrack.id}
-                                      oldProjectId={timeTrack.projectId}
-                                      oldStartTime={
-                                        new Date(timeTrack.startTime)
-                                      }
-                                      oldEndTime={new Date(timeTrack.endTime!)}
-                                      oldActivities={timeTrack.activities}
-                                    />
-                                  ),
-                                }}
-                              >
-                                Bearbeiten
-                              </ModalButton>
-                              <RestartTimeTrackingButton
-                                projectId={timeTrack.projectId}
-                                disabled={!!runningTimeTrack}
-                              />
-                            </div>
+
+                            {!timeTrack.project.archived && (
+                              <div className="flex gap-2">
+                                <ModalButton
+                                  modal={{
+                                    title: "Zeiterfassung bearbeiten",
+                                    content: (
+                                      <AddTimeTracking
+                                        timeTrackId={timeTrack.id}
+                                        oldProjectId={timeTrack.projectId}
+                                        oldStartTime={
+                                          new Date(timeTrack.startTime)
+                                        }
+                                        oldEndTime={
+                                          new Date(timeTrack.endTime!)
+                                        }
+                                        oldActivities={timeTrack.activities}
+                                      />
+                                    ),
+                                  }}
+                                >
+                                  Bearbeiten
+                                </ModalButton>
+
+                                <RestartTimeTrackingButton
+                                  projectId={timeTrack.projectId}
+                                  disabled={!!runningTimeTrack}
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
 
