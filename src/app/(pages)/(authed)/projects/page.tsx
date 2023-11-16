@@ -43,7 +43,10 @@ const Projects = async () => {
                   <div className="flex flex-row justify-between items-center">
                     <div>
                       <p className="text-xl">
-                        {project.name} {project.archived && "(archiviert)"}
+                        <span>{project.name}</span>{" "}
+                        <span className="text-sm">
+                          {project.archived && "(archiviert)"}
+                        </span>
                       </p>
                       <p className="text-sm">
                         <span>Zahlungsziel:</span>{" "}
