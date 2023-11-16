@@ -9,6 +9,7 @@ const testProject: Project = {
   name: "Test Name",
   paymentDue: 1,
   paymentDueUnit: "days",
+  archived: false,
 };
 
 describe("Customer service tests", () => {
