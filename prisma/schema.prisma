@@ -25,8 +25,8 @@ model User {
 }
 
 model Profile {
-  userId      Int    @id
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int     @id
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   firstName   String
   lastName    String
   zipCode     String
@@ -85,6 +85,7 @@ model Project {
   paymentDueUnit PaymentDueUnit
   customerId     Int
   customer       Customer       @relation(fields: [customerId], references: [id])
+  archived       Boolean        @default(false)
   invoices       Invoice[]
   timeTrack      TimeTrack[]
 
