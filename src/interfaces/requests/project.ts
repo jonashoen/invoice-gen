@@ -15,6 +15,7 @@ export interface DeleteProjectRequest {
 }
 
 export interface EditProjectRequest {
+  archived?: boolean;
   customerId?: number;
   id: number;
   name?: string;

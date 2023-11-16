@@ -82,12 +82,14 @@ const edit = async (
     paymentDue,
     paymentDueUnit,
     customerId,
+    archived,
   }: {
     id: number;
     name?: string;
     paymentDue?: number;
     paymentDueUnit?: PaymentDueUnit;
     customerId?: number;
+    archived?: boolean;
   }
 ) => {
   if (customerId) {
@@ -137,6 +139,7 @@ const edit = async (
       paymentDue,
       paymentDueUnit,
       customerId,
+      archived,
     },
   });
 };

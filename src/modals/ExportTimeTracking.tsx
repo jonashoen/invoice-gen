@@ -34,7 +34,10 @@ const ExportTimeTracking: React.FC = () => {
     initialData: [],
   });
 
-  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<{
+    severity: "error" | "success" | "warning";
+    message: string;
+  } | null>(null);
 
   const getTimeTrackingDataMutation = useApiMutation<
     ExportTimeTrackRequest,
@@ -53,20 +56,41 @@ const ExportTimeTracking: React.FC = () => {
       const csvData = generateCsv(csvConfig)(formattedTimeTracks);
 
       downloadCsv(csvConfig)(csvData);
+
+      setInfo({
+        severity: "success",
+        message: "Die Datei wurde heruntergeladen.",
+      });
     },
     onError: () => {
-      setError(
-        "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen."
-      );
+      setInfo({
+        severity: "error",
+        message:
+          "Ein unerwarteter Fehler ist aufgetreten, bitte nochmal versuchen.",
+      });
     },
   });
 
   const [projectId, setProjectId] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>(() => {
+    const date = new Date();
+
+    const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-01`;
+
+    return dateString;
+  });
+  const [endDate, setEndDate] = useState<string>(() => {
+    const date = new Date();
+
+    const dateString = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}`;
+
+    return dateString;
+  });
 
   const getTimeTrackingData = () => {
-    setError(null);
+    setInfo(null);
 
     getTimeTrackingDataMutation.mutate({
       projectId: parseInt(projectId),
@@ -77,9 +101,9 @@ const ExportTimeTracking: React.FC = () => {
 
   return (
     <Form className="gap-5" onSubmit={getTimeTrackingData}>
-      {error && (
-        <Info severity="error" className="mt-4">
-          {error}
+      {info && (
+        <Info severity={info.severity} className="mt-4">
+          {info.message}
         </Info>
       )}
 
@@ -87,10 +111,12 @@ const ExportTimeTracking: React.FC = () => {
         value={projectId}
         setValue={setProjectId}
         loading={projectsFetching}
-        options={projects.map((project) => ({
-          value: project.id,
-          text: `${project.name} (${project.customer.name})`,
-        }))}
+        options={projects
+          .filter((project) => !project.archived)
+          .map((project) => ({
+            value: project.id,
+            text: `${project.name} (${project.customer.name})`,
+          }))}
         label="Projekt"
         required
       />

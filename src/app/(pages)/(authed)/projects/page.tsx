@@ -52,7 +52,7 @@ const Projects = async () => {
                     </div>
                     <ModalButton
                       modal={{
-                        title: "Kunden bearbeiten",
+                        title: "Projekt bearbeiten",
                         content: (
                           <AddProject
                             id={project.id}
@@ -63,6 +63,7 @@ const Projects = async () => {
                             oldPaymentDue={project.paymentDue.toString()}
                             oldPaymentDueUnit={project.paymentDueUnit}
                             oldCustomerId={project.customerId.toString()}
+                            oldArchived={project.archived}
                           />
                         ),
                       }}

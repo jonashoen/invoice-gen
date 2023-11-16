@@ -19,6 +19,7 @@ export const editProject = Joi.object({
     .valid(...Object.values(PaymentDueUnit))
     .optional(),
   customerId: Joi.number().integer().positive().optional(),
+  archived: Joi.boolean().optional(),
 }).meta({ className: "EditProjectRequest" });
 
 export const deleteProject = Joi.object({

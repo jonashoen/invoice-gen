@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/Button";
+import Checkbox from "@/components/Checkbox";
 import Form from "@/components/Form";
 import Info from "@/components/Info";
 import Select from "@/components/Select";
@@ -26,6 +27,7 @@ interface Props {
   oldPaymentDue?: string;
   oldPaymentDueUnit?: PaymentDueUnit;
   oldCustomerId?: string;
+  oldArchived?: boolean;
 }
 
 const AddProject: React.FC<Props> = ({
@@ -35,6 +37,7 @@ const AddProject: React.FC<Props> = ({
   oldPaymentDue = "",
   oldPaymentDueUnit = "days",
   oldCustomerId = "",
+  oldArchived = false,
 }) => {
   const hideModal = useModalStore((state) => state.hide);
 
@@ -52,6 +55,7 @@ const AddProject: React.FC<Props> = ({
   const [paymentDueUnit, setPaymentDueUnit] =
     useState<PaymentDueUnit>(oldPaymentDueUnit);
   const [customerId, setCustomerId] = useState(oldCustomerId);
+  const [archived, setArchived] = useState(oldArchived);
 
   const addProjectMutation = useApiMutation<AddProjectRequest>({
     route: Api.AddProject,
@@ -116,6 +120,7 @@ const AddProject: React.FC<Props> = ({
       paymentDue: parseInt(paymentDue),
       paymentDueUnit,
       customerId: parseInt(customerId),
+      archived,
     });
   };
 
@@ -134,7 +139,8 @@ const AddProject: React.FC<Props> = ({
     oldName !== name ||
     oldPaymentDue !== paymentDue ||
     oldPaymentDueUnit !== paymentDueUnit ||
-    oldCustomerId !== customerId;
+    oldCustomerId !== customerId ||
+    oldArchived !== archived;
 
   return (
     <Form className="gap-5" onSubmit={id ? editProject : addProject}>
@@ -189,6 +195,8 @@ const AddProject: React.FC<Props> = ({
           className="min-w-[250px]"
         />
       </div>
+
+      <Checkbox checked={archived} setValue={setArchived} label="Archiviert" />
 
       <div
         className={[

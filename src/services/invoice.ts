@@ -77,7 +77,7 @@ const add = async (
     },
   });
 
-  if (!project) {
+  if (!project || project.archived) {
     return null;
   }
 
@@ -136,6 +136,18 @@ const edit = async (
 
   if (!invoice || invoice.locked) {
     return null;
+  }
+
+  if (projectId) {
+    const project = await db.project.findUnique({
+      where: {
+        id: projectId,
+      },
+    });
+
+    if (!project || project.archived) {
+      return null;
+    }
   }
 
   if (updatedPositions && updatedPositions.length !== 0) {

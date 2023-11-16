@@ -233,10 +233,12 @@ const AddInvoice: React.FC<Props> = ({
         value={projectId}
         setValue={setProjectId}
         loading={projectsFetching}
-        options={projects.map((project) => ({
-          value: project.id,
-          text: `${project.name} (${project.customer.name})`,
-        }))}
+        options={projects
+          .filter((project) => !project.archived)
+          .map((project) => ({
+            value: project.id,
+            text: `${project.name} (${project.customer.name})`,
+          }))}
         label="Projekt"
         required
       />

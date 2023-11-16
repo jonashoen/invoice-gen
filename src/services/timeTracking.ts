@@ -81,7 +81,7 @@ const start = async (userId: number, { projectId }: { projectId: number }) => {
     },
   });
 
-  if (!project) {
+  if (!project || project.archived) {
     return null;
   }
 
@@ -126,6 +126,7 @@ const edit = async (
   userId: number,
   {
     timeTrackId,
+    projectId,
     startTime,
     endTime,
     addedActivities,
@@ -133,6 +134,7 @@ const edit = async (
     deletedActivities,
   }: {
     timeTrackId: number;
+    projectId?: number;
     startTime?: Date;
     endTime?: Date;
     addedActivities?: { description: string }[];
@@ -156,6 +158,18 @@ const edit = async (
 
   if (!timeTrack) {
     return null;
+  }
+
+  if (projectId) {
+    const project = await db.project.findUnique({
+      where: {
+        id: projectId,
+      },
+    });
+
+    if (!project || project.archived) {
+      return null;
+    }
   }
 
   if (startTime && endTime) {
@@ -205,6 +219,7 @@ const edit = async (
       id: timeTrackId,
     },
     data: {
+      projectId,
       startTime: startTime && dayjs.utc(startTime).toDate(),
       endTime: endTime && dayjs.utc(endTime).toDate(),
       activities: {
@@ -273,7 +288,7 @@ const exportTimeTracking = async (
     },
   });
 
-  if (!project) {
+  if (!project || project.archived) {
     return null;
   }
 
