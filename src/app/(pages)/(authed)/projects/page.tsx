@@ -42,7 +42,9 @@ const Projects = async () => {
                 <Paper key={project.id}>
                   <div className="flex flex-row justify-between items-center">
                     <div>
-                      <p className="text-xl">{project.name}</p>
+                      <p className="text-xl">
+                        {project.name} {project.archived && "(archiviert)"}
+                      </p>
                       <p className="text-sm">
                         <span>Zahlungsziel:</span>{" "}
                         <span>
