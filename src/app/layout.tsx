@@ -1,19 +1,13 @@
-import { Lexend_Mega } from "next/font/google";
-
+import Body from "@/components/Body";
 import "./globals.css";
 import Provider from "@/components/Provider";
-
-const lexendMega = Lexend_Mega({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="de">
-      <body className={["bg-yellow", lexendMega.className].join(" ")}>
+      <Body>
         <Provider>{children}</Provider>
-      </body>
+      </Body>
     </html>
   );
 };
