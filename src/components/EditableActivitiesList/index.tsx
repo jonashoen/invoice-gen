@@ -26,10 +26,11 @@ const EditableActivitiesList: React.FC<
   required,
   ...props
 }) => {
+  const [newItemUncontrolled, setNewItemUncontrolled] = useState("");
   const [newItem, setNewItem] =
     newItemProp !== undefined && setNewItemProp
       ? [newItemProp, setNewItemProp]
-      : useState("");
+      : [newItemUncontrolled, setNewItemUncontrolled];
 
   const addItem = () => {
     if (newItem.trim()) {
