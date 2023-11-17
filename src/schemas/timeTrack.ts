@@ -43,10 +43,15 @@ export const exportTimeTracks = Joi.object({
   endDate: Joi.date().required(),
 }).meta({ className: "ExportTimeTrackRequest" });
 
+export const getTimeTrackedSinceLastInvoice = Joi.object({
+  projectId: Joi.number().integer().positive().required(),
+}).meta({ className: "GetTimeTrackedSinceLastInvoice" });
+
 export default {
   startTimeTrackRequest,
   stopTimeTrackRequest,
   editTimeTrackRequest,
   deleteTimeTrackRequest,
   exportTimeTracks,
+  getTimeTrackedSinceLastInvoice,
 };

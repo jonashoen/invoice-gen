@@ -10,27 +10,25 @@ interface Props
   setValue?: (value: string) => void;
 }
 
-const TextField: React.FC<Props> = ({
-  label,
-  className,
-  setValue,
-  ...props
-}) => (
-  <label className="flex-1">
-    {label}
-    {label && ":"}
-    <input
-      className={[className, styles.textField].join(" ")}
-      {...props}
-      onChange={
-        setValue
-          ? (e) => {
-              setValue(e.target.value);
-            }
-          : props.onChange
-      }
-    />
-  </label>
+const TextField = React.forwardRef<HTMLInputElement, Props>(
+  ({ label, className, setValue, ...props }, ref) => (
+    <label className="flex-1">
+      {label}
+      {label && ":"}
+      <input
+        ref={ref}
+        className={[className, styles.textField].join(" ")}
+        {...props}
+        onChange={
+          setValue
+            ? (e) => {
+                setValue(e.target.value);
+              }
+            : props.onChange
+        }
+      />
+    </label>
+  )
 );
 
 export default TextField;

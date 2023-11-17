@@ -4,6 +4,7 @@ import TimeTrackExportResponse from "@/interfaces/responses/TimeTrackExportRespo
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import duration from "dayjs/plugin/duration";
+import { TimeTrack } from "@prisma/client";
 
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -327,17 +328,9 @@ const exportTimeTracking = async (
 
     timeTrackExportData.push({
       date: dayjs.utc(date).toDate(),
-      duration: groupedTimeTracks[date].reduce(
-        (hours, { startTime, endTime }) => {
-          const trackDuration = dayjs.duration(
-            dayjs(endTime).diff(startTime, "minutes"),
-            "minutes"
-          );
-
-          return hours + trackDuration.as("hours");
-        },
-        0
-      ),
+      duration: groupedTimeTracks[date].reduce((hours, timeTrack) => {
+        return hours + calculateTimeTrackDuration(timeTrack);
+      }, 0),
       activities: allActivitiesOfDay.filter(
         (activity, index) => allActivitiesOfDay.indexOf(activity) === index
       ),
@@ -345,6 +338,54 @@ const exportTimeTracking = async (
   }
 
   return timeTrackExportData;
+};
+
+const getTrackedTimeSinceLastInvoice = async (
+  userId: number,
+  { projectId }: { projectId: number }
+) => {
+  const project = await db.project.findUnique({
+    where: {
+      id: projectId,
+      customer: {
+        userId,
+      },
+    },
+  });
+
+  if (!project) {
+    return null;
+  }
+
+  const [lastInvoice] = await db.invoice.findMany({
+    where: {
+      projectId,
+      locked: true,
+    },
+    orderBy: {
+      date: "desc",
+    },
+    take: 1,
+  });
+
+  console.log({ lastInvoice });
+
+  const timeTracks = await db.timeTrack.findMany({
+    where: {
+      projectId,
+      endTime: {
+        gt: lastInvoice?.date
+          ? dayjs.utc(lastInvoice.date).add(1, "day").toDate()
+          : undefined,
+      },
+    },
+  });
+
+  const time = timeTracks.reduce((hoursSum, timeTrack) => {
+    return hoursSum + calculateTimeTrackDuration(timeTrack);
+  }, 0);
+
+  return time;
 };
 
 export default {
@@ -355,4 +396,11 @@ export default {
   edit,
   deleteEntry,
   exportTimeTracking,
+  getTrackedTimeSinceLastInvoice,
+};
+
+const calculateTimeTrackDuration = ({ startTime, endTime }: TimeTrack) => {
+  return dayjs
+    .duration(dayjs(endTime).diff(startTime, "minutes"), "minutes")
+    .asHours();
 };

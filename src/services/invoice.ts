@@ -43,7 +43,7 @@ const getInvoices = async (userId: number) => {
       },
     },
     orderBy: {
-      id: "asc",
+      id: "desc",
     },
   });
 };

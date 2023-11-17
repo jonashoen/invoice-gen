@@ -37,6 +37,7 @@ const Api = {
   DeleteTimeTracking: "/time-tracking/delete",
   EditTimeTracking: "/time-tracking/edit",
   ExportTimeTracking: "/time-tracking/export",
+  TimeSinceLastInvoice: "/time-tracking/time-since-last-invoice",
 };
 
 export default Api;

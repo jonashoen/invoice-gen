@@ -14,7 +14,7 @@ import {
   InvoicePositionUnit,
   Project,
 } from "@prisma/client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import t from "@/i18n/t";
 import useApiMutation from "@/hooks/useApiMutation";
@@ -25,6 +25,8 @@ import {
 } from "@/interfaces/requests/invoice";
 import useModalStore from "@/store/modalStore";
 import Info from "@/components/Info";
+import Paper from "@/components/Paper";
+import { GetTimeTrackedSinceLastInvoice } from "@/interfaces/requests";
 
 interface Props {
   id?: number;
@@ -45,6 +47,8 @@ const AddInvoice: React.FC<Props> = ({
     route: Api.Projects,
     initialData: [],
   });
+
+  const priceRef = useRef<HTMLInputElement>(null);
 
   const [error, setError] = useState("");
 
@@ -74,6 +78,27 @@ const AddInvoice: React.FC<Props> = ({
     route: Api.DeleteInvoice,
     invalidates: [Api.Invoices],
     onSuccess: hideModal,
+    onError: () => {
+      setError(
+        "Beim Löschen der Rechnung ist ein Fehler aufgetreten, bitte nochmal versuchen."
+      );
+    },
+  });
+
+  const getTimeSinceLastInvoiceMutation = useApiMutation<
+    GetTimeTrackedSinceLastInvoice,
+    number
+  >({
+    route: Api.TimeSinceLastInvoice,
+    onSuccess: (hours) => {
+      setDescription("");
+      setPrice("");
+      setAmount(hours.toString());
+      setUnit("hours");
+      priceRef.current?.focus();
+
+      console.log(priceRef.current);
+    },
     onError: () => {
       setError(
         "Beim Löschen der Rechnung ist ein Fehler aufgetreten, bitte nochmal versuchen."
@@ -221,6 +246,12 @@ const AddInvoice: React.FC<Props> = ({
       );
     });
 
+  const getTimeSinceLastInvoice = () => {
+    setError("");
+
+    getTimeSinceLastInvoiceMutation.mutate({ projectId: parseInt(projectId) });
+  };
+
   return (
     <Form className="gap-5" onSubmit={id ? editInvoice : addInvoice}>
       {error && (
@@ -242,6 +273,21 @@ const AddInvoice: React.FC<Props> = ({
         label="Projekt"
         required
       />
+
+      {!id &&
+        positions.filter((position) => position.unit === "hours").length ===
+          0 && (
+          <p
+            className={[
+              "text-purple underline",
+              projectId ? "cursor-pointer" : "cursor-not-allowed opacity-75",
+            ].join(" ")}
+            title="Es wird automatisch die Arbeitszeit, seit der letzten Rechnungserstellung, für dieses Projekt berechnet."
+            onClick={getTimeSinceLastInvoice}
+          >
+            <span>Arbeitszeit aus Zeiterfassung übernehmen [?]</span>
+          </p>
+        )}
 
       <p>Positionen:</p>
       {positions.length !== 0 && (
@@ -401,6 +447,7 @@ const AddInvoice: React.FC<Props> = ({
           label="Einheit"
           required={positions.length === 0}
         />
+
         <TextField
           value={price}
           setValue={setPrice}
@@ -408,6 +455,7 @@ const AddInvoice: React.FC<Props> = ({
           required={positions.length === 0}
           type="number"
           step={0.01}
+          ref={priceRef}
         />
       </div>
 

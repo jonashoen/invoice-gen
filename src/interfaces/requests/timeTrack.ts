@@ -28,6 +28,10 @@ export interface ExportTimeTrackRequest {
   startDate: Date;
 }
 
+export interface GetTimeTrackedSinceLastInvoice {
+  projectId: number;
+}
+
 export interface StartTimeTrackRequest {
   projectId: number;
 }
