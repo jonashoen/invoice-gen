@@ -22,7 +22,7 @@ const csvConfig = mkConfig({
     { displayLabel: "Tätigkeiten", key: "activities" },
   ],
   fieldSeparator: ";",
-  filename: `Stundenzettel_${dateToDateString()}.csv`,
+  filename: `Stundenzettel_${dateToDateString()}`,
   decimalSeparator: "locale",
 });
 
