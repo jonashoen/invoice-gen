@@ -53,6 +53,15 @@ const ExportTimeTracking: React.FC = () => {
         })
       );
 
+      formattedTimeTracks.push({ date: "", duration: "", activities: [] });
+      formattedTimeTracks.push({
+        date: "Gesamt",
+        duration: timeTracks
+          .reduce((hoursSum, timeTrack) => hoursSum + timeTrack.duration, 0)
+          .toLocaleString(),
+        activities: [],
+      });
+
       const csvData = generateCsv(csvConfig)(formattedTimeTracks);
 
       downloadCsv(csvConfig)(csvData);
