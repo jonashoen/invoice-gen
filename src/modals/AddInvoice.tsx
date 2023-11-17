@@ -247,6 +247,10 @@ const AddInvoice: React.FC<Props> = ({
     });
 
   const getTimeSinceLastInvoice = () => {
+    if (!projectId) {
+      return;
+    }
+
     setError("");
 
     getTimeSinceLastInvoiceMutation.mutate({ projectId: parseInt(projectId) });

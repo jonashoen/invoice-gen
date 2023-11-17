@@ -368,14 +368,12 @@ const getTrackedTimeSinceLastInvoice = async (
     take: 1,
   });
 
-  console.log({ lastInvoice });
-
   const timeTracks = await db.timeTrack.findMany({
     where: {
       projectId,
       endTime: {
         gt: lastInvoice?.date
-          ? dayjs.utc(lastInvoice.date).add(1, "day").toDate()
+          ? dayjs.utc(lastInvoice.date).toDate()
           : undefined,
       },
     },

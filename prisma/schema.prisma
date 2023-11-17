@@ -94,8 +94,8 @@ model Project {
 
 model Invoice {
   id        Int               @id @default(autoincrement())
-  createdAt DateTime          @default(now()) @db.Date
-  date      DateTime?         @db.Date
+  createdAt DateTime          @default(now())
+  date      DateTime?
   number    String?           @unique
   filename  String?
   locked    Boolean           @default(false)
