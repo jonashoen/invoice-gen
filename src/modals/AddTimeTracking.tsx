@@ -91,6 +91,7 @@ const AddTimeTracking: React.FC<Props> = ({
     useState<(TimeTrackActivity & { added?: boolean; deleted?: boolean })[]>(
       oldActivities
     );
+  const [newItem, setNewItem] = useState("");
 
   const startTimeTracking = () => {
     setError("");
@@ -105,12 +106,24 @@ const AddTimeTracking: React.FC<Props> = ({
 
     setError("");
 
+    const allActivities = newItem
+      ? [
+          ...activities,
+          {
+            description: newItem,
+            added: true,
+            id: -1,
+            timeTrackId: -1,
+          },
+        ]
+      : activities;
+
     editTimeTrackingMutation.mutate({
       timeTrackId,
       projectId: parseInt(projectId),
       startTime: startTime ? new Date(startTime) : undefined,
       endTime: endTime ? new Date(endTime) : undefined,
-      addedActivities: activities
+      addedActivities: allActivities
         .filter((a) => a.added && !a.deleted)
         .map((a) => ({
           description: a.description,
@@ -138,7 +151,7 @@ const AddTimeTracking: React.FC<Props> = ({
   };
 
   const editTrackingDisabled =
-    activities.filter((a) => !a.deleted).length === 0 ||
+    (activities.filter((a) => !a.deleted).length === 0 && newItem === "") ||
     (dateToLocalIsoString(new Date(startTime)) ===
       dateToLocalIsoString(oldStartTime) &&
       dateToLocalIsoString(new Date(endTime)) ===
@@ -156,7 +169,8 @@ const AddTimeTracking: React.FC<Props> = ({
 
         return activity.description === oldActivity.description;
       }) &&
-      projectId === oldProjectId.toString());
+      projectId === oldProjectId.toString() &&
+      newItem === "");
 
   return (
     <Form
@@ -205,6 +219,9 @@ const AddTimeTracking: React.FC<Props> = ({
             label="Tätigkeiten"
             value={activities}
             setValue={setActivities}
+            newItem={newItem}
+            setNewItem={setNewItem}
+            required={activities.length === 0}
           />
         </>
       )}

@@ -31,15 +31,28 @@ const StopTimeTracking = () => {
   const [activities, setActivities] = useState<
     (TimeTrackActivity & { added?: boolean; deleted?: boolean })[]
   >([]);
+  const [newItem, setNewItem] = useState("");
 
   const addedActivities = activities.filter((activity) => !activity.deleted);
 
   const stopTimeTracking = () => {
+    const allActivities = newItem
+      ? [
+          ...addedActivities,
+          {
+            description: newItem,
+            added: true,
+            id: -1,
+            timeTrackId: -1,
+          },
+        ]
+      : addedActivities;
+
     stopTimeTrackingMutation.mutate({
-      activities: addedActivities.map((activity) => activity.description),
+      activities: allActivities.map((activity) => activity.description),
     });
   };
-
+  console.log(activities.length === 0);
   return (
     <div className="flex flex-col gap-5">
       {error && (
@@ -53,6 +66,9 @@ const StopTimeTracking = () => {
           label="Tätigkeiten"
           value={activities}
           setValue={setActivities}
+          newItem={newItem}
+          setNewItem={setNewItem}
+          required={activities.length === 0}
         />
 
         <div className="flex justify-end mt-10">
@@ -60,7 +76,6 @@ const StopTimeTracking = () => {
             className="bg-ice"
             type="submit"
             loading={stopTimeTrackingMutation.isLoading}
-            disabled={addedActivities.length === 0}
           >
             Stoppen
           </Button>

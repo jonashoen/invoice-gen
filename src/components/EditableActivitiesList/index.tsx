@@ -9,12 +9,27 @@ interface Props<T> extends HTMLAttributes<HTMLElement> {
   label?: string;
   value: T[];
   setValue: Dispatch<SetStateAction<T[]>>;
+  newItem?: string;
+  setNewItem?: Dispatch<SetStateAction<string>>;
+  required?: boolean;
 }
 
 const EditableActivitiesList: React.FC<
   Props<TimeTrackActivity & { added?: boolean; deleted?: boolean }>
-> = ({ className, label, value, setValue, ...props }) => {
-  const [newItem, setNewItem] = useState("");
+> = ({
+  className,
+  label,
+  value,
+  setValue,
+  newItem: newItemProp,
+  setNewItem: setNewItemProp,
+  required,
+  ...props
+}) => {
+  const [newItem, setNewItem] =
+    newItemProp !== undefined && setNewItemProp
+      ? [newItemProp, setNewItemProp]
+      : useState("");
 
   const addItem = () => {
     if (newItem.trim()) {
@@ -114,7 +129,9 @@ const EditableActivitiesList: React.FC<
                   addItem();
                 }
               }}
+              required={required}
             />
+
             <Button
               type="button"
               onClick={addItem}
