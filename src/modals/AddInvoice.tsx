@@ -25,7 +25,6 @@ import {
 } from "@/interfaces/requests/invoice";
 import useModalStore from "@/store/modalStore";
 import Info from "@/components/Info";
-import Paper from "@/components/Paper";
 import { GetTimeTrackedSinceLastInvoice } from "@/interfaces/requests";
 
 interface Props {
@@ -96,8 +95,6 @@ const AddInvoice: React.FC<Props> = ({
       setAmount(hours.toString());
       setUnit("hours");
       priceRef.current?.focus();
-
-      console.log(priceRef.current);
     },
     onError: () => {
       setError(
@@ -281,15 +278,22 @@ const AddInvoice: React.FC<Props> = ({
       {!id &&
         positions.filter((position) => position.unit === "hours").length ===
           0 && (
-          <p
-            className={[
-              "text-purple underline",
-              projectId ? "cursor-pointer" : "cursor-not-allowed opacity-75",
-            ].join(" ")}
-            title="Es wird automatisch die Arbeitszeit, seit der letzten Rechnungserstellung, für dieses Projekt berechnet."
-            onClick={getTimeSinceLastInvoice}
-          >
-            <span>Arbeitszeit aus Zeiterfassung übernehmen [?]</span>
+          <p className="text-purple underline">
+            <span
+              className={
+                projectId ? "cursor-pointer" : "cursor-not-allowed opacity-75"
+              }
+              onClick={getTimeSinceLastInvoice}
+            >
+              Arbeitszeit aus Zeiterfassung übernehmen
+            </span>
+            <span
+              title="Es wird automatisch die Arbeitszeit, seit der letzten Rechnungserstellung, für dieses Projekt berechnet."
+              className="cursor-help"
+            >
+              {" "}
+              [?]
+            </span>
           </p>
         )}
 
