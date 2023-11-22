@@ -278,20 +278,21 @@ const AddInvoice: React.FC<Props> = ({
       {!id &&
         positions.filter((position) => position.unit === "hours").length ===
           0 && (
-          <p className="text-purple underline">
+          <p className="text-purple">
             <span
-              className={
-                projectId ? "cursor-pointer" : "cursor-not-allowed opacity-75"
-              }
+              className={[
+                "underline",
+                projectId ? "cursor-pointer" : "cursor-not-allowed opacity-75",
+              ].join(" ")}
               onClick={getTimeSinceLastInvoice}
             >
               Arbeitszeit aus Zeiterfassung übernehmen
             </span>
+            <span> </span>
             <span
               title="Es wird automatisch die Arbeitszeit, seit der letzten Rechnungserstellung, für dieses Projekt berechnet."
               className="cursor-help"
             >
-              {" "}
               [?]
             </span>
           </p>
