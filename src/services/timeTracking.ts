@@ -375,6 +375,7 @@ const getTrackedTimeSinceLastInvoice = async (
         gt: lastInvoice?.date
           ? dayjs.utc(lastInvoice.date).toDate()
           : undefined,
+        not: null,
       },
     },
   });
