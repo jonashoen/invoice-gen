@@ -197,9 +197,9 @@ const TimeTracking = async () => {
                           </div>
                         </div>
 
-                        <ul className="mt-2">
+                        <ul className="mt-2 ml-4 list-['-_']">
                           {timeTrack.activities.map((activity) => (
-                            <li key={activity.id}>- {activity.description}</li>
+                            <li key={activity.id}>{activity.description}</li>
                           ))}
                         </ul>
                       </Paper>
