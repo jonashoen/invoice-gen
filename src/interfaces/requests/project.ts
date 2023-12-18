@@ -5,6 +5,7 @@
 
 export interface AddProjectRequest {
   customerId: number;
+  hourlyRate: number;
   name: string;
   paymentDue: number;
   paymentDueUnit: 'days' | 'week' | 'weeks' | 'month' | 'months';
@@ -17,6 +18,7 @@ export interface DeleteProjectRequest {
 export interface EditProjectRequest {
   archived?: boolean;
   customerId?: number;
+  hourlyRate?: number;
   id: number;
   name?: string;
   paymentDue?: number;

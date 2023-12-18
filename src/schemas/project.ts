@@ -9,6 +9,7 @@ export const addProject = Joi.object({
     .valid(...Object.values(PaymentDueUnit))
     .required(),
   customerId: Joi.number().integer().positive().required(),
+  hourlyRate: Joi.number().positive().required(),
 }).meta({ className: "AddProjectRequest" });
 
 export const editProject = Joi.object({
@@ -19,6 +20,7 @@ export const editProject = Joi.object({
     .valid(...Object.values(PaymentDueUnit))
     .optional(),
   customerId: Joi.number().integer().positive().optional(),
+  hourlyRate: Joi.number().positive().optional(),
   archived: Joi.boolean().optional(),
 }).meta({ className: "EditProjectRequest" });
 

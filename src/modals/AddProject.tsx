@@ -27,6 +27,7 @@ interface Props {
   oldPaymentDue?: string;
   oldPaymentDueUnit?: PaymentDueUnit;
   oldCustomerId?: string;
+  oldHourlyRate?: string;
   oldArchived?: boolean;
 }
 
@@ -37,6 +38,7 @@ const AddProject: React.FC<Props> = ({
   oldPaymentDue = "",
   oldPaymentDueUnit = "days",
   oldCustomerId = "",
+  oldHourlyRate = "",
   oldArchived = false,
 }) => {
   const hideModal = useModalStore((state) => state.hide);
@@ -51,6 +53,7 @@ const AddProject: React.FC<Props> = ({
   const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState(oldName);
+  const [hourlyRate, setHourlyRate] = useState(oldHourlyRate);
   const [paymentDue, setPaymentDue] = useState(oldPaymentDue);
   const [paymentDueUnit, setPaymentDueUnit] =
     useState<PaymentDueUnit>(oldPaymentDueUnit);
@@ -106,6 +109,7 @@ const AddProject: React.FC<Props> = ({
       paymentDue: parseInt(paymentDue),
       paymentDueUnit,
       customerId: parseInt(customerId),
+      hourlyRate: parseFloat(hourlyRate),
     });
   };
 
@@ -120,6 +124,7 @@ const AddProject: React.FC<Props> = ({
       paymentDue: parseInt(paymentDue),
       paymentDueUnit,
       customerId: parseInt(customerId),
+      hourlyRate: parseFloat(hourlyRate),
       archived,
     });
   };
@@ -140,6 +145,7 @@ const AddProject: React.FC<Props> = ({
     oldPaymentDue !== paymentDue ||
     oldPaymentDueUnit !== paymentDueUnit ||
     oldCustomerId !== customerId ||
+    oldHourlyRate !== hourlyRate ||
     oldArchived !== archived;
 
   return (
@@ -163,13 +169,25 @@ const AddProject: React.FC<Props> = ({
         }))}
       />
 
-      <TextField
-        label="Name"
-        value={name}
-        setValue={setName}
-        required
-        name="projectName"
-      />
+      <div className="flex flex-wrap gap-4">
+        <TextField
+          label="Name"
+          value={name}
+          setValue={setName}
+          required
+          name="projectName"
+        />
+
+        <TextField
+          label="Stundensatz in Euro"
+          required
+          value={hourlyRate}
+          setValue={setHourlyRate}
+          name="hourlyRate"
+          type="number"
+          step="0.01"
+        />
+      </div>
 
       <div className="flex flex-wrap gap-4">
         <TextField

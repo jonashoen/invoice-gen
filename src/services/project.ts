@@ -33,11 +33,13 @@ const add = async (
     paymentDue,
     paymentDueUnit,
     customerId,
+    hourlyRate,
   }: {
     name: string;
     paymentDue: number;
     paymentDueUnit: PaymentDueUnit;
     customerId: number;
+    hourlyRate: number;
   }
 ) => {
   const customer = await db.customer.findUnique({
@@ -70,6 +72,7 @@ const add = async (
       paymentDue,
       paymentDueUnit,
       customerId,
+      hourlyRate,
     },
   });
 };
@@ -82,6 +85,7 @@ const edit = async (
     paymentDue,
     paymentDueUnit,
     customerId,
+    hourlyRate,
     archived,
   }: {
     id: number;
@@ -89,6 +93,7 @@ const edit = async (
     paymentDue?: number;
     paymentDueUnit?: PaymentDueUnit;
     customerId?: number;
+    hourlyRate?: number;
     archived?: boolean;
   }
 ) => {
@@ -139,6 +144,7 @@ const edit = async (
       paymentDue,
       paymentDueUnit,
       customerId,
+      hourlyRate,
       archived,
     },
   });

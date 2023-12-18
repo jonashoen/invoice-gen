@@ -49,7 +49,7 @@ const Projects = async () => {
                         </span>
                       </p>
                       <p className="text-sm">
-                        <span>Zahlungsziel:</span>{" "}
+                        <span>Zahlungsfrist:</span>{" "}
                         <span>
                           {project.paymentDue} {t(project.paymentDueUnit)}
                         </span>
@@ -68,6 +68,7 @@ const Projects = async () => {
                             oldPaymentDue={project.paymentDue.toString()}
                             oldPaymentDueUnit={project.paymentDueUnit}
                             oldCustomerId={project.customerId.toString()}
+                            oldHourlyRate={project.hourlyRate.toString()}
                             oldArchived={project.archived}
                           />
                         ),
