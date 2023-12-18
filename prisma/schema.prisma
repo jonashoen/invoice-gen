@@ -86,6 +86,7 @@ model Project {
   customerId     Int
   customer       Customer       @relation(fields: [customerId], references: [id])
   archived       Boolean        @default(false)
+  hourlyRate     Float
   invoices       Invoice[]
   timeTrack      TimeTrack[]
 
