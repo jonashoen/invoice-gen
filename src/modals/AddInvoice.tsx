@@ -26,6 +26,7 @@ import {
 import useModalStore from "@/store/modalStore";
 import Info from "@/components/Info";
 import { GetTimeTrackedSinceLastInvoice } from "@/interfaces/requests";
+import TimeSinceLastInvoice from "@/interfaces/responses/TimeSinceLastInvoice";
 
 interface Props {
   id?: number;
@@ -47,7 +48,7 @@ const AddInvoice: React.FC<Props> = ({
     initialData: [],
   });
 
-  const priceRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null);
 
   const [error, setError] = useState("");
 
@@ -86,15 +87,15 @@ const AddInvoice: React.FC<Props> = ({
 
   const getTimeSinceLastInvoiceMutation = useApiMutation<
     GetTimeTrackedSinceLastInvoice,
-    number
+    TimeSinceLastInvoice
   >({
     route: Api.TimeSinceLastInvoice,
-    onSuccess: (hours) => {
-      setDescription("");
-      setPrice("");
-      setAmount(hours.toString());
+    onSuccess: (timeInfo) => {
+      setAmount(timeInfo.hours.toString());
       setUnit("hours");
-      priceRef.current?.focus();
+      setPrice(timeInfo.price.toString());
+      setDescription("");
+      descriptionRef.current?.focus();
     },
     onError: () => {
       setError(
@@ -343,6 +344,7 @@ const AddInvoice: React.FC<Props> = ({
                     disabled={position.deleted}
                     required={!position.deleted}
                     type="number"
+                    step="0.1"
                   />
                 </td>
                 <td className="flex-[2]">
@@ -405,6 +407,7 @@ const AddInvoice: React.FC<Props> = ({
                     disabled={position.deleted}
                     required={!position.deleted}
                     type="number"
+                    step="0.01"
                   />
                 </td>
                 <td className="flex-[4] text-right">
@@ -444,6 +447,7 @@ const AddInvoice: React.FC<Props> = ({
           label="Anzahl"
           required={positions.length === 0}
           type="number"
+          step="0.1"
         />
 
         <Select
@@ -464,7 +468,6 @@ const AddInvoice: React.FC<Props> = ({
           required={positions.length === 0}
           type="number"
           step={0.01}
-          ref={priceRef}
         />
       </div>
 
@@ -474,6 +477,7 @@ const AddInvoice: React.FC<Props> = ({
         label="Beschreibung"
         required={positions.length === 0}
         className="h-32"
+        ref={descriptionRef}
       />
 
       <div className="flex justify-end" onClick={addPosition}>

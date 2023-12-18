@@ -384,7 +384,7 @@ const getTrackedTimeSinceLastInvoice = async (
     return hoursSum + calculateTimeTrackDuration(timeTrack);
   }, 0);
 
-  return time;
+  return { hours: time, price: project.hourlyRate };
 };
 
 export default {
