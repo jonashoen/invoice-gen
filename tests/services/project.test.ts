@@ -9,6 +9,7 @@ const testProject: Project = {
   name: "Test Name",
   paymentDue: 1,
   paymentDueUnit: "days",
+  hourlyRate: 10,
   archived: false,
 };
 
