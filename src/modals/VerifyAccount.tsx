@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import CodeInput, { CODE_LENGHT } from "@/components/CodeInput";
+import CodeInput from "@/components/CodeInput";
 import Form from "@/components/Form";
 import Info from "@/components/Info";
 import useApiMutation from "@/hooks/useApiMutation";
