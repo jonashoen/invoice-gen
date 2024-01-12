@@ -52,7 +52,7 @@ const StopTimeTracking = () => {
       activities: allActivities.map((activity) => activity.description),
     });
   };
-  console.log(activities.length === 0);
+
   return (
     <div className="flex flex-col gap-5">
       {error && (
