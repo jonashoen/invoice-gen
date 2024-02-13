@@ -8,12 +8,13 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   setValue?: (value: string) => void;
 }
 
-const TextArea = React.forwardRef<HTMLInputElement, Props>(
-  ({ label, className, setValue, ...props }) => (
+const TextArea = React.forwardRef<HTMLTextAreaElement, Props>(
+  ({ label, className, setValue, ...props }, ref) => (
     <label className="flex-1">
       {label}
       {label && ":"}
       <textarea
+        ref={ref}
         className={[className, styles.textArea].join(" ")}
         {...props}
         onChange={
