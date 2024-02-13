@@ -48,7 +48,7 @@ const AddInvoice: React.FC<Props> = ({
     initialData: [],
   });
 
-  const descriptionRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const [error, setError] = useState("");
 
