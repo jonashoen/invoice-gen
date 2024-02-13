@@ -8,11 +8,14 @@ dayjs.extend(duration);
 dayjs.locale("de");
 
 const getDurationString = (
-  startTime: Date,
+  startTime: Date | number,
   endTime?: Date | null,
   showSeconds = false
 ) => {
-  const diff = dayjs.utc(endTime).diff(startTime);
+  const diff =
+    typeof startTime === "number"
+      ? startTime
+      : dayjs.utc(endTime).diff(startTime);
   const duration = dayjs.duration(diff);
 
   const hours = duration.get("hours");
