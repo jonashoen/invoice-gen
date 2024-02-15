@@ -21,6 +21,10 @@ const Pagination = <T,>({ data, pageSize = 10, children }: Props<T>) => {
     pageSize,
   });
 
+  const scrollTop = () => {
+    scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       {children(currentData)}
@@ -29,7 +33,10 @@ const Pagination = <T,>({ data, pageSize = 10, children }: Props<T>) => {
         <div className="flex justify-center">
           <div className="flex gap-2">
             <Button
-              onClick={previousPage}
+              onClick={() => {
+                scrollTop();
+                previousPage();
+              }}
               disabled={currentPage === 0}
               className="bg-white !w-12"
             >
@@ -40,7 +47,10 @@ const Pagination = <T,>({ data, pageSize = 10, children }: Props<T>) => {
               .map((_, index) => (
                 <Button
                   key={index}
-                  onClick={() => setPage(index)}
+                  onClick={() => {
+                    scrollTop();
+                    setPage(index);
+                  }}
                   className={[
                     "!w-12",
                     currentPage === index ? "bg-green" : "bg-white",
@@ -50,7 +60,10 @@ const Pagination = <T,>({ data, pageSize = 10, children }: Props<T>) => {
                 </Button>
               ))}
             <Button
-              onClick={nextPage}
+              onClick={() => {
+                scrollTop();
+                nextPage();
+              }}
               disabled={currentPage === pageCount - 1}
               className="bg-white !w-12"
             >
