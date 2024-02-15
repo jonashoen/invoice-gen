@@ -2,13 +2,13 @@ import de from "./de.json";
 
 type Languages = "de";
 
-const translations = {
+const translations: Record<Languages, Record<string, string>> = {
   de,
 };
 
 const t = (key: string, language: Languages = "de") => {
   if (key in translations[language]) {
-    return (de as any)[key];
+    return translations[language][key];
   } else {
     return key;
   }

@@ -6,7 +6,7 @@ Includes data management for the user, customers, projects, tracked time and inv
 
 ## Usage
 
-The application is configured to run with a PostgreSQL database, but can be configured to other databases by chanching the according line in the `schema.prisma` file.
+The application is configured to run with a PostgreSQL database, but can be configured to other databases by changing the according line in the `schema.prisma` file.
 
 The following environment variables need to be set:
 
