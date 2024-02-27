@@ -1,12 +1,12 @@
 import de from "./de.json";
 
-type Languages = "de";
+type Language = "de";
 
-const translations: Record<Languages, Record<string, string>> = {
+const translations: Record<Language, Record<string, string>> = {
   de,
 };
 
-const t = (key: string, language: Languages = "de") => {
+const t = (key: string, language: Language = "de") => {
   if (key in translations[language]) {
     return translations[language][key];
   } else {
